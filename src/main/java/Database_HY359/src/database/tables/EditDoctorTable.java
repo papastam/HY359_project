@@ -203,4 +203,16 @@ public class EditDoctorTable {
         stmt.close();
     }
 
+    public void setDoctorCertification(String username, int certified) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+
+        Statement stmt = con.createStatement();
+
+        String insertQuery = "UPDATE doctors SET certified='" + certified + "' WHERE username = '" + username + "'";
+
+        System.out.println("# The doctor's certification has sucessfully changed.");
+        stmt.executeUpdate(insertQuery);
+        stmt.close();
+    }
+
 }

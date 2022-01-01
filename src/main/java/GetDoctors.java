@@ -1,4 +1,6 @@
+import Database_HY359.src.database.tables.EditDoctorTable;
 import Database_HY359.src.database.tables.EditSimpleUserTable;
+import Database_HY359.src.mainClasses.Doctor;
 import Database_HY359.src.mainClasses.SimpleUser;
 import org.json.JSONObject;
 
@@ -10,8 +12,8 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet(name = "GetUsers", value = "/GetUsers")
-public class GetUsers extends HttpServlet {
+@WebServlet(name = "GetDoctors", value = "/GetDoctors")
+public class GetDoctors extends HttpServlet {
     private void createResponse(HttpServletResponse response, int statuscode, String data) {
         response.setStatus(statuscode);
 
@@ -28,20 +30,20 @@ public class GetUsers extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EditSimpleUserTable usertable = new EditSimpleUserTable();
-        ArrayList<SimpleUser> users=null;
+        EditDoctorTable doctable = new EditDoctorTable();
+        ArrayList<Doctor> docs=null;
         JSONObject jsonreply = new JSONObject();
 
         try {
-            users = usertable.databaseToSimpleUsers();
+            docs = doctable.databaseToDoctors();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        for(SimpleUser user : users){
-            jsonreply.append("users",usertable.simpleUserToJSON(user));
+        for(Doctor doc : docs){
+            jsonreply.append("doctors",doctable.doctorToJSON(doc));
         }
 
         createResponse(response,200,jsonreply.toString());

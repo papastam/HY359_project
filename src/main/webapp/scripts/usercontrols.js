@@ -78,3 +78,4 @@ function checkUserLoggedIn(usertype){
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send("");
 }
+

@@ -108,8 +108,8 @@
                         $("#wrondaddress").hide();
                         $("#showmapbtn").prop("disabled",false);
 
-                        usercachedinfo["lat"]=text["lat"];
-                        usercachedinfo["lon"]=text["lon"];
+                        userdata["lat"]=text["lat"];
+                        userdata["lon"]=text["lon"];
 
                         var position=setPosition(text["lat"],text["lon"]);
                         map.setCenter(position, zoom);

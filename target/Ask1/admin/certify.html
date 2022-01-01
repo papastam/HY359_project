@@ -1,12 +1,67 @@
+<script>
+    function loaddoctortable(){
+        $("#doctable").append("<tr><th>Name</th><th>AMKA</th><th>Address</th><th>Phone</th><th>Action</th></tr>");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                for(index in jsonreply["doctors"]){
+                    doc=JSON.parse(jsonreply["doctors"][index]);
+
+                    var certifiedoption = " <select name='certification' id='"+doc["username"]+"_certvalue' onchange='changeDoctorCertification("+doc["username"]+")'> <option value='1' "+(doc["certified"]=="1"?"selected":"")+">1</option> <option value='0' "+(doc["certified"]=="0"?"selected":"")+">0</option>"
+
+                    $("#doctable").append("<tr><td>"+doc["username"]+"</td><td>"+doc["amka"]+"</td><td>"+doc["address"]+", "+doc["city"]+", "+doc["country"]+"</td><td>"+doc["telephone"]+"</td><td>"+certifiedoption+"</td></tr>")
+                }
+            }else if(xhr.readyState === 4 && xhr.status === 403){
+                console.log("GetDoctors failed, returned status code of: "+xhr.status);
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/GetDoctors');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function changeDoctorCertification(username){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.readyState === 4 && xhr.status ===200){
+                $("#serverreply").html("<a style='color: green'>Doctor "+username+" succesfully got his new certification</a>");
+                $("#doctable").html("");
+                loaddoctortable();
+            }else if(xhr.status===403){
+                $("#serverreply").html("<a style='color: red'>Server responded with status code of"+xhr.status+": "+xhr.responseText+"</a>");
+            }
+        }
+
+        var jsonrequest = {"username":username};
+
+        xhr.open("POST", "/Project_war_exploded/CertifyDoctor");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(jsonrequest));
+
+    }
+
+    $(document).ready(function(){
+        loaddoctortable();
+    });
+
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="script.js"></script>
 </head>
 <body>
-    <div>
-        2
-    </div>
+<div>
+    <table id="doctable">
+    </table>
+</div>
+<div id="serverreply">
+
+</div>
 </body>
 </html>

@@ -207,9 +207,10 @@ public class EditSimpleUserTable {
     }
 
     /**
-     * Establish a database connection and add in the database.
+     * Establish a database connection and edit a user from the database.
      *
      * @throws ClassNotFoundException
+     * @throws SQLException
      */
     public void updateWholeSimpleUser(SimpleUser user) throws ClassNotFoundException, SQLException {
         Connection con = DB_Connection.getConnection();
@@ -243,6 +244,20 @@ public class EditSimpleUserTable {
         System.out.println(updateQuery);
         stmt.executeUpdate(updateQuery);
         System.out.println("# The user has succesfully updated his data.");
+
+        /* Get the member id from the database and set it to the member */
+        stmt.close();
+    }
+
+    public void deleteSimpleUser(String username) throws ClassNotFoundException, SQLException {
+        Connection con = DB_Connection.getConnection();
+
+        Statement stmt = con.createStatement();
+        String updateQuery = "DELETE FROM users WHERE username = '"+username+"'";
+        //stmt.execute(table);
+        System.out.println(updateQuery);
+        stmt.executeUpdate(updateQuery);
+        System.out.println("# The user has been sucesfully deleted.");
 
         /* Get the member id from the database and set it to the member */
         stmt.close();
