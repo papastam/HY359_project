@@ -1,0 +1,52 @@
+<script>
+    function loadusertable(){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                console.log(jsonreply);
+                for(user in jsonreply["users"]){
+                    $("#usertable").append("<tr><td>"+user["username"]+"</td><td>"+user["amka"]+"</td><td>"+user["address"]+"</td><td>"+user["phone"]+"</td><td>"+"Delete"+"</td></tr>")
+                }
+            }else if(xhr.readyState === 4 && xhr.status === 403){
+                console.log("GetUsers failed, returned status code of: "+xhr.status);
+            }
+        }
+
+        xhr.open('POST', '/Project_war_exploded/GetUsers');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    $(document).ready(function(){
+        loadusertable();
+    });
+
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="script.js"></script>
+</head>
+<body>
+    <div>
+        <table id="usertable">
+            <tr>
+                <th>Name</th>
+                <th>AMKA</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

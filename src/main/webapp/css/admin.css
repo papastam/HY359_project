@@ -1,0 +1,33 @@
+html, body {
+    font-family: Verdana, Helvetica, sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+td{
+    font-size: large;
+    border-bottom: solid black 1px;
+    padding: 8px;
+}
+
+table{
+    border-spacing: 0px;
+    width: 100%;
+}
+
+.admin-grid-container{
+    display: grid;
+    grid-template-columns: auto auto;
+    height: 100%;
+}
+
+.admin-grid-item{
+    height: 100%;
+}
+
+#navbar-right{
+    background-color: #2980c5;
+    width:200px;
+    border-right: 3px outset #2980c5;
+    margin-right: 20px;
+}

@@ -1,0 +1,43 @@
+<script>
+    $(document).ready(function(){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                for(var i in jsonreply){
+                    var doc = JSON.parse(jsonreply[i]);
+                    $("#docstable").append('<tr id="doctable_r'+i+'"></tr>');
+
+                    $("#doctable_r"+i).append('<td class="doctablecell">'+doc["firstname"]+' '+doc["lastname"]+'</td>');
+                    $("#doctable_r"+i).append('<td class="doctablecell">'+doc["specialty"]+'</td>');
+                    $("#doctable_r"+i).append('<td class="doctablecell">'+doc["telephone"]+'</td>');
+                    $("#doctable_r"+i).append('<td class="doctablecell">'+doc["address"]+", "+doc["city"]+", "+doc["country"]+'</td>');
+                    $("#doctable_r"+i).append('<td class="doctablecell">'+doc["email"]+'</td>');
+                    $("#doctable_r"+i).append('<td class="doctablecell">'+doc["doctor_info"]+'</td>');
+                }
+            }
+        }
+
+        xhr.open('POST', 'CertifiedDoctorBoy');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+
+
+    });
+
+</script>
+<header class="title">
+    <h4>Here are all the licenced doctors available:</h4>
+</header>
+<br>
+<table id="docstable">
+    <thead id="doctablehead">
+        <td class="doctablecell">Name</td>
+        <td class="doctablecell">Specialty</td>
+        <td class="doctablecell">Telephone</td>
+        <td class="doctablecell">Address</td>
+        <td class="doctablecell">Email</td>
+        <td class="doctablecell">Doctor Info</td>
+    </thead>
+
+</table>

@@ -1,0 +1,228 @@
+/*Default Body style*/
+body {
+	background-color: white;
+	padding: 5px;
+}
+
+/*Aside tab for the basic info*/
+aside {
+	border: outset #f3bd94;
+	border-radius: 7px;
+	width: 340px;
+	text-align: center;
+	margin: 5px;
+	margin-left: 15px;
+	padding: 10px;
+	float: left;
+	box-shadow: 6px 9px 12px 9px rgb(0 0 0 / 10%);
+}
+
+/*The basic section rules*/
+section{
+	padding: 2px;
+	margin-bottom: 28px;
+}
+
+input{
+	margin-bottom: 7px;
+}
+
+footer{
+	margin-top: 19px;
+	padding: 10px;
+	height: 100px;
+	border-top: solid;
+}
+
+table {
+	display: block;
+}
+
+img {
+ 	padding: 2px;
+}
+
+p{
+	margin-top: 5px;
+}
+
+table {
+	margin:  5px;
+}
+
+td {
+	border-bottom: 2px groove; 
+}
+
+audio {
+	position: relative;
+	top: -53px;
+	left: 462px;
+}
+
+/*For all the headers in the article*/
+article header {
+	font-weight: 600;
+	padding: 2px;
+    margin-bottom: 28px;
+}
+
+/*For the the lists used in the form*/
+form ul{
+	padding:  0px;
+	list-style-type: none;
+}
+
+.errormsg{
+	color: red;
+}
+
+#appfield{
+	margin: 10px;
+}
+
+#loginnav{
+	justify-content: end;
+}
+
+#appfield{
+    min-height: 550px;
+}
+
+#loginform{
+	padding: 7px;
+	border: outset 3px #9f7c61;
+	border-radius: 11px;
+	background-color: #ffe7c0;
+	display: none;
+}
+
+#dateamkamiss, #wrondaddress, #amkadatemiss, #wrongpass, #producertype, #geolocationerr, #outsideCrete, #usernameexists, #emailexists, #amkaexists{
+	display: none;
+	margin: 5px;	
+}
+
+#produceerinfo, #eulaunchecked, #Map{
+	display: none;
+}
+
+#usercontrols {
+	float: right;
+	padding: 5px;
+}
+
+#rootappfield{
+	min-height: 610px;
+	margin-top: 13px;
+	padding-left: 17px;
+	padding-top: 5px;
+}
+
+/*Used for the article section in the main div*/
+#right_float {
+	min-height: 610px;
+	margin-left: 384px;
+	margin-top: 13px;
+	padding-left: 17px;
+	padding-top: 5px;
+	border-left: outset #a52639;
+}
+
+/*default icon size*/
+#sm_icon{
+	margin-left: 5px;
+	margin-right: 5px; 
+}
+
+#yt_video{
+	position: relative;
+	left: 20px;
+    box-shadow: 6px 9px 12px 9px rgb(0 0 0 / 10%);
+}
+
+#photo_caption_div{
+	height: 46px;
+	margin-top: 13px;
+}
+
+#photo_caption{
+    font-weight: bold;
+}
+
+#header_logo {
+    margin-top: -5px;
+    margin-left: 5px;
+    float: left;
+}
+
+#header_text{
+	float: left;
+	margin-left: 5px;
+	position: relative;
+	top: 34px;
+	border-left: double 6px #9f7c61;
+	padding-left: 14px;
+}
+
+#article_pic {
+	height: 300px;
+	border: outset;
+	box-shadow: 6px 9px 12px 9px rgb(0 0 0 / 10%);
+	float: left;
+}
+
+#site_logo {
+    height: 137px;
+    margin: 5px;
+}
+
+#infocard_pic {
+	display: block;
+ 	margin-left: auto;
+ 	margin-right: auto;
+	height: 250px;
+}
+
+#top_header {
+	height: 143px;
+	border-bottom: groove;
+}
+
+#infocard_table tr {
+	border-bottom: solid #000000 1px;
+}
+
+#cp_navbar{
+	text-decoration: underline rgba(0,0,0,.55);
+}
+
+#footer_form{
+	float: right;
+	margin: 25px 0px;
+}
+
+.title{
+	color: #6a2e00;
+	/*text-decoration: underline 2px; */
+	border-bottom: solid;
+	width: 75%;
+}
+
+.cp_li{
+	padding: 5px;
+    max-width: 300px;
+}
+
+.fb-share-button{
+    margin-top: 15px;
+}
+
+.input-group{
+	float: right;
+	max-width: 200px;
+}
+
+.navbar-nav{ 
+	flex-direction:  row;
+
+}

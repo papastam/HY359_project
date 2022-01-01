@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta name="Author" content="Chris Papastamos">
+	<meta name="Description" content="First assignment of hy359 course">
+	<meta name="Theme" content="A fake bio profile for a friend of mine (the Official Website on the infocard is real)">
+	<meta name="keywords" content="hy359, Chris Papastamos, CSD, UOC">
+	<!-- <meta http-equiv="refresh" content="1"> -->
+
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/stylesheet.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<title>Konstantinos Englezakis' bio</title>
+	<link rel="icon" href="images/icon.png">
+
+	<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
+	<script src="https://goessner.net/download/prj/jsonxml/xml2json.js"> </script>
+	<script src="script.js"></script>
+</head>
+<body>
+<div id="fb-root"></div>
+<!--	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/el_GR/sdk.js#xfbml=1&version=v12.0" nonce="BaStU0Ys"></script>-->
+
+<header id="top_header">
+	<div id="header_logo">
+		<a href=""><img id="site_logo" src="images/papastampedia.png"></a>
+	</div>
+	<div id="header_text">
+		<h2>Konstantinos Englezakis</h2>
+		<h6>one of the best greek singers</h6>
+	</div>
+
+</header>
+<script>
+	$(document).ready(function(){
+		$("#logoutbtn").hide();
+		$("#infobtn").hide();
+		$("#bmibtn").hide();
+		$("#doctorsbtn").hide();
+	})
+</script>
+<nav id="cp_navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+	<!-- <div class="collapse navbar-collapse" id="navbarNav"> -->
+	<ul class="navbar-nav">
+		<li id="registerbtn" class="nav-item">
+			<a class="nav-link active" onclick="loadRegister();">Register </a>
+		</li>
+		<li id="loginbtn" class="nav-item">
+			<a class="nav-link active" onclick="loadLogin()">Login </a>
+		</li>
+		<li id="infobtn" class="nav-item">
+			<a class="nav-link active" onclick="showusrinfo()">User Info </a>
+		</li>
+		<li id="bmibtn" class="nav-item">
+			<a class="nav-link active" onclick="showbmi()">Health Stats </a>
+		</li>
+		<li id="doctorsbtn" class="nav-item">
+			<a class="nav-link active" onclick="showdoctors()">Available Doctors </a>
+		</li>
+		<li id=logoutbtn" class="nav-item">
+			<a class="nav-link active" onclick="userlogedout()">Logout </a>
+		</li>
+	</ul>
+	<!-- </div> -->
+</nav>
+<div>
+	<!--		<aside>-->
+	<!--			<header><h4>Konstantinos Englezakis</h4></header>-->
+
+	<!--			<div>-->
+	<!--				<img id="infocard_pic" src="guitar pic.png">-->
+	<!--			</div>-->
+	<!--			<table id="infocard_table">-->
+	<!--				<tr>-->
+	<!--					<td>Name in Greek</td>-->
+	<!--					<td> Κωνσταντινος Εγγλεζακης</td> -->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Date of birth</td>-->
+	<!--					<td>20 May 1986 (35 y/o)</td>-->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Ethnicity</td>-->
+	<!--					<td><a href="https://el.wikipedia.org/wiki/%CE%88%CE%BB%CE%BB%CE%B7%CE%BD%CE%B1%CF%82">Greek</a></td>-->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Occupation</td>-->
+	<!--					<td>-->
+	<!--						<a href="https://el.wikipedia.org/wiki/%CE%9C%CE%BF%CF%85%CF%83%CE%B9%CE%BA%CF%8C%CF%82">Musician</a>, -->
+	<!--						<a href="https://www.wikidata.org/wiki/Q177220">Singer</a> and -->
+	<!--						<a href="https://www.wikidata.org/wiki/Q55960555">Songwriter</a></td>-->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Music genre</td>-->
+	<!--					<td>-->
+	<!--						<a href="https://el.wikipedia.org/wiki/%CE%9B%CE%B1%CF%8A%CE%BA%CF%8C_%CF%84%CF%81%CE%B1%CE%B3%CE%BF%CF%8D%CE%B4%CE%B9">Greek music</a> and -->
+	<!--						<a href="https://el.wikipedia.org/wiki/%CE%A0%CE%BF%CF%80_%CE%BC%CE%BF%CF%85%CF%83%CE%B9%CE%BA%CE%AE">Pop music</a></td>-->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Awards</td>-->
+	<!--					<td><a href="https://el.wikipedia.org/wiki/MAD_Video_Music_Awards">MAD Video Music Awards</a><td>-->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Website</td>-->
+	<!--					<td><a href="https://el.wikipedia.org/wiki/%CE%9A%CF%89%CE%BD%CF%83%CF%84%CE%B1%CE%BD%CF%84%CE%AF%CE%BD%CE%BF%CF%82_%CE%95%CE%B3%CE%B3%CE%BB%CE%B5%CE%B6%CE%AC%CE%BA%CE%B7%CF%82">Official Website</a></td>-->
+	<!--				</tr>-->
+	<!--				<tr>-->
+	<!--					<td>Social Media</td>-->
+	<!--					<td><a id="sm_icon" href="https://www.facebook.com/kon.engle" class="fa fa-facebook"></a><a id="sm_icon" href="https://www.instagram.com/englezakiss" class="fa fa-instagram"></a></td>-->
+	<!--				</tr>-->
+	<!--			</table>-->
+
+	<!--		</aside>-->
+	<div id="appfield">
+
+	</div>
+</div>
+<footer>
+	<!--		<div class="fb-share-button" data-href="https://www.facebook.com/kon.engle" data-layout="box_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.facebook.com%2Fkon.engle&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Κοινοποίηση</a></div>-->
+	<a href="https://www.vrisko.gr/efimeries-farmakeion/irakleio" target="_blank"><img src="https://www.vrisko.gr/graphlink/Pharmacies/image/468x60_Banner_n/?Region=irakleio&NativeRegion=%ce%97%cf%81%ce%ac%ce%ba%ce%bb%ce%b5%ce%b9%ce%bf&" border="0" alt="Εφημερεύοντα Φαρμακεία Ηράκλειο" /></a>
+
+	<div id="footer_form">
+		<h6>Subscribe to Papastampedia newsletter:</h6>
+		<form class="form-inline">
+			<input class="form-control mr-sm-2" placeholder="example@mail.com">
+			<button id="newsletter_btn" class="btn btn-outline-success my-2 my-sm-0">Subscribe</button>
+		</form>
+	</div>
+</footer>
+</body>
