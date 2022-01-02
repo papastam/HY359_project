@@ -171,7 +171,7 @@ function sendAJAXUpdate(event) {
 
 	// console.log("sent data");
 	// console.log(data);
-	xhr.open('POST', 'UpdateUserInfo');
+	xhr.open('POST', 'UserAPI');
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.send(JSON.stringify(data));
 

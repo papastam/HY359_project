@@ -1,10 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script>
+    function submitNewBloodTest(event){
+        event.preventDefault();
+        let formData = new FormData(document.getElementById('newBloodTest'));
+        const testdata = {};
+        formData.forEach((value, key) => (testdata[key] = value));
 
-</body>
-</html>
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                $("#ajaxContent").html("<p style='color:green'>Your info was updated succesfully</p>");
+                loadBloodTests();
+            } else if (xhr.status !== 200) {
+                $("#ajaxContent").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        testdata["amka"]=userdata["amka"];
+        if(testdata["blood_sugar"]<70){
+            testdata["blood_sugar_level"]="low";
+        }else if(testdata["blood_sugar"]<110){
+            testdata["blood_sugar_level"]="normal";
+        }else{
+            testdata["blood_sugar_level"]="high";
+        }
+
+        if(testdata["cholesterol"]<200){
+            testdata["cholesterol_level"]="normal";
+        }else{
+            testdata["cholesterol_level"]="high";
+        }
+
+        if(testdata["iron"]<60){
+            testdata["iron_level"]="low";
+        }else if(testdata["iron"]<150){
+            testdata["iron_level"]="normal";
+        }else{
+            testdata["iron_level"]="high";
+        }
+
+        if(testdata["vitamin_d3"]<30){
+            testdata["vitamin_d3_level"]="low";
+        }else if(testdata["vitamin_d3"]<149){
+            testdata["vitamin_d3_level"]="normal";
+        }else{
+            testdata["vitamin_d3_level"]="high";
+        }
+
+        if(testdata["vitamin_b12"]<160){
+            testdata["vitamin_d3_level"]="low";
+        }else if(testdata["vitamin_d3"]<925){
+            testdata["vitamin_d3_level"]="normal";
+        }else{
+            testdata["vitamin_d3_level"]="high";
+        }
+
+        xhr.open('POST', '/Project_war_exploded/BloodTestsAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(testdata));
+    }
+
+    function loadBloodTests(){
+        $("#prevbloodtests").html("");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState===4 && xhr.status==200 ){
+                var reply = JSON.parse(xhr.responseText);
+                $("#prevbloodtests").append("<tr><td>Test Date</td><td>Medical Center</td><td>Blood Sugar</td><td>Cholesterol</td><td>Iron</td><td>Vitamin D3</td><td>Vitamin B12</td><td></td></tr>");
+                for(ind in reply["tests"]){
+                    var test = JSON.parse(reply["tests"][ind]);
+                    $("#prevbloodtests").append("<tr><td>"+test["test_date"]+"</td><td>"+test["medical_center"]+"</td><td>"+test["blood_sugar"]+" ("+test["blood_sugar_level"]+")</td><td>"+test["cholesterol"]+" ("+test["cholesterol_level"]+")</td><td>"+test["iron"]+" ("+test["iron_level"]+")</td><td>"+test["vitamin_d3"]+" ("+test["vitamin_d3_level"]+")</td><td>"+test["vitamin_b12"]+" ("+test["vitamin_b12_level"]+")</td><td></td></tr>");
+                }
+            }
+        };
+
+        xhr.open('GET', '/Project_war_exploded/BloodTestsAPI?amka='+userdata["amka"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    $(document).ready(function (){
+        loadBloodTests()
+    });
+</script>
+<div>
+    <form id="newBloodTest" onsubmit="submitNewBloodTest(event)">
+        <table>
+            <tr>
+                <td>Test Date</td>
+                <td>Medical Center</td>
+                <td>Blood Sugar</td>
+                <td>Cholesterol</td>
+                <td>Iron</td>
+                <td>Vitamin D3</td>
+                <td>Vitamin B12</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><input id="test_date" type="date" name="test_date" value="1980-01-01" min="1920-01-01" max="2005-12-31" required /></td>
+                <td><input id="medical_center" type="text" name="medical_center" required></td>
+                <td><input id="blood_sugar" type="text" name="blood_sugar" required></td>
+                <td><input id="cholesterol" type="text" name="cholesterol" required></td>
+                <td><input id="iron" type="text" name="iron" required></td>
+                <td><input id="vitamin_d3" type="text" name="vitamin_d3" required></td>
+                <td><input id="vitamin_b12" type="text" name="vitamin_b12" required></td>
+                <td><input type="submit" class="button" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
+    <div id="ajaxContent"></div>
+    <br>
+</div>
+    <header>Previus Blood Tests</header>
+    <table id="prevbloodtests">
+
+    </table>
+
+<div>
+
+
+
+</div>

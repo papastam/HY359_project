@@ -20,4 +20,5 @@ function loadmessages(){
 
 $(document).ready(function () {
     checkUserLoggedIn("user");
+    loadinfo();
 });

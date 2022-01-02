@@ -7,6 +7,7 @@ package Database_HY359.src.database.tables;
 
 import Database_HY359.src.mainClasses.BloodTest;
 import Database_HY359.src.mainClasses.Doctor;
+import Database_HY359.src.mainClasses.SimpleUser;
 import com.google.gson.Gson;
 import Database_HY359.src.database.DB_Connection;
 import org.json.JSONObject;
@@ -44,6 +45,50 @@ public class EditBloodTestTable {
 
         String json = gson.toJson(bt, BloodTest.class);
         return json;
+    }
+
+    public ArrayList<BloodTest> databaseToBloodTests() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<BloodTest> tests=new ArrayList<BloodTest>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM bloodtest");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                BloodTest test = gson.fromJson(json, BloodTest.class);
+                tests.add(test);
+            }
+            return tests;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public ArrayList<BloodTest> databaseToBloodTests(long amka) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<BloodTest> tests=new ArrayList<BloodTest>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka="+amka);
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                BloodTest test = gson.fromJson(json, BloodTest.class);
+                tests.add(test);
+            }
+            return tests;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public JSONObject databaseToJSON() throws SQLException, ClassNotFoundException {

@@ -23,11 +23,10 @@
                 $("#gender_"+jsonreply["gender"]).prop("checked","checked");
                 $("#bd_"+jsonreply["blooddonor"]).prop("checked","checked");
                 $("#bt_"+jsonreply["bloodtype"]).prop("selected","true");
-                updateCachedInfo(jsonreply);
             }
         }
 
-        xhr.open('POST', 'GetUserInfo');
+        xhr.open('POST', 'GetInfo');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
 

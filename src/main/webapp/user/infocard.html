@@ -1,35 +1,22 @@
 <script>
     $(document).ready(function(){
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function (){
-            if(xhr.readyState === 4 && xhr.status === 200){
-                var jsonreply = JSON.parse(xhr.responseText);
-                // console.log(jsonreply);
-                $("#username").val(jsonreply["username"]);
-                usercachedinfo["logged_in"] =  jsonreply["username"];
-                $("#email").val(jsonreply["email"]);
-                $("#passwordfield").val(jsonreply["password"]);
-                $("#firstname").val(jsonreply["firstname"]);
-                $("#lastname").val(jsonreply["lastname"]);
-                $("#bdate").val(jsonreply["birthdate"]);
-                $("#amka").val(jsonreply["amka"]);
-                $("#country").val(jsonreply["country"]);
-                $("#city").val(jsonreply["city"]);
-                $("#address").val(jsonreply["address"]);
-                $("#telephone").val(jsonreply["telephone"]);
-                $("#height").val(jsonreply["height"]);
-                $("#weight").val(jsonreply["weight"]);
+        $("#username").val(userdata["username"]);
+        $("#email").val(userdata["email"]);
+        $("#passwordfield").val(userdata["password"]);
+        $("#firstname").val(userdata["firstname"]);
+        $("#lastname").val(userdata["lastname"]);
+        $("#bdate").val(userdata["birthdate"]);
+        $("#amka").val(userdata["amka"]);
+        $("#country").val(userdata["country"]);
+        $("#city").val(userdata["city"]);
+        $("#address").val(userdata["address"]);
+        $("#telephone").val(userdata["telephone"]);
+        $("#height").val(userdata["height"]);
+        $("#weight").val(userdata["weight"]);
 
-                $("#gender_"+jsonreply["gender"]).prop("checked","checked");
-                $("#bd_"+jsonreply["blooddonor"]).prop("checked","checked");
-                $("#bt_"+jsonreply["bloodtype"]).prop("selected","true");
-                updateCachedInfo(jsonreply);
-            }
-        }
-
-        xhr.open('POST', 'GetInfo');
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send("");
+        $("#gender_"+userdata["gender"]).prop("checked","checked");
+        $("#bd_"+userdata["blooddonor"]).prop("checked","checked");
+        $("#bt_"+userdata["bloodtype"]).prop("selected","true");
 
         $("#showpass,#cshowpass").click(function(){
             if($(this).siblings(".pwrdfld").attr('type')=="password"){
@@ -132,7 +119,7 @@
 
             console.log("sent data");
             console.log(request);
-            xhr.open('POST', 'TestForDuplicates');
+            xhr.open('POST', '/Project_war_exploded/TestForDuplicates');
             xhr.setRequestHeader("Content-type", "application/json");
             xhr.send(JSON.stringify(request));
         }

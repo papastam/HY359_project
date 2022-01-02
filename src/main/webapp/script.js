@@ -1,9 +1,9 @@
 function loadinfo(){
-    $("#appfield").load("info.html");
+    $("#appwindow").load("info.html");
 }
 
 function loaddoctors(){
-    $("#appfield").load("availableDoctors.html");
+    $("#appwindow").load("availableDoctors.html");
 }
 
 function sendAjaxRegisterPOST(event){
@@ -29,8 +29,6 @@ function sendAjaxRegisterPOST(event){
 
     data["lat"]=userdata["lat"];
     data["lon"]=userdata["lon"];
-
-    updateCachedInfo(data);
 
     // console.log("sent data");
     console.log(JSON.stringify(data));
