@@ -9,7 +9,7 @@ function showlogin(){
 }
 
 function loadregister(){
-    $("#appfield").load("register.html");
+    $("#appwindow").load("register.html");
 }
 
 function sendAjaxLoginPOST(event){
@@ -39,7 +39,7 @@ function sendAjaxLoginPOST(event){
     }
 
     // console.log("sent data");
-    // console.log("data");
+    // console.log(data);
     xhr.open('POST', 'Login');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
