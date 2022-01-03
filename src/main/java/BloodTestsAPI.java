@@ -62,6 +62,44 @@ public class BloodTestsAPI extends HttpServlet {
         JSONObject jsonin = new JSONObject(tokener);
         EditBloodTestTable bloodtest = new EditBloodTestTable();
 
+        if(Integer.parseInt((String) jsonin.get("blood_sugar"))<70){
+            jsonin.put("blood_sugar_level","low");
+        }else if(Integer.parseInt((String) jsonin.get("blood_sugar"))<110){
+            jsonin.put("blood_sugar_level","normal");
+        }else{
+            jsonin.put("blood_sugar_level","high");
+        }
+
+        if(Integer.parseInt((String) jsonin.get("cholesterol"))<200){
+            jsonin.put("cholesterol_level","normal");
+        }else{
+            jsonin.put("cholesterol_level","high");
+        }
+
+        if(Integer.parseInt((String) jsonin.get("iron"))<60){
+            jsonin.put("iron_level","low");
+        }else if(Integer.parseInt((String) jsonin.get("iron"))<150){
+            jsonin.put("iron_level","normal");
+        }else{
+            jsonin.put("iron_level","high");
+        }
+
+        if(Integer.parseInt((String) jsonin.get("vitamin_d3"))<30){
+            jsonin.put("vitamin_d3_level","low");
+        }else if(Integer.parseInt((String) jsonin.get("vitamin_d3"))<149){
+            jsonin.put("vitamin_d3_level","normal");
+        }else{
+            jsonin.put("vitamin_d3_level","high");
+        }
+
+        if(Integer.parseInt((String) jsonin.get("vitamin_b12"))<160){
+            jsonin.put("vitamin_d3_level","low");
+        }else if(Integer.parseInt((String) jsonin.get("vitamin_d3"))<925){
+            jsonin.put("vitamin_d3_level","normal");
+        }else{
+            jsonin.put("vitamin_d3_level","high");
+        }
+
         try {
             bloodtest.addBloodTestFromJSON(String.valueOf(jsonin));
         } catch (ClassNotFoundException e) {

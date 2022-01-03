@@ -5,6 +5,7 @@
  */
 package Database_HY359.src.database.tables;
 
+import Database_HY359.src.mainClasses.BloodTest;
 import com.google.gson.Gson;
 import Database_HY359.src.database.tables.EditBloodTestTable;
 import Database_HY359.src.database.DB_Connection;
@@ -13,6 +14,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +56,28 @@ public class EditTreatmentTable {
             Gson gson = new Gson();
             Treatment tr  = gson.fromJson(json, Treatment.class);
             return tr;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public ArrayList<Treatment> databaseToTreatments(int user_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Treatment> treatments= new ArrayList<Treatment>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM treatment WHERE user_id="+user_id);
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Treatment treatment = gson.fromJson(json, Treatment.class);
+                treatments.add(treatment);
+            }
+            return treatments;
+
         } catch (Exception e) {
             System.err.println("Got an exception! ");
             System.err.println(e.getMessage());
