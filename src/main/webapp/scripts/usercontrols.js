@@ -1,4 +1,4 @@
-let userdata;
+let userdata= {"lat":0,"lon":0};
 
 function showlogin(){
     if($("#loginform").is(":visible")){
