@@ -6,6 +6,7 @@
 package Database_HY359.src.database.tables;
 
 import Database_HY359.src.mainClasses.Doctor;
+import Database_HY359.src.mainClasses.SimpleUser;
 import com.google.gson.Gson;
 import Database_HY359.src.database.DB_Connection;
 import java.sql.Connection;
@@ -198,6 +199,45 @@ public class EditDoctorTable {
         System.out.println(insertQuery);
         stmt.executeUpdate(insertQuery);
         System.out.println("# The doctor was successfully added in the database.");
+
+        /* Get the member id from the database and set it to the member */
+        stmt.close();
+    }
+
+    /**
+     * Establish a database connection and edit a doctor from the database.
+     *
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
+    public void updateWholeDoctor(Doctor doc) throws ClassNotFoundException, SQLException {
+        Connection con = DB_Connection.getConnection();
+
+        Statement stmt = con.createStatement();
+        String updateQuery = "UPDATE doctors SET "
+                + "email='" + doc.getEmail() + "',"
+                + "password='" + doc.getPassword() + "',"
+                + "firstname='" + doc.getFirstname() + "',"
+                + "lastname='" + doc.getLastname() + "',"
+                + "birthdate='" + doc.getBirthdate() + "',"
+                + "gender='" + doc.getGender() + "',"
+                + "specialty='" + doc.getSpecialty() + "',"
+                + "doctor_info='" + doc.getDoctor_info() + "',"
+                + "country='" + doc.getCountry() + "',"
+                + "city='" + doc.getCity() + "',"
+                + "address='" + doc.getAddress() + "',"
+                + "lat='" + doc.getLat() + "',"
+                + "lon='" + doc.getLon() + "',"
+                + "telephone='" + doc.getTelephone() + "',"
+                + "height='" + doc.getHeight() + "',"
+                + "weight='" + doc.getWeight() + "',"
+                + "blooddonor='" + doc.isBloodDonor() + "',"
+                + "bloodtype='" + doc.getBloodtype() + "' "
+                + "WHERE username = '"+doc.getUsername()+"'";
+        //stmt.execute(table);
+        System.out.println(updateQuery);
+        stmt.executeUpdate(updateQuery);
+        System.out.println("# The doctor has succesfully updated his data.");
 
         /* Get the member id from the database and set it to the member */
         stmt.close();

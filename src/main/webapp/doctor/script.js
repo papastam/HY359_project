@@ -19,5 +19,6 @@ function loadmessages(){
 }
 
 $(document).ready(function () {
+    loadinfo();
     checkUserLoggedIn("doctor");
 });

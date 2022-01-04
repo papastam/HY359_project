@@ -1,10 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script>
+    function calculateDistance(jsonpoints) {
+        console.log(jsonpoints);
+        const data = null;
 
-</body>
-</html>
+        const xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                console.log(this.responseText);
+            }
+        });
+
+        xhr.open("GET", "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins="+jsonpoints["user"]+"&destinations="+jsonpoints["docs"]);
+        xhr.setRequestHeader("x-rapidapi-host", "trueway-matrix.p.rapidapi.com");
+        xhr.setRequestHeader("x-rapidapi-key", "bd2e97d2d1msh175dda3181f8171p1988aejsnf9cec4a9c8d3");
+
+        xhr.send(data);
+    }
+
+    $(document).ready(function(){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                console.log(jsonreply);
+
+                var jsonpoins = {"user":userdata["lat"]+","+userdata["lon"],"docs":""};
+                for(index in jsonreply["doctors"]) {
+                    var doc = JSON.parse(jsonreply["doctors"][index]);
+                    jsonpoins["docs"] = jsonpoins["docs"] + doc["lat"] + "," + doc["lon"] + ";";
+
+                }
+                calculateDistance(jsonpoins);
+
+                    //
+                    // if(doc["certified"]!=1){continue;}
+                    // console.log(doc);
+                    //
+                    // $("#docstable").append('<tr id="doctable_r'+index+'"></tr>');
+                    //
+                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["firstname"]+' '+doc["lastname"]+'</td>');
+                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["specialty"]+'</td>');
+                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["telephone"]+'</td>');
+                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["address"]+", "+doc["city"]+", "+doc["country"]+'</td>');
+                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["email"]+'</td>');
+                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["doctor_info"]+'</td>');
+
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/CertifiedDoctorBoy');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+
+
+    });
+
+</script>
+<header class="title">
+    <h4>Here are all the licenced doctors available:</h4>
+</header>
+<br>
+<table id="docstable">
+    <thead id="doctablehead">
+    <td class="doctablecell">Name</td>
+    <td class="doctablecell">Specialty</td>
+    <td class="doctablecell">Telephone</td>
+    <td class="doctablecell">Address</td>
+    <td class="doctablecell">Email</td>
+    <td class="doctablecell">Doctor Info</td>
+    </thead>
+
+</table>

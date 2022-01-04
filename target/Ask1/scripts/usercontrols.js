@@ -1,44 +1,9 @@
 let userdata= {"lat":0,"lon":0};
 
-function updateCachedInfo(jsonreply){
-    usercachedinfo["gender"]=jsonreply["gender"];
-    usercachedinfo["height"]=jsonreply["height"];
-    usercachedinfo["weight"]=jsonreply["weight"];
-}
-
-function sendAJAXUpdate(event) {
-    event.preventDefault();
-    let formData = new FormData(document.getElementById('editdataform'));
-    const data = {};
-    formData.forEach((value, key) => (data[key] = value));
-
-
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // console.log(xhr.responseText);
-
-            $("#ajaxContent").html("<p style='color:green'>Your info was updated succesfully</p>");
-        } else if (xhr.status !== 200) {
-            $("#ajaxContent").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
-        }
-    };
-    delete data["cpassword"];
-    data["address"] += " " + data["addrnumber"];
-    delete data["addrnumber"];
-    data["username"] = usercachedinfo["logged_in"];
-
-    data["lat"]=usercachedinfo["lat"];
-    data["lon"]=usercachedinfo["lon"];
-
-    updateCachedInfo(data);
-
-    // console.log("sent data");
-    // console.log(data);
-    xhr.open('POST', '/Project_war_exploded/UserAPI');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(JSON.stringify(data));
-
+function updateuserdata(jsonreply){
+    userdata["gender"]=jsonreply["gender"];
+    userdata["height"]=jsonreply["height"];
+    userdata["weight"]=jsonreply["weight"];
 }
 
 function showlogin(){

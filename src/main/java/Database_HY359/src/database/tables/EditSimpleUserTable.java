@@ -216,19 +216,13 @@ public class EditSimpleUserTable {
         Connection con = DB_Connection.getConnection();
 
         Statement stmt = con.createStatement();
-//            + " users (username,email,password,firstname,lastname,birthdate,gender,amka,country,city,address,"
-//                    + "lat,lon,telephone,height,weight,blooddonor,bloodtype)"
-//                    + " VALUES ("
-//            String update="UPDATE users SET weight='"+weight+"' WHERE username = '"+username+"'";
         String updateQuery = "UPDATE users SET "
-//                    + "'" + user.getUsername() + "',"
                 + "email='" + user.getEmail() + "',"
                 + "password='" + user.getPassword() + "',"
                 + "firstname='" + user.getFirstname() + "',"
                 + "lastname='" + user.getLastname() + "',"
                 + "birthdate='" + user.getBirthdate() + "',"
                 + "gender='" + user.getGender() + "',"
-//                    + "'" + user.getAmka() + "',"
                 + "country='" + user.getCountry() + "',"
                 + "city='" + user.getCity() + "',"
                 + "address='" + user.getAddress() + "',"
