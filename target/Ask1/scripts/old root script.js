@@ -142,7 +142,7 @@ function sendAjaxRegisterPOST(event){
 	xhr.send(JSON.stringify(data));
 }
 
-function sendAJAXUpdate(event) {
+function UpdateUser(event) {
 	event.preventDefault();
 	let formData = new FormData(document.getElementById('editdataform'));
 	const data = {};

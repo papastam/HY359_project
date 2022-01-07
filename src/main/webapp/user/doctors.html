@@ -1,6 +1,26 @@
 <script>
-    function calculateDistance(jsonpoints) {
-        console.log(jsonpoints);
+    function printdoctortable(sortedindexes,jsonreply){
+        // console.log(jsonreply);
+        for (index in sortedindexes) {
+            var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
+            // console.log(sortedindexes[index]);
+
+            if (doc["certified"] != true) {
+                continue;
+            }
+            $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
+
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["specialty"] + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["telephone"] + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["email"] + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["doctor_info"] + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["distance"] + ' m</td>');
+        }
+    }
+
+    function calculateandPrint(method, jsonpoints, jsonreply) {
         const data = null;
 
         const xhr = new XMLHttpRequest();
@@ -8,45 +28,57 @@
 
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === this.DONE) {
-                console.log(this.responseText);
+                var reply = JSON.parse(this.responseText);
+                var distances = reply["distances"][0];
+                console.log(reply);
+                var sortedindexes = new Object();
+
+                for(i=0;i<distances["length"];i++){if(distances[i]==null){distances[i]=99999999;}}
+
+                // console.log(distances);
+                for(i=0;i<distances["length"];i++){
+                    var minind = distances.indexOf(Math.min(...distances));
+
+                    var doc = JSON.parse(jsonreply["doctors"][i]);
+                    doc["distance"]=distances[minind];
+                    jsonreply["doctors"][i]=JSON.stringify(doc);
+
+                    sortedindexes[i]=minind
+                    distances[minind]=9999999999;
+                    // console.log(doc);
+                }
+                // console.log(sortedindexes);
+                printdoctortable(sortedindexes,jsonreply);
             }
         });
 
-        xhr.open("GET", "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins="+jsonpoints["user"]+"&destinations="+jsonpoints["docs"]);
+        xhr.open("GET", "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins=" + jsonpoints["user"] + "&destinations=" + jsonpoints["docs"]);
         xhr.setRequestHeader("x-rapidapi-host", "trueway-matrix.p.rapidapi.com");
         xhr.setRequestHeader("x-rapidapi-key", "bd2e97d2d1msh175dda3181f8171p1988aejsnf9cec4a9c8d3");
 
         xhr.send(data);
     }
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         var xhr = new XMLHttpRequest();
-        xhr.onload = function (){
-            if(xhr.readyState === 4 && xhr.status === 200){
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
                 var jsonreply = JSON.parse(xhr.responseText);
-                console.log(jsonreply);
 
-                var jsonpoins = {"user":userdata["lat"]+","+userdata["lon"],"docs":""};
-                for(index in jsonreply["doctors"]) {
+                var jsonpoints = {"user": userdata["lat"] + "," + userdata["lon"], "docs": ""};
+                for (index in jsonreply["doctors"]) {
                     var doc = JSON.parse(jsonreply["doctors"][index]);
-                    jsonpoins["docs"] = jsonpoins["docs"] + doc["lat"] + "," + doc["lon"] + ";";
+                    // console.log(doc);
+
+                    if (doc["certified"] !=true) {
+                        continue;
+                    }
+                    jsonpoints["docs"] = jsonpoints["docs"] + doc["lat"] + "," + doc["lon"] + ";";
+                    jsonpoints["indexes"]= jsonpoints["indexes"] +index+";";
 
                 }
-                calculateDistance(jsonpoins);
-
-                    //
-                    // if(doc["certified"]!=1){continue;}
-                    // console.log(doc);
-                    //
-                    // $("#docstable").append('<tr id="doctable_r'+index+'"></tr>');
-                    //
-                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["firstname"]+' '+doc["lastname"]+'</td>');
-                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["specialty"]+'</td>');
-                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["telephone"]+'</td>');
-                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["address"]+", "+doc["city"]+", "+doc["country"]+'</td>');
-                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["email"]+'</td>');
-                    // $("#doctable_r"+index).append('<td class="doctablecell">'+doc["doctor_info"]+'</td>');
-
+                // console.log(jsonpoints);
+                calculateandPrint("distance", jsonpoints, jsonreply);
             }
         }
 
@@ -58,18 +90,25 @@
     });
 
 </script>
-<header class="title">
+<header className="title">
     <h4>Here are all the licenced doctors available:</h4>
 </header>
 <br>
+<label for="sortorder">Sort table by: </label>
+<select id="sortorder" name="sortorder">
+    <option value="distance">Distance</option>
+    <option value="time">Time</option>
+</select>
+
 <table id="docstable">
     <thead id="doctablehead">
-    <td class="doctablecell">Name</td>
-    <td class="doctablecell">Specialty</td>
-    <td class="doctablecell">Telephone</td>
-    <td class="doctablecell">Address</td>
-    <td class="doctablecell">Email</td>
-    <td class="doctablecell">Doctor Info</td>
+    <td className="doctablecell">Name</td>
+    <td className="doctablecell">Specialty</td>
+    <td className="doctablecell">Telephone</td>
+    <td className="doctablecell">Address</td>
+    <td className="doctablecell">Email</td>
+    <td className="doctablecell">Doctor Info</td>
+    <td className="doctablecell">Distance</td>
     </thead>
 
 </table>
