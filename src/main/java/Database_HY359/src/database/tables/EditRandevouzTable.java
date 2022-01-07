@@ -55,7 +55,7 @@ public class EditRandevouzTable {
         ArrayList<Randevouz> users=new ArrayList<Randevouz>();
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE ststus=free AND doctor_id="+doctor_id );
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE status=free AND doctor_id="+doctor_id );
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
@@ -77,7 +77,7 @@ public class EditRandevouzTable {
         ArrayList<Randevouz> users=new ArrayList<Randevouz>();
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE ststus=free AND  user_id="+user_id );
+            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE status=free AND  user_id="+user_id );
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
                 Gson gson = new Gson();
