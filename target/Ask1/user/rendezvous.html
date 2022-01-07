@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script>
+    function showrendezvous(){
+        $("#rendezvouswindow").load("myRendezvous.html");
+    }
 
-</body>
-</html>
+    function bookrendezvous(){
+        $("#rendezvouswindow").load("bookRendezvous.html");
+    }
+
+    $(document).ready(function () {
+        showrendezvous();
+    });
+</script>
+
+<div id="rendezvouscontrols">
+    <nav id="rendezvousnav" class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav">
+            <li id="myrendezvous" class="nav-item active" >
+                <a class="nav-link" onclick="showrendezvous();">My Rendezvous </a>
+            </li>
+            <li id="logoutbtn" class="nav-item active">
+            <a class="nav-link" onclick="bookrendezvous();">Book new </a>
+        </li>
+        </ul>
+    </nav>
+</div>
+
+<div id="rendezvouswindow">
+
+</div>

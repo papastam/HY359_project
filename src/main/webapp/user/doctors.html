@@ -1,9 +1,14 @@
 <script>
-    function printdoctortable(sortedindexes,jsonreply){
-        // console.log(jsonreply);
+    //TODO: show doctors on a map
+    var doctorsreply;
+    var jsonpoints;
+
+    function printdoctortable(sortedindexes, jsonreply) {
+        $("#docstable").html('<thead id=\"doctablehead\"><td className=\"doctablecell\">Name</td><td className=\"doctablecell\">Specialty</td><td className=\"doctablecell\">Telephone</td><td className=\"doctablecell\">Address</td><td className=\"doctablecell\">Email</td><td className=\"doctablecell\">Doctor Info</td><td className=\"doctablecell\">Distance</td><td className=\"doctablecell\">Duration</td></thead>')
+        console.log(jsonreply);
         for (index in sortedindexes) {
             var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
-            // console.log(sortedindexes[index]);
+            console.log(sortedindexes[index]);
 
             if (doc["certified"] != true) {
                 continue;
@@ -17,6 +22,7 @@
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["email"] + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["doctor_info"] + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["distance"] + ' m</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["duration"] + ' m</td>');
         }
     }
 
@@ -30,25 +36,43 @@
             if (this.readyState === this.DONE) {
                 var reply = JSON.parse(this.responseText);
                 var distances = reply["distances"][0];
+                var durations = reply["durations"][0];
+                var length = distances["length"];
                 console.log(reply);
                 var sortedindexes = new Object();
 
-                for(i=0;i<distances["length"];i++){if(distances[i]==null){distances[i]=99999999;}}
-
-                // console.log(distances);
-                for(i=0;i<distances["length"];i++){
-                    var minind = distances.indexOf(Math.min(...distances));
-
-                    var doc = JSON.parse(jsonreply["doctors"][i]);
-                    doc["distance"]=distances[minind];
-                    jsonreply["doctors"][i]=JSON.stringify(doc);
-
-                    sortedindexes[i]=minind
-                    distances[minind]=9999999999;
-                    // console.log(doc);
+                for (i = 0; i < length; i++) {
+                    if (distances[i] == null) {
+                        distances[i] = 99999999;
+                    }
+                    if (durations[i] == null) {
+                        durations[i] = 99999999;
+                    }
                 }
-                // console.log(sortedindexes);
-                printdoctortable(sortedindexes,jsonreply);
+
+                console.log(distances);
+                for (i = 0; i < length; i++) {
+                    var minind=0;
+                    if(method==="distances") {
+                        minind = distances.indexOf(Math.min(...distances));
+                        sortedindexes[i] = minind;
+                    }else if(method==="durations"){
+                        minind = durations.indexOf(Math.min(...durations));
+                        sortedindexes[i] = minind;
+                    }
+
+                    var doc = JSON.parse(jsonreply["doctors"][minind]);
+                    doc["distance"] = distances[minind];
+                    doc["duration"] = durations[minind];
+                    jsonreply["doctors"][minind] = JSON.stringify(doc);
+
+                    durations[minind] = 9999999999;
+                    distances[minind] = 9999999999;
+
+                    console.log(doc);
+                }
+                console.log(sortedindexes);
+                printdoctortable(sortedindexes, jsonreply);
             }
         });
 
@@ -63,22 +87,22 @@
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                var jsonreply = JSON.parse(xhr.responseText);
+                doctorsreply = JSON.parse(xhr.responseText);
 
-                var jsonpoints = {"user": userdata["lat"] + "," + userdata["lon"], "docs": ""};
-                for (index in jsonreply["doctors"]) {
-                    var doc = JSON.parse(jsonreply["doctors"][index]);
-                    // console.log(doc);
+                jsonpoints = {"user": userdata["lat"] + "," + userdata["lon"], "docs": ""};
+                for (index in doctorsreply["doctors"]) {
+                    var doc = JSON.parse(doctorsreply["doctors"][index]);
+                    console.log(doc);
 
-                    if (doc["certified"] !=true) {
+                    if (doc["certified"] != true) {
                         continue;
                     }
                     jsonpoints["docs"] = jsonpoints["docs"] + doc["lat"] + "," + doc["lon"] + ";";
-                    jsonpoints["indexes"]= jsonpoints["indexes"] +index+";";
+                    jsonpoints["indexes"] = jsonpoints["indexes"] + index + ";";
 
                 }
-                // console.log(jsonpoints);
-                calculateandPrint("distance", jsonpoints, jsonreply);
+                console.log(jsonpoints);
+                calculateandPrint("distances", jsonpoints, doctorsreply);
             }
         }
 
@@ -86,6 +110,10 @@
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
 
+        $("#sortorder").change(function () {
+            calculateandPrint($(this).val(),jsonpoints,doctorsreply);
+            console.log("changed");
+        });
 
     });
 
@@ -94,21 +122,12 @@
     <h4>Here are all the licenced doctors available:</h4>
 </header>
 <br>
-<label for="sortorder">Sort table by: </label>
+<label htmlFor="sortorder">Sort table by: </label>
 <select id="sortorder" name="sortorder">
-    <option value="distance">Distance</option>
-    <option value="time">Time</option>
+    <option value="distances" selected>Distance</option>
+    <option value="durations">Duration</option>
 </select>
 
 <table id="docstable">
-    <thead id="doctablehead">
-    <td className="doctablecell">Name</td>
-    <td className="doctablecell">Specialty</td>
-    <td className="doctablecell">Telephone</td>
-    <td className="doctablecell">Address</td>
-    <td className="doctablecell">Email</td>
-    <td className="doctablecell">Doctor Info</td>
-    <td className="doctablecell">Distance</td>
-    </thead>
 
 </table>
