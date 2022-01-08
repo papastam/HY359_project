@@ -26,7 +26,7 @@ public class TestForDuplicates extends HttpServlet {
         EditDoctorTable doctable = new EditDoctorTable();
         ArrayList<Doctor> doctors = null;
         try {
-            doctors = doctable.databaseToDoctors();
+            doctors = doctable.databaseToDoctors(0);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

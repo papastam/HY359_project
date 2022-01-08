@@ -5,16 +5,19 @@
  */
 package Database_HY359.src.database.tables;
 
+import Database_HY359.src.mainClasses.Doctor;
 import com.google.gson.Gson;
 import Database_HY359.src.database.DB_Connection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Database_HY359.src.mainClasses.Message;
+import org.json.JSONObject;
 
 /**
  *
@@ -41,7 +44,25 @@ public class EditMessageTable {
         return json;
     }
 
-   
+    public JSONObject chatToJSON(int user_id, int doctor_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JSONObject jsonmessages = new JSONObject();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM message WHERE doctor_id=\""+doctor_id+"\" AND user_id=\""+user_id+"\"");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                jsonmessages.append("messages",json);
+            }
+            return jsonmessages;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
     
     public Message databaseToMessage(int id) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();

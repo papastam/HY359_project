@@ -77,6 +77,28 @@ form ul{
 	color: red;
 }
 
+#messageswindow {
+    min-height: 126px;
+    width: 572px;
+    border: 2px outset #9f7c61;
+    padding: 5px;
+}
+
+#messages{
+	min-height: 500px;
+	background-color: #e3e3e3;
+}
+
+#messagecontols{
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 2px outset #9f7c61;
+}
+
+#messageinput{
+	width: 500px;
+}
+
 #appfield{
 	margin: 10px;
 }
