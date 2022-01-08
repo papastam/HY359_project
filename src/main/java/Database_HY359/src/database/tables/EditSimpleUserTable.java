@@ -10,6 +10,8 @@ import Database_HY359.src.mainClasses.SimpleUser;
 import Database_HY359.src.mainClasses.User;
 import com.google.gson.Gson;
 import Database_HY359.src.database.DB_Connection;
+import org.json.JSONObject;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -106,6 +108,26 @@ public class EditSimpleUserTable {
                 users.add(user);
             }
             return users;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public JSONObject databaseToJSON() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JSONObject jsonreply = new JSONObject();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM users WHERE username!='admin'");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                jsonreply.append("users",json);
+            }
+            return jsonreply;
 
         } catch (Exception e) {
             System.err.println("Got an exception! ");

@@ -37,13 +37,24 @@ public class CertifiedDoctorBoy extends HttpServlet {
         EditDoctorTable doctable = new EditDoctorTable();
         ArrayList<Doctor> docs=null;
         JSONObject jsonreply = new JSONObject();
+        String certified = request.getParameter("certified");
 
-        try {
-            docs = doctable.databaseToDoctors();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if(certified!=null) {
+            try {
+                docs = doctable.databaseToDoctors(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+                createResponse(response, 403, e.getMessage());
+                return;
+            }
+        }else {
+            try {
+                docs = doctable.databaseToDoctors(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+                createResponse(response, 403, e.getMessage());
+                return;
+            }
         }
 
         for(Doctor doc : docs){

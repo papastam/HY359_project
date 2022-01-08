@@ -36,20 +36,25 @@ public class UserAPI extends HttpServlet {
         EditSimpleUserTable usertable = new EditSimpleUserTable();
         ArrayList<SimpleUser> users=null;
         JSONObject jsonreply = new JSONObject();
+        String allusers = request.getParameter("allusers");
 
-        try {
-            users = usertable.databaseToSimpleUsers();
-        } catch (SQLException e) {
+        try{
+            if(allusers!=null){
+                createResponse(response,200,usertable.databaseToJSON().toString());
+            }else {
+                users = usertable.databaseToSimpleUsers();
+
+                for (SimpleUser user : users) {
+                    jsonreply.append("users", usertable.simpleUserToJSON(user));
+                }
+
+                createResponse(response, 200, jsonreply.toString());
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            createResponse(response,403,e.getMessage());
+            return;
         }
-
-        for(SimpleUser user : users){
-            jsonreply.append("users",usertable.simpleUserToJSON(user));
-        }
-
-        createResponse(response,200,jsonreply.toString());
     }
 
     //This method is used to update a user's info from a json input in its request

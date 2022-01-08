@@ -1,10 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script>
+    // USER MESSAGE TEMPLATE
+    // <div class="message_container user_container">
+    //     <div class="message user_message">
+    //         (Message)
+    //     </div>
+    // </div>
 
-</body>
-</html>
+    // DOCTOR MESSAGE TEMPLATE
+    // <div class="message_container">
+    //     <div class="message doctor_message">
+    //         (Message)
+    //     </div>
+    // </div>
+
+    var currentopenchat;
+
+    function sendmessage(event) {
+        event.preventDefault();
+        let myForm = document.getElementById('newMessageForm');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                openchat(currentopenchat);
+                $("#messageinput").val("");
+                $("#errormessages").html("");
+            } else if (xhr.status !== 200) {
+                $("#errormessages").html("<p style='color:red'>Your message wasn't sent! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        data["doctor_id"]=currentopenchat;
+        data["user_id"]=userdata["user_id"];
+        data["sender"]="user";
+        data["blood_donation"]=0;
+        data["date_time"]=moment().format('YYYY-MM-DD HH:mm:ss');
+
+        xhr.open('POST', '/Project_war_exploded/MessagesAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    function printmessage(message,sender) {
+        if(sender==="user"){
+            $("#messages").append("<div class=\"message_container user_container\"><div class=\"message user_message\">"+message+"</div></div>");
+        }else if(sender==="doctor"){
+            $("#messages").append("<div class=\"message_container\"><div class=\"message doctor_message\">"+message+"</div></div>");
+        }
+    }
+
+    function openchat(doctor_id) {
+        currentopenchat = doctor_id;
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                $("#messageswindow").show();
+                $("#messages").html("");
+                var reply = JSON.parse(xhr.responseText);
+                for(ind in reply["messages"]){
+                    var message = JSON.parse(reply["messages"][ind]);
+                    printmessage(message["message"],message["sender"]);
+                }
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/MessagesAPI?doctor_id=' + doctor_id + "&user_id=" + userdata["user_id"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+    }
+
+    function printdoctortable() {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var jsonreply = JSON.parse(xhr.responseText);
+                // console.log(jsonreply);
+                for (var index in jsonreply["doctors"]) {
+                    var doc = JSON.parse(jsonreply["doctors"][index]);
+                    if (doc["certified"] != 1) {
+                        continue;
+                    }
+                    // console.log(doc);
+
+                    $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
+
+                    $("#doctable_r" + index).append('<td>' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
+                    $("#doctable_r" + index).append('<td>' + doc["specialty"] + '</td>');
+                    $("#doctable_r" + index).append('<td>' + doc["telephone"] + '</td>');
+                    $("#doctable_r" + index).append('<td>' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
+                    $("#doctable_r" + index).append('<td>' + doc["email"] + '</td>');
+                    $("#doctable_r" + index).append('<td>' + doc["doctor_info"] + '</td>');
+                    $("#doctable_r" + index).append('<td class="doctablecell"><input type="button" value="Open Chat" onclick="openchat(\'' + doc["doctor_id"] + '\')" </td>');
+                }
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/CertifiedDoctorBoy?certified=1');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+    }
+
+    $(document).ready(function () {
+        printdoctortable();
+    });
+
+</script>
+<header class="title">
+    <h4>Select a doctor to chat with:</h4>
+</header>
+<br>
+<table id="docstable">
+    <thead id="doctablehead">
+    <td>Name</td>
+    <td>Specialty</td>
+    <td>Telephone</td>
+    <td>Address</td>
+    <td>Email</td>
+    <td>Doctor Info</td>
+    <td>Action</td>
+    </thead>
+
+</table>
+<br>
+<div id="messageswindow">
+    <div id="messages">
+
+
+    </div>
+    <div id="messagecontols">
+        <form id="newMessageForm" class="newMessageForm" onsubmit="sendmessage(event);">
+            <input type="text" id="messageinput" name="message" placeholder="Enter your message">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <div id="errormessages"></div>
+</div>
