@@ -14,12 +14,16 @@
                 $("#response").css("color", "green");
             } else if (xhr.status !== 200) {
                 var jsonreply = JSON.parse(xhr.responseText);
+                console.log("jsonreply");
+                console.log(jsonreply["reply"]);
                 if (jsonreply["reply"] === -1) {
-                    $("#datetimereply").html("You are not certified so you cannot make a rendezvous.")
+                    $("#datetimereply").html("You are not certified so you cannot make a rendezvous.");
                 } else if (jsonreply["reply"] === 0) {
                     $("#datetimereply").html("You cannot make a new rendezvous today or in the past.");
                 } else if (jsonreply["reply"] === 1) {
                     $("#datetimereply").html("Another rendezvous is in that time period.");
+                } else if(jsonreply["reply"] === 2) {
+                    $("#datetimereply").html("A rendezvous cannot be created before 08:00 or after 20:30.");
                 }
                 $("#datetimereply").css("color", "red");
 
@@ -27,6 +31,7 @@
                 $("#response").css("color", "red");
             }
         }
+
         data["username"] = userdata["username"];
         data["password"] = userdata["password"];
         data["certified"] = userdata["certified"];
