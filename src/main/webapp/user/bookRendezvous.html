@@ -31,11 +31,11 @@
 
     function showbook(randevouz_ind){
         var rend = JSON.parse(rendezvous[randevouz_ind]);
-        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table id='confirmtable'><thead><td>Date and Time</td><td>Price</td><td>Doctor Info</td><td>Comments</td><td>Confirm</td></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td><td style='display: none'><input name='randevouz_id' value='"+rend["randevouz_id"]+"'></td></tr></table></form>");
+        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table id='confirmtable'><thead><td>Date & Time</td><td>Price</td><td>Doctor Info</td><td>Comments</td><td>Confirm</td></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td><td style='display: none'><input name='randevouz_id' value='"+rend["randevouz_id"]+"'></td></tr></table></form>");
     }
 
     function showrendezvous(doctor_id) {
-        $("#rendezvous").html("<table id=\"randtable\"><thead><td>Date and Time</td><td>Price</td><td>Doctor Info</td><td>Book</td> </thead></table>")
+        $("#rendezvous").html("<table id=\"randtable\"><thead><td>Date & Time</td><td>Price</td><td>Doctor Info</td><td>Book</td> </thead></table>")
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -76,7 +76,7 @@
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["email"] + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["doctor_info"] + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["distance"] + ' m</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["duration"] + ' m</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["duration"] + ' sec</td>');
             $("#doctable_r" + index).append('<td class="doctablecell"><input type="button" value="Show Rendezvous" onclick="showrendezvous(\'' + doc["doctor_id"] + '\')"></td>');
         }
     }

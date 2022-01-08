@@ -27,7 +27,6 @@ public class RendezvousAPI extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(data);
         respwr.write(data);
         response.setContentType("application/text");
         response.setCharacterEncoding("UTF-8");
@@ -52,7 +51,7 @@ public class RendezvousAPI extends HttpServlet {
 
         if(doctor_id!=null){
             try {
-                rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id), 1);
+                rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
@@ -60,7 +59,7 @@ public class RendezvousAPI extends HttpServlet {
             }
         }else if(user_id!=null){
             try {
-                rendezvous = rendtable.getfreeRendezvousByUserID(Integer.parseInt(user_id));
+                rendezvous = rendtable.getAllRendezvousOfUser(Integer.parseInt(user_id));
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
@@ -75,6 +74,24 @@ public class RendezvousAPI extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader inputJSONfromClient = request.getReader();
+        JSONTokener tokener = new JSONTokener(inputJSONfromClient);
+        JSONObject jsonin = new JSONObject(tokener);
+        EditRandevouzTable rendtable = new EditRandevouzTable();
+
+        try {
+            rendtable.updateRandevouz(Integer.parseInt((String) jsonin.get("randevouz_id")),(Integer) jsonin.get("user_id"), (String) jsonin.get("user_info"),"selected");
+        } catch (Exception e) {
+            e.printStackTrace();
+            createResponse(response,403,e.getMessage());
+            return;
+        }
+
+        createResponse(response,200,"");
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BufferedReader inputJSONfromClient = request.getReader();
         JSONTokener tokener = new JSONTokener(inputJSONfromClient);
         JSONObject jsonIn = new JSONObject(tokener);
@@ -120,6 +137,23 @@ public class RendezvousAPI extends HttpServlet {
             }
             createResponse(response, 200, "");
         }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader inputJSONfromClient = request.getReader();
+        JSONTokener tokener = new JSONTokener(inputJSONfromClient);
+        JSONObject jsonIn = new JSONObject(tokener);
+
+        EditRandevouzTable rendtable = new EditRandevouzTable();
+        try {
+            rendtable.cancelrendezvous(Integer.parseInt((String) jsonIn.get("rend_id")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            createResponse(response,403,e.getMessage());
+            return;
+        }
+        createResponse(response,200,"");
     }
 
     private boolean checkValidity(String datetime, ArrayList<Randevouz> rendezvous, HttpServletResponse response) {

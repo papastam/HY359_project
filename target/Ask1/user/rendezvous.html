@@ -1,5 +1,5 @@
 <script>
-    function showrendezvous(){
+    function showmyrendezvous(){
         $("#rendezvouswindow").load("myRendezvous.html");
     }
 
@@ -8,7 +8,7 @@
     }
 
     $(document).ready(function () {
-        showrendezvous();
+        showmyrendezvous();
     });
 </script>
 
@@ -16,7 +16,7 @@
     <nav id="rendezvousnav" class="navbar navbar-expand-lg navbar-light bg-light">
         <ul class="navbar-nav">
             <li id="myrendezvous" class="nav-item active" >
-                <a class="nav-link" onclick="showrendezvous();">My Rendezvous </a>
+                <a class="nav-link" onclick="showmyrendezvous();">My Rendezvous </a>
             </li>
             <li id="logoutbtn" class="nav-item active">
             <a class="nav-link" onclick="bookrendezvous();">Book new </a>
