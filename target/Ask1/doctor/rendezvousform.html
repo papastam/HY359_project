@@ -1,0 +1,14 @@
+<form id="rendezvousform" onsubmit="newRandezvous(event);return false;">
+    <label for="datetime">Date and Time</label>
+    <input id="datetime" name="date_time" type="datetime-local" required>
+    <label id="datetimereply"></label>
+    <br>
+    <label for="price">Price</label>
+    <input id="price" name="price" type="number" min="10" max="80" required>
+    <br>
+    <label for="info">Information</label>
+    <input id="info" name="doctor_info" type="text" required>
+    <br>
+    <input type="submit" value="Make Rendezvous">
+</form>
+<label id="response"></label>

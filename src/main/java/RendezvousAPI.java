@@ -161,8 +161,6 @@ public class RendezvousAPI extends HttpServlet {
         String[] date_;
         String[] time_;
         String[] split = datetime.split("T");
-        int day, month, year, day_, month_, year_;
-        int hour, minutes, hour_, minutes_;
 
         date_ = split[0].split("-");
         time_ = split[1].split(":");
@@ -182,6 +180,14 @@ public class RendezvousAPI extends HttpServlet {
             createResponse(response, 403, jsonOut.toString());
             return false;
         }
+        //Check if time is between 8:00 and 20:30
+        if(Integer.parseInt(time) < 800 || Integer.parseInt(time) > 2030) {
+            System.out.println("Time is before 8:00 or after 20:30");
+            jsonOut.put("reply", 2); //2 means time is before 8:00 or after 20:30
+            createResponse(response, 403, jsonOut.toString());
+            return false;
+        }
+
 
         String[] rendezvousdatetime;
         String rendezvousDate;
