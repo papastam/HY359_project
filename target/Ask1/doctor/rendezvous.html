@@ -1,3 +1,78 @@
+<script>
+    function newRandezvous(event) {
+        event.preventDefault();
+        let myForm = document.getElementById('rendezvousform');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.status === 200 && xhr.readyState === 4) {
+                $("#response").html("Rendezvous Created Successfully");
+                $("#datetimereply").html("");
+                $("#response").css("color", "green");
+            } else if (xhr.status !== 200) {
+                var jsonreply = JSON.parse(xhr.responseText);
+                if (jsonreply["reply"] === -1) {
+                    $("#datetimereply").html("You are not certified so you cannot make a rendezvous.")
+                } else if (jsonreply["reply"] === 0) {
+                    $("#datetimereply").html("You cannot make a new rendezvous today or in the past.");
+                } else if (jsonreply["reply"] === 1) {
+                    $("#datetimereply").html("Another rendezvous is in that time period.");
+                }
+                $("#datetimereply").css("color", "red");
+
+                $("#response").html("Error in creating the rendezvous");
+                $("#response").css("color", "red");
+            }
+        }
+        data["username"] = userdata["username"];
+        data["password"] = userdata["password"];
+        data["certified"] = userdata["certified"];
+        xhr.open('POST', '/Project_war_exploded/RendezvousAPI');
+        xhr.send(JSON.stringify(data));
+    }
+
+    function showDocRendezvous() {
+        var xhr = new XMLHttpRequest();
+        var data = {};
+        data["doctor_id"] = userdata["doctor_id"];
+        xhr.onload = function() {
+            if(xhr.status === 200 && xhr.readyState === 4) {
+                var response = JSON.parse(xhr.responseText);
+                table = "";
+                table += "<table class='table table-bordered'><thead><tr>" +
+                    "<th></th>" +
+                    "<th>Name</th>" +
+                    "<th>Date / Time</th>" +
+                    "<th>Information</th>" +
+                    "<th>Price</th>" +
+                    "<th>Status</th></tr></thead><tbody>";
+
+                for(let i = 0; i < response["size"] + 1; i++) {
+                    var rend = response[""+i];
+                    console.log(rend);
+                    table += "<tr>" +
+                        "<td>" +i +"</td>" +
+                        "<td>"+rend["name"]+"</td>" +
+                        "<td>"+rend["date_time"]+"</td>" +
+                        "<td>"+rend["doctor_info"]+"</td>" +
+                        "<td>"+rend["price"]+"</td>" +
+                        "<td>"+rend["status"]+"</td></tr>";
+                }
+                table += "</tbody></table>";
+                console.log(table);
+                $("#rendezvouswindow").html(table);
+            }
+        }
+
+        xhr.open("POST", "/Project_war_exploded/ShowDeleteRendezvous");
+        xhr.send(JSON.stringify(data));
+    }
+</script>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +80,12 @@
     <title>Title</title>
 </head>
 <body>
+    <div>
+        <button type="button" onclick="loadrendezvousform()">New Rendezvous</button>
+        <button type="button" onclick="showDocRendezvous()">See Rendezvous</button>
+    </div>
+    <div id="rendezvouswindow">
 
+    </div>
 </body>
 </html>

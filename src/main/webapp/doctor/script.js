@@ -10,6 +10,10 @@ function loadrendezvous(){
     $("#appwindow").load("rendezvous.html");
 }
 
+function loadrendezvousform(){
+    $("#rendezvouswindow").load("rendezvousform.html")
+}
+
 function loaddoctors(){
     $("#appwindow").load("doctors.html");
 }
