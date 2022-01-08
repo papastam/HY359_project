@@ -1,17 +1,70 @@
+<script src="https://momentjs.com/downloads/moment.js"></script>
 <script>
+    // USER MESSAGE TEMPLATE
+    // <div class="message_container user_container">
+    //     <div class="message user_message">
+    //         (Message)
+    //     </div>
+    // </div>
+
+    // DOCTOR MESSAGE TEMPLATE
+    // <div class="message_container">
+    //     <div class="message doctor_message">
+    //         (Message)
+    //     </div>
+    // </div>
+
+    var currentopenchat;
+
     function sendmessage(event) {
         event.preventDefault();
-    }
+        let myForm = document.getElementById('newMessageForm');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
 
-    function openchat(doctor_id) {
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
+                openchat(currentopenchat);
+                $("#messageinput").val("");
+                $("#errormessages").html("");
+            } else if (xhr.status !== 200) {
+                $("#errormessages").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        data["doctor_id"]=currentopenchat;
+        data["user_id"]=userdata["user_id"];
+        data["sender"]="user";
+        data["blood_donation"]=0;
+        data["date_time"]=moment().format('YYYY-MM-DD HH:mm:ss');
+
+        xhr.open('POST', '/Project_war_exploded/MessagesAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    function printmessage(message,sender) {
+        if(sender==="user"){
+            $("#messages").append("<div class=\"message_container user_container\"><div class=\"message user_message\">"+message+"</div></div>");
+        }else if(sender==="doctor"){
+            $("#messages").append("<div class=\"message_container\"><div class=\"message doctor_message\">"+message+"</div></div>");
+        }
+    }
+
+    function openchat(doctor_id) {
+        currentopenchat = doctor_id;
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                $("#messageswindow").show();
+                $("#messages").html("");
                 var reply = JSON.parse(xhr.responseText);
-                // if(jQuery.isEmptyObject(reply)){
-
-
-                console.log(reply);
+                for(ind in reply["messages"]){
+                    var message = JSON.parse(reply["messages"][ind]);
+                    printmessage(message["message"],message["sender"]);
+                }
             }
         }
 
@@ -25,13 +78,13 @@
         xhr.onload = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var jsonreply = JSON.parse(xhr.responseText);
-                console.log(jsonreply);
+                // console.log(jsonreply);
                 for (var index in jsonreply["doctors"]) {
                     var doc = JSON.parse(jsonreply["doctors"][index]);
                     if (doc["certified"] != 1) {
                         continue;
                     }
-                    console.log(doc);
+                    // console.log(doc);
 
                     $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
 
@@ -56,7 +109,7 @@
     });
 
 </script>
-<header className="title">
+<header class="title">
     <h4>Select a doctor to chat with:</h4>
 </header>
 <br>
@@ -71,17 +124,17 @@
     </thead>
 
 </table>
-
+<br>
 <div id="messageswindow">
     <div id="messages">
-        <div class="message user">
-            Hello!
-        </div>
+
+
     </div>
-    <div id="controls">
-        <form onSubmit="sendmessage(event);">
-            <input type="text" id="messageinput" name="messagetosend" placeholder="Enter your message">
+    <div id="messagecontols">
+        <form id="newMessageForm" class="newMessageForm" onsubmit="sendmessage(event);">
+            <input type="text" id="messageinput" name="message" placeholder="Enter your message">
             <input type="submit" value="Send">
         </form>
     </div>
+    <div id="errormessages"></div>
 </div>

@@ -78,6 +78,7 @@ form ul{
 }
 
 #messageswindow {
+	display: none;
     min-height: 126px;
     width: 572px;
     border: 2px outset #9f7c61;
@@ -95,8 +96,38 @@ form ul{
 	border-top: 2px outset #9f7c61;
 }
 
+.message_container{
+    margin: 10px;
+    margin-top: 0px;
+    text-align: we;
+}
+
+.message{
+	width: fit-content;
+	padding: 5px;
+	border-radius: 11px;
+}
+
+.user_message{
+	border: 2px solid hsl(202deg 78% 57%);
+	background-color: hsl(202deg 100% 90%);
+}
+
+.user_container{
+	text-align: -webkit-right;
+}
+
+.doctor_message{
+	border: 2px solid hsl(38deg 78% 57%);
+	background-color: hsl(38deg 100% 90%);
+}
+
 #messageinput{
 	width: 500px;
+}
+
+#errormessages{
+	color: red;
 }
 
 #appfield{

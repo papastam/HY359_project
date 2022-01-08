@@ -1,9 +1,12 @@
 import Database_HY359.src.database.tables.EditMessageTable;
+import Database_HY359.src.database.tables.EditRandevouzTable;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -43,5 +46,23 @@ public class MessagesAPI extends HttpServlet {
             return;
         }
         createResponse(response,200, jsonmessages.toString());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader inputJSONfromClient = request.getReader();
+        JSONTokener tokener = new JSONTokener(inputJSONfromClient);
+        JSONObject jsonin = new JSONObject(tokener);
+        EditMessageTable messageTable = new EditMessageTable();
+
+        try {
+            messageTable.addMessageFromJSON(jsonin.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            createResponse(response,403,e.getMessage());
+            return;
+        }
+        createResponse(response,200,"");
+
     }
 }
