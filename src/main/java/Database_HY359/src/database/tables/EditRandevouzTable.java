@@ -53,28 +53,6 @@ public class EditRandevouzTable {
         return null;
     }
 
-//    public ArrayList<Randevouz> getfreeRendezvousByDocID(int doctor_id) throws SQLException, ClassNotFoundException {
-//        Connection con = DB_Connection.getConnection();
-//        Statement stmt = con.createStatement();
-//        ArrayList<Randevouz> users=new ArrayList<Randevouz>();
-//        ResultSet rs;
-//        try {
-//            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE status=free AND doctor_id="+doctor_id );
-//            while (rs.next()) {
-//                String json = DB_Connection.getResultsToJSON(rs);
-//                Gson gson = new Gson();
-//                Randevouz rendezvous = gson.fromJson(json, Randevouz.class);
-//                users.add(rendezvous);
-//            }
-//            return users;
-//
-//        } catch (Exception e) {
-//            System.err.println("Got an exception! ");
-//            System.err.println(e.getMessage());
-//        }
-//        return null;
-//    }
-
     public JSONObject databaseToJSON(int doctor_id, int status) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -188,30 +166,6 @@ public class EditRandevouzTable {
         } catch (Exception e) {
             System.err.println("Got an exception in getfreeRendezvousByUserID()");
             System.err.println(e.getMessage());
-        }
-        return null;
-    }
-
-    public ArrayList<Randevouz> databaseToArrayList(int doctor_id) throws SQLException, ClassNotFoundException {
-        Connection con = DB_Connection.getConnection();
-        Statement stmt = con.createStatement();
-        ArrayList<Randevouz> allrendezvous= new ArrayList<Randevouz>();
-        ResultSet rs = null;
-
-        try {
-            rs = stmt.executeQuery("SELECT * FROM randevouz WHERE doctor_id = '" + doctor_id +"'");
-
-            while (rs.next()) {
-                String json = DB_Connection.getResultsToJSON(rs);
-                Gson gson = new Gson();
-                Randevouz rendezvous = gson.fromJson(json, Randevouz.class);
-                allrendezvous.add(rendezvous);
-            }
-            return allrendezvous;
-        }
-        catch(Exception ex) {
-            System.err.println("Got an exception in getAllRendezvousOfDoc()");
-            System.err.println(ex.getMessage());
         }
         return null;
     }

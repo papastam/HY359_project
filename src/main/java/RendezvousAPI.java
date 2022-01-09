@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 @WebServlet(name = "RendezvousAPI", value = "/RendezvousAPI")
@@ -51,19 +52,20 @@ public class RendezvousAPI extends HttpServlet {
         EditRandevouzTable rendtable = new EditRandevouzTable();
 
         JSONObject rendezvous = new JSONObject();
+        ArrayList<Randevouz> doc_rendezvous = null;
 
         if(doctor_id!=null){
             try {
                 if(mode == null) {
-                    rendezvous = rendtable.databaseToJSON(Integer.parseInt(doctor_id),0);
+                    doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id), 0);
                 }
                 else {
                     switch (mode){
                         case "free":
-                            rendezvous = rendtable.databaseToJSON(Integer.parseInt(doctor_id),1);
+                            doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id),1);
                             break;
                         case "selected":
-                            rendezvous = rendtable.databaseToJSON(Integer.parseInt(doctor_id),2);
+                            doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id),2);
                             break;
                     }
                 }
