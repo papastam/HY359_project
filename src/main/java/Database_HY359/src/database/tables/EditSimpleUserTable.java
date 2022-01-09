@@ -57,24 +57,6 @@ public class EditSimpleUserTable {
         stmt.executeUpdate(update);
     }
     
-    public void printSimpleUserDetails(String username, String password) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
-        Statement stmt = con.createStatement();
-
-        ResultSet rs;
-        try {
-            rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='"+password+"'");
-            while (rs.next()) {
-                System.out.println("===Result===");
-                DB_Connection.printResults(rs);
-            }
-
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-        }
-    }
-    
     public SimpleUser databaseToSimpleUser(String username, String password) throws SQLException, ClassNotFoundException{
          Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
@@ -94,7 +76,7 @@ public class EditSimpleUserTable {
         return null;
     }
 
-    public JSONObject databaseToSimpleUsers() throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToJSON() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         JSONObject users=new JSONObject();
@@ -114,7 +96,7 @@ public class EditSimpleUserTable {
         return null;
     }
 
-    public ArrayList<SimpleUser> databaseToSimpleUsersArrayList() throws SQLException, ClassNotFoundException {
+    public ArrayList<SimpleUser> databaseToArrayList() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<SimpleUser> users=new ArrayList<SimpleUser>();
@@ -136,7 +118,7 @@ public class EditSimpleUserTable {
         return null;
     }
 
-    public JSONObject databaseToJSON() throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToJSONnotadmin() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         JSONObject jsonreply = new JSONObject();
@@ -155,24 +137,6 @@ public class EditSimpleUserTable {
         }
         return null;
     }
-
-    public String databaseUserToJSON(String username, String password) throws SQLException, ClassNotFoundException{
-        Connection con = DB_Connection.getConnection();
-        Statement stmt = con.createStatement();
-
-        ResultSet rs;
-        try {
-            rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='"+password+"'");
-            rs.next();
-            String json=DB_Connection.getResultsToJSON(rs);
-            return json;
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-        }
-        return null;
-    }
-
 
      public void createSimpleUserTable() throws SQLException, ClassNotFoundException {
 

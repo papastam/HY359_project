@@ -37,7 +37,7 @@ public class TestForDuplicates extends HttpServlet {
         EditSimpleUserTable usrtable = new EditSimpleUserTable();
         ArrayList<SimpleUser> users = null;
         try {
-            users = usrtable.databaseToSimpleUsersArrayList();
+            users = usrtable.databaseToArrayList();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

@@ -64,7 +64,7 @@ public class EditTreatmentTable {
         return null;
     }
 
-    public JSONObject databaseToTreatments(int user_id) throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToJSON(int user_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         JSONObject treatments= new JSONObject();

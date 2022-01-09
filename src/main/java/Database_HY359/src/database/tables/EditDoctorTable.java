@@ -89,26 +89,6 @@ public class EditDoctorTable {
         return null;
     }
 
-    public JSONObject databaseToJSON(int certification_check) throws SQLException, ClassNotFoundException {
-        Connection con = DB_Connection.getConnection();
-        Statement stmt = con.createStatement();
-        JSONObject jsonret = new JSONObject();
-        ResultSet rs;
-        try {
-            if(certification_check==1){rs = stmt.executeQuery("SELECT * FROM doctors WHERE certified=1");}
-            else{rs = stmt.executeQuery("SELECT * FROM doctors");}
-            while (rs.next()) {
-                String json = DB_Connection.getResultsToJSON(rs);
-                jsonret.append("doctors",json);
-            }
-            return jsonret;
-
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-        }
-        return null;
-    }
 
     public ArrayList<Doctor> databaseToArrayList(int certification_check) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
@@ -125,6 +105,27 @@ public class EditDoctorTable {
                 doctors.add(doc);
             }
             return doctors;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public JSONObject databaseToJSON(int certification_check) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JSONObject jsonret = new JSONObject();
+        ResultSet rs;
+        try {
+            if(certification_check==1){rs = stmt.executeQuery("SELECT * FROM doctors WHERE certified=1");}
+            else{rs = stmt.executeQuery("SELECT * FROM doctors");}
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                jsonret.append("doctors",json);
+            }
+            return jsonret;
 
         } catch (Exception e) {
             System.err.println("Got an exception! ");

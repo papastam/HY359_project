@@ -55,15 +55,15 @@ public class RendezvousAPI extends HttpServlet {
         if(doctor_id!=null){
             try {
                 if(mode == null) {
-                    rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),0);
+                    rendezvous = rendtable.databaseToJSON(Integer.parseInt(doctor_id),0);
                 }
                 else {
                     switch (mode){
                         case "free":
-                            rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
+                            rendezvous = rendtable.databaseToJSON(Integer.parseInt(doctor_id),1);
                             break;
                         case "selected":
-                            rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),2);
+                            rendezvous = rendtable.databaseToJSON(Integer.parseInt(doctor_id),2);
                             break;
                     }
                 }
@@ -130,7 +130,7 @@ public class RendezvousAPI extends HttpServlet {
             jsonIn.remove("username");
             jsonIn.remove("password");
             jsonIn.remove("certified");
-            rendezvous = randevouzTable.getRendezvousByDocIDtoArrayList(doctor.getDoctor_id(), 0);
+            rendezvous = randevouzTable.databaseToArrayList(doctor.getDoctor_id(), 0);
         }
         catch(ClassNotFoundException ex){
             System.out.println(ex.toString());

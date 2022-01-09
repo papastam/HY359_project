@@ -75,7 +75,7 @@ public class EditRandevouzTable {
 //        return null;
 //    }
 
-    public JSONObject getRendezvousByDocID(int doctor_id, int status) throws SQLException, ClassNotFoundException{
+    public JSONObject databaseToJSON(int doctor_id, int status) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         JSONObject jsonret = new JSONObject();
@@ -113,7 +113,7 @@ public class EditRandevouzTable {
         return null;
     }
 
-    public ArrayList<Randevouz> getRendezvousByDocIDtoArrayList(int doctor_id, int status) throws SQLException, ClassNotFoundException{
+    public ArrayList<Randevouz> databaseToArrayList(int doctor_id, int status) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Randevouz> rend = new ArrayList<Randevouz>();
@@ -192,7 +192,7 @@ public class EditRandevouzTable {
         return null;
     }
 
-    public ArrayList<Randevouz> getAllRendezvousOfDoc(int doctor_id) throws SQLException, ClassNotFoundException {
+    public ArrayList<Randevouz> databaseToArrayList(int doctor_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Randevouz> allrendezvous= new ArrayList<Randevouz>();

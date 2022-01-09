@@ -47,7 +47,7 @@ public class EditBloodTestTable {
         return json;
     }
 
-    public ArrayList<BloodTest> databaseToBloodTests() throws SQLException, ClassNotFoundException {
+    public ArrayList<BloodTest> databaseToArrayList() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<BloodTest> tests=new ArrayList<BloodTest>();
@@ -94,7 +94,7 @@ public class EditBloodTestTable {
         Statement stmt = con.createStatement();
         int i=0;
         JSONObject jsonBloodTests = new JSONObject();
-//        ArrayList<BloodTest> bloodtests=new ArrayList<BloodTest>();
+        ArrayList<BloodTest> bloodtests=new ArrayList<BloodTest>();
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM bloodtest");

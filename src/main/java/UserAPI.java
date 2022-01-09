@@ -39,10 +39,9 @@ public class UserAPI extends HttpServlet {
 
         try{
             if(allusers!=null){
-                createResponse(response,200,usertable.databaseToJSON().toString());
+                createResponse(response,200,usertable.databaseToJSONnotadmin().toString());
             }else {
-                jsonreply = usertable.databaseToSimpleUsers();
-
+                jsonreply = usertable.databaseToJSON();
                 createResponse(response, 200, jsonreply.toString());
             }
         } catch (Exception e) {

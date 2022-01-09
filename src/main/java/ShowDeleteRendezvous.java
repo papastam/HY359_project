@@ -48,7 +48,7 @@ public class ShowDeleteRendezvous extends HttpServlet {
         ArrayList<Randevouz> allDocRandezvous = null;
         try {
             System.out.println("doc_id = " + (int) jsonIn.get("doctor_id"));
-            allDocRandezvous = randevouzTable.getAllRendezvousOfDoc((int) jsonIn.get("doctor_id"));
+            allDocRandezvous = randevouzTable.databaseToArrayList((int) jsonIn.get("doctor_id"));
             System.out.println("size of list = " +allDocRandezvous.size());
         }
         catch(ClassNotFoundException | SQLException ex) {

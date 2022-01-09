@@ -36,7 +36,7 @@ public class TreatmentsAPI extends HttpServlet {
         int user_id = Integer.parseInt(request.getParameter("user_id"));
 
         try {
-            jsonreply = treatable.databaseToTreatments(user_id);
+            jsonreply = treatable.databaseToJSON(user_id);
         } catch (SQLException e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
