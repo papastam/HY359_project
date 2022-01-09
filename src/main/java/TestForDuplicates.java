@@ -26,17 +26,18 @@ public class TestForDuplicates extends HttpServlet {
         EditDoctorTable doctable = new EditDoctorTable();
         ArrayList<Doctor> doctors = null;
         try {
-            doctors = doctable.databaseToDoctors(0);
+            doctors = doctable.databaseToArrayList(0);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        //databaseToSimpleUsersArrayList
 
         EditSimpleUserTable usrtable = new EditSimpleUserTable();
         ArrayList<SimpleUser> users = null;
         try {
-            users = usrtable.databaseToSimpleUsers();
+            users = usrtable.databaseToSimpleUsersArrayList();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -101,94 +102,5 @@ public class TestForDuplicates extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-//        if(jsonrequest.has("usertype")) {
-//            if (jsonrequest.get("usertype").equals("doctor")) {
-//                EditDoctorTable doctable = new EditDoctorTable();
-//                ArrayList<Doctor> doctors = null;
-//
-//                try {
-//                    doctors = doctable.databaseToDoctors();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                if(jsonrequest.has("username")){
-//                    jsonreply.put("usernameexists",0);
-//                }
-//                if(jsonrequest.has("email")){
-//                    jsonreply.put("emailexists",0);
-//                }
-//                if(jsonrequest.has("amka")){
-//                    jsonreply.put("amkaexists",0);
-//                }
-//
-//                for(int i=0;i< doctors.size();i++){
-//                    if(jsonrequest.has("username")){
-//                        if(doctors.get(i).getUsername().equals(jsonrequest.get("username"))){
-//                            jsonreply.put("usernameexists",1);
-//                        }
-//                    }
-//                    if(jsonrequest.has("email")){
-//                        if(doctors.get(i).getEmail().equals(jsonrequest.get("email"))){
-//                            jsonreply.put("emailexists",1);
-//                        }
-//                    }
-//                    if(jsonrequest.has("amka")){
-//                        if(doctors.get(i).getAmka().equals(jsonrequest.get("amka"))){
-//                            jsonreply.put("amkaexists",1);
-//                        }
-//                    }
-//                }
-//            }else if(jsonrequest.get("usertype").equals("user")){
-//                EditSimpleUserTable userstable = new EditSimpleUserTable();
-//                ArrayList<SimpleUser> users = null;
-//
-//                try {
-//                    users = userstable.databaseToSimpleUsers();
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                if(jsonrequest.has("username")){
-//                    jsonreply.put("usernameexists",0);
-//                }
-//                if(jsonrequest.has("email")){
-//                    jsonreply.put("emailexists",0);
-//                }
-//                if(jsonrequest.has("amka")){
-//                    jsonreply.put("amkaexists",0);
-//                }
-//
-//                for(int i=0;i < users.size();i++){
-//                    if(jsonrequest.has("username")){
-//                        if(users.get(i).getUsername().equals(jsonrequest.get("username"))){
-//                            jsonreply.put("usernameexists",1);
-//                        }
-//                    }
-//                    if(jsonrequest.has("email")){
-//                        if(users.get(i).getEmail().equals(jsonrequest.get("email"))){
-//                            jsonreply.put("emailexists",1);
-//                        }
-//                    }
-//                    if(jsonrequest.has("amka")){
-//                        if(users.get(i).getAmka().equals(jsonrequest.get("amka"))){
-//                            jsonreply.put("amkaexists",1);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            response.setStatus(200);
-//            PrintWriter respwr = response.getWriter();
-//            respwr.write(String.valueOf(jsonreply));
-//            response.setContentType("application/json");
-//            response.setCharacterEncoding("UTF-8");
-//        }else{
-//            response.setStatus(410);
-//        }
     }
 }

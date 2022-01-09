@@ -34,7 +34,6 @@ public class UserAPI extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EditSimpleUserTable usertable = new EditSimpleUserTable();
-        ArrayList<SimpleUser> users=null;
         JSONObject jsonreply = new JSONObject();
         String allusers = request.getParameter("allusers");
 
@@ -42,11 +41,7 @@ public class UserAPI extends HttpServlet {
             if(allusers!=null){
                 createResponse(response,200,usertable.databaseToJSON().toString());
             }else {
-                users = usertable.databaseToSimpleUsers();
-
-                for (SimpleUser user : users) {
-                    jsonreply.append("users", usertable.simpleUserToJSON(user));
-                }
+                jsonreply = usertable.databaseToSimpleUsers();
 
                 createResponse(response, 200, jsonreply.toString());
             }

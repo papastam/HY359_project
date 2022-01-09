@@ -31,13 +31,12 @@ public class BloodTestsAPI extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EditBloodTestTable bloodtests = new EditBloodTestTable();
-        ArrayList<BloodTest> tests = new ArrayList<>();
         JSONObject jsonreply = new JSONObject();
 
         String amka = request.getParameter("amka");
 
         try {
-            tests = bloodtests.databaseToBloodTests(Long.parseLong(amka));
+            jsonreply = bloodtests.databaseToJSON(Long.parseLong(amka));
         } catch (SQLException e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
@@ -46,10 +45,6 @@ public class BloodTestsAPI extends HttpServlet {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
             return;
-        }
-
-        for(int i=0;i<tests.size();i++){
-            jsonreply.append("tests",bloodtests.bloodTestToJSON(tests.get(i)));
         }
 
         createResponse(response,200,jsonreply.toString());

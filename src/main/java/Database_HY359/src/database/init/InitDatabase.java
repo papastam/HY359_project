@@ -209,7 +209,7 @@ public class InitDatabase {
 
         //Doctors
         EditDoctorTable edt = new EditDoctorTable();
-        ArrayList<Doctor> doctors = edt.databaseToDoctors(0);
+        ArrayList<Doctor> doctors = edt.databaseToArrayList(0);
         Gson gson = new Gson();
         JsonArray jsonDoc = gson.toJsonTree(doctors).getAsJsonArray();
         System.out.println("Doctors\n" + jsonDoc + "\n");

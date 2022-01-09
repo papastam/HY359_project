@@ -9,6 +9,9 @@ import Database_HY359.src.mainClasses.Doctor;
 import Database_HY359.src.mainClasses.SimpleUser;
 import com.google.gson.Gson;
 import Database_HY359.src.database.DB_Connection;
+import org.json.JSONObject;
+
+import javax.print.Doc;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,10 +89,31 @@ public class EditDoctorTable {
         return null;
     }
 
-    public ArrayList<Doctor> databaseToDoctors(int certification_check) throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToJSON(int certification_check) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        ArrayList<Doctor> doctors=new ArrayList<Doctor>();
+        JSONObject jsonret = new JSONObject();
+        ResultSet rs;
+        try {
+            if(certification_check==1){rs = stmt.executeQuery("SELECT * FROM doctors WHERE certified=1");}
+            else{rs = stmt.executeQuery("SELECT * FROM doctors");}
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                jsonret.append("doctors",json);
+            }
+            return jsonret;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public ArrayList<Doctor> databaseToArrayList(int certification_check) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Doctor> doctors =new ArrayList<Doctor>();
         ResultSet rs;
         try {
             if(certification_check==1){rs = stmt.executeQuery("SELECT * FROM doctors WHERE certified=1");}

@@ -94,7 +94,27 @@ public class EditSimpleUserTable {
         return null;
     }
 
-    public ArrayList<SimpleUser> databaseToSimpleUsers() throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToSimpleUsers() throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        JSONObject users=new JSONObject();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM users");
+            while (rs.next()) {
+                String json = DB_Connection.getResultsToJSON(rs);
+                users.append("users",json);
+            }
+            return users;
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public ArrayList<SimpleUser> databaseToSimpleUsersArrayList() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<SimpleUser> users=new ArrayList<SimpleUser>();

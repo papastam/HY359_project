@@ -31,13 +31,12 @@ public class TreatmentsAPI extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EditTreatmentTable treatable = new EditTreatmentTable();
-        ArrayList<Treatment> treatments = new ArrayList<>();
         JSONObject jsonreply = new JSONObject();
 
         int user_id = Integer.parseInt(request.getParameter("user_id"));
 
         try {
-            treatments = treatable.databaseToTreatments(user_id);
+            jsonreply = treatable.databaseToTreatments(user_id);
         } catch (SQLException e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
@@ -46,10 +45,6 @@ public class TreatmentsAPI extends HttpServlet {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
             return;
-        }
-
-        for(int i=0;i<treatments.size();i++){
-            jsonreply.append("treatments",treatable.treatmentToJSON(treatments.get(i)));
         }
 
         createResponse(response,200,jsonreply.toString());

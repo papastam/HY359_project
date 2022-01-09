@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import Database_HY359.src.mainClasses.Treatment;
+import org.json.JSONObject;
 
 /**
  *
@@ -63,18 +64,16 @@ public class EditTreatmentTable {
         return null;
     }
 
-    public ArrayList<Treatment> databaseToTreatments(int user_id) throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToTreatments(int user_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        ArrayList<Treatment> treatments= new ArrayList<Treatment>();
+        JSONObject treatments= new JSONObject();
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM treatment WHERE user_id="+user_id);
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
-                Gson gson = new Gson();
-                Treatment treatment = gson.fromJson(json, Treatment.class);
-                treatments.add(treatment);
+                treatments.append("treatment",json);
             }
             return treatments;
 

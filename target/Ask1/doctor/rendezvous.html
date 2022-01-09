@@ -14,8 +14,6 @@
                 $("#response").css("color", "green");
             } else if (xhr.status !== 200) {
                 var jsonreply = JSON.parse(xhr.responseText);
-                console.log("jsonreply");
-                console.log(jsonreply["reply"]);
                 if (jsonreply["reply"] === -1) {
                     $("#datetimereply").html("You are not certified so you cannot make a rendezvous.");
                 } else if (jsonreply["reply"] === 0) {
@@ -31,11 +29,10 @@
                 $("#response").css("color", "red");
             }
         }
-
         data["username"] = userdata["username"];
         data["password"] = userdata["password"];
         data["certified"] = userdata["certified"];
-        xhr.open('PUT', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('POST', '/Project_war_exploded/RendezvousAPI');
         xhr.send(JSON.stringify(data));
     }
 

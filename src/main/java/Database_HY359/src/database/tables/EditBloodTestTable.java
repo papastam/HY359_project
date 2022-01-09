@@ -69,20 +69,18 @@ public class EditBloodTestTable {
         return null;
     }
 
-    public ArrayList<BloodTest> databaseToBloodTests(long amka) throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToJSON(long amka) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        ArrayList<BloodTest> tests=new ArrayList<BloodTest>();
+        JSONObject jsonret = new JSONObject();
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka="+amka);
             while (rs.next()) {
                 String json = DB_Connection.getResultsToJSON(rs);
-                Gson gson = new Gson();
-                BloodTest test = gson.fromJson(json, BloodTest.class);
-                tests.add(test);
+                jsonret.append("tests",json);
             }
-            return tests;
+            return jsonret;
 
         } catch (Exception e) {
             System.err.println("Got an exception! ");

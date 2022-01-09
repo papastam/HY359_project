@@ -32,26 +32,16 @@ public class RendezvousAPI extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
     }
 
-    private JSONObject ArrayListToJSON(ArrayList<Randevouz> array){
-        JSONObject jsonret = new JSONObject();
-        EditRandevouzTable rendtable = new EditRandevouzTable();
-
-        for(int i=0;i< array.size();i++){
-            jsonret.append("rendezvous", rendtable.randevouzToJSON(array.get(i)));
-        }
-        return jsonret;
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String doctor_id = (String) request.getParameter("doctor_id");
         String user_id = (String) request.getParameter("user_id");
         EditRandevouzTable rendtable = new EditRandevouzTable();
-        ArrayList<Randevouz> rendezvous = new ArrayList<Randevouz>();
+        JSONObject jsonreply = new JSONObject();
 
         if(doctor_id!=null){
             try {
-                rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
+                jsonreply = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
@@ -59,7 +49,7 @@ public class RendezvousAPI extends HttpServlet {
             }
         }else if(user_id!=null){
             try {
-                rendezvous = rendtable.getAllRendezvousOfUser(Integer.parseInt(user_id));
+                jsonreply = rendtable.getAllRendezvousOfUser(Integer.parseInt(user_id));
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
@@ -69,7 +59,7 @@ public class RendezvousAPI extends HttpServlet {
             createResponse(response,403,"Please specify docor_id or user_id in the querry part");
             return;
         }
-        createResponse(response,200,ArrayListToJSON(rendezvous).toString());
+        createResponse(response,200,jsonreply.toString());
     }
 
     @Override
@@ -115,7 +105,7 @@ public class RendezvousAPI extends HttpServlet {
             jsonIn.remove("username");
             jsonIn.remove("password");
             jsonIn.remove("certified");
-            rendezvous = randevouzTable.getRendezvousByDocID(doctor.getDoctor_id(), 0);
+            rendezvous = randevouzTable.getRendezvousByDocIDtoArrayList(doctor.getDoctor_id(), 0);
         }
         catch(ClassNotFoundException ex){
             System.out.println(ex.toString());

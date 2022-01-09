@@ -35,30 +35,19 @@ public class CertifiedDoctorBoy extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EditDoctorTable doctable = new EditDoctorTable();
-        ArrayList<Doctor> docs=null;
         JSONObject jsonreply = new JSONObject();
         String certified = request.getParameter("certified");
 
-        if(certified!=null) {
-            try {
-                docs = doctable.databaseToDoctors(1);
-            } catch (Exception e) {
-                e.printStackTrace();
-                createResponse(response, 403, e.getMessage());
-                return;
+        try {
+            if(certified!=null) {
+                jsonreply = doctable.databaseToJSON(1);
+            }else {
+                jsonreply = doctable.databaseToJSON(0);
             }
-        }else {
-            try {
-                docs = doctable.databaseToDoctors(0);
-            } catch (Exception e) {
-                e.printStackTrace();
-                createResponse(response, 403, e.getMessage());
-                return;
-            }
-        }
-
-        for(Doctor doc : docs){
-            jsonreply.append("doctors",doctable.doctorToJSON(doc));
+        } catch (Exception e) {
+            e.printStackTrace();
+            createResponse(response, 403, e.getMessage());
+            return;
         }
 
         createResponse(response,200,jsonreply.toString());
@@ -113,8 +102,6 @@ public class CertifiedDoctorBoy extends HttpServlet {
         BufferedReader inputJSONfromClient = request.getReader();
         JSONTokener tokener = new JSONTokener(inputJSONfromClient);
         JSONObject jsonin = new JSONObject(tokener);
-
-        JSONObject jsonreply = new JSONObject();
 
         EditDoctorTable doctable = new EditDoctorTable();
 
