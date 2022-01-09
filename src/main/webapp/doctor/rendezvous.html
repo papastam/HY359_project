@@ -32,17 +32,16 @@
         data["username"] = userdata["username"];
         data["password"] = userdata["password"];
         data["certified"] = userdata["certified"];
-        xhr.open('POST', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('PUT', '/Project_war_exploded/RendezvousAPI');
         xhr.send(JSON.stringify(data));
     }
 
     function showDocRendezvous() {
         var xhr = new XMLHttpRequest();
-        var data = {};
-        data["doctor_id"] = userdata["doctor_id"];
+
         xhr.onload = function() {
             if(xhr.status === 200 && xhr.readyState === 4) {
-                var response = JSON.parse(xhr.responseText);
+                var response = JSON.parse(xhr.responseText)["rendezvous"];
                 table = "";
                 table += "<table class='table table-bordered'><thead><tr>" +
                     "<th></th>" +
@@ -50,10 +49,12 @@
                     "<th>Date / Time</th>" +
                     "<th>Information</th>" +
                     "<th>Price</th>" +
-                    "<th>Status</th></tr></thead><tbody>";
+                    "<th>Status</th>" +
+                    "<th></th></tr></thead><tbody>";
 
-                for(let i = 0; i < response["size"] + 1; i++) {
-                    var rend = response[""+i];
+                for(let i in response) {
+                    var rend = JSON.parse(response[i]);
+                    var cancelbtn = "<button type='button' onclick='cancelrendezvous()'>Cancel</button>"
                     console.log(rend);
                     table += "<tr>" +
                         "<td>" +i +"</td>" +
@@ -64,12 +65,28 @@
                         "<td>"+rend["status"]+"</td></tr>";
                 }
                 table += "</tbody></table>";
-                console.log(table);
+
                 $("#rendezvouswindow").html(table);
             }
         }
 
-        xhr.open("POST", "/Project_war_exploded/ShowDeleteRendezvous");
+        xhr.open("GET", "/Project_war_exploded/RendezvousAPI?doctor_id="+userdata["doctor_id"]);
+        xhr.send();
+    }
+
+    function cancelrendezvous(rend_id){
+        xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                $("#deletereply").html("<p style='color:green'>Your rendezvous was canceled succesfully</p>");
+                showRendezvous();
+            } else if (xhr.status !== 200) {
+                $("#deletereply").html("<p style='color:red'>Your rendezvous didn't get canceled! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        }
+        var data = {"rend_id":rend_id};
+        xhr.open('DELETE', '/Project_war_exploded/RendezvousAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
 </script>
@@ -87,6 +104,9 @@
         <button type="button" onclick="showDocRendezvous()">See Rendezvous</button>
     </div>
     <div id="rendezvouswindow">
+
+    </div>
+    <div id="deletereply">
 
     </div>
 </body>

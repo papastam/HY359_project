@@ -5,6 +5,7 @@ import Database_HY359.src.mainClasses.Randevouz;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import javax.json.Json;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -46,12 +47,26 @@ public class RendezvousAPI extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String doctor_id = (String) request.getParameter("doctor_id");
         String user_id = (String) request.getParameter("user_id");
+        String mode = (String) request.getParameter("mode");
         EditRandevouzTable rendtable = new EditRandevouzTable();
+
         ArrayList<Randevouz> rendezvous = new ArrayList<Randevouz>();
 
         if(doctor_id!=null){
             try {
-                rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
+                if(mode == null) {
+                    rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),0);
+                }
+                else {
+                    switch (mode){
+                        case "free":
+                            rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
+                            break;
+                        case "selected":
+                            rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),2);
+                            break;
+                    }
+                }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
@@ -66,7 +81,7 @@ public class RendezvousAPI extends HttpServlet {
                 return;
             }
         }else{
-            createResponse(response,403,"Please specify docor_id or user_id in the querry part");
+            createResponse(response,403,"Please specify doctor_id or user_id in the query part");
             return;
         }
         createResponse(response,200,ArrayListToJSON(rendezvous).toString());
