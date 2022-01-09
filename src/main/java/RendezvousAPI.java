@@ -1,7 +1,9 @@
 import Database_HY359.src.database.tables.EditDoctorTable;
 import Database_HY359.src.database.tables.EditRandevouzTable;
+import Database_HY359.src.database.tables.EditSimpleUserTable;
 import Database_HY359.src.mainClasses.Doctor;
 import Database_HY359.src.mainClasses.Randevouz;
+import Database_HY359.src.mainClasses.SimpleUser;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -53,6 +55,7 @@ public class RendezvousAPI extends HttpServlet {
 
         JSONObject rendezvous = new JSONObject();
         ArrayList<Randevouz> doc_rendezvous = null;
+        JSONObject jsonOut = new JSONObject();
 
         if(doctor_id!=null){
             try {
@@ -86,7 +89,33 @@ public class RendezvousAPI extends HttpServlet {
             createResponse(response,403,"Please specify doctor_id or user_id in the query part");
             return;
         }
-        createResponse(response,200,rendezvous.toString());
+
+        SimpleUser user = new SimpleUser();
+        EditSimpleUserTable userTable = new EditSimpleUserTable();
+
+        for(int i = 0; i < doc_rendezvous.size(); i++) {
+            try {
+                JSONObject rend = new JSONObject();
+                user = userTable.getSimpleUserFromID(doc_rendezvous.get(i).getUser_id());
+                if(user == null)
+                    rend.put("name", "Not selected by any user");
+                else
+                    rend.put("name", user.getFirstname() + " " + user.getLastname());
+
+                rend.put("date_time", doc_rendezvous.get(i).getDate_time());
+                rend.put("status", doc_rendezvous.get(i).getStatus());
+                rend.put("price", doc_rendezvous.get(i).getPrice());
+                rend.put("doctor_info", doc_rendezvous.get(i).getDoctor_info());
+                rend.put("rendezvous_id", doc_rendezvous.get(i).getRandevouz_id());
+                jsonOut.put(String.valueOf(i), rend);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        createResponse(response,200,jsonOut.toString());
     }
 
     @Override
