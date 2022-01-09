@@ -50,7 +50,7 @@ public class RendezvousAPI extends HttpServlet {
         String mode = (String) request.getParameter("mode");
         EditRandevouzTable rendtable = new EditRandevouzTable();
 
-        ArrayList<Randevouz> rendezvous = new ArrayList<Randevouz>();
+        JSONObject rendezvous = new JSONObject();
 
         if(doctor_id!=null){
             try {
@@ -84,7 +84,7 @@ public class RendezvousAPI extends HttpServlet {
             createResponse(response,403,"Please specify doctor_id or user_id in the query part");
             return;
         }
-        createResponse(response,200,ArrayListToJSON(rendezvous).toString());
+        createResponse(response,200,rendezvous.toString());
     }
 
     @Override
@@ -130,7 +130,7 @@ public class RendezvousAPI extends HttpServlet {
             jsonIn.remove("username");
             jsonIn.remove("password");
             jsonIn.remove("certified");
-            rendezvous = randevouzTable.getRendezvousByDocID(doctor.getDoctor_id(), 0);
+            rendezvous = randevouzTable.getRendezvousByDocIDtoArrayList(doctor.getDoctor_id(), 0);
         }
         catch(ClassNotFoundException ex){
             System.out.println(ex.toString());

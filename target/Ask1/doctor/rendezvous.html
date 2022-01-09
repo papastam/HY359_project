@@ -32,7 +32,7 @@
         data["username"] = userdata["username"];
         data["password"] = userdata["password"];
         data["certified"] = userdata["certified"];
-        xhr.open('POST', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('PUT', '/Project_war_exploded/RendezvousAPI');
         xhr.send(JSON.stringify(data));
     }
 
