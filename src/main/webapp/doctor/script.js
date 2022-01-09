@@ -14,8 +14,8 @@ function loadrendezvousform(){
     $("#rendezvouswindow").load("rendezvousform.html")
 }
 
-function loaddoctors(){
-    $("#appwindow").load("doctors.html");
+function loadpatients(){
+    $("#appwindow").load("patients.html");
 }
 
 function loadmessages(){

@@ -27,15 +27,13 @@ import java.util.logging.Logger;
  */
 public class EditRandevouzTable {
 
-   
     public void addRandevouzFromJSON(String json) throws ClassNotFoundException{
          Randevouz r=jsonToRandevouz(json);
          createNewRandevouz(r);
     }
-    
-    
-     public Randevouz databaseToRandevouz(int id) throws SQLException, ClassNotFoundException{
-         Connection con = DB_Connection.getConnection();
+
+    public Randevouz databaseToRandevouz(int id) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
 
         ResultSet rs;

@@ -1,10 +1,112 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script>
+    var currentpatient;
+    function showtreatments(user_id){
+        currentpatient = user_id;
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.readyState===4 && xhr.status===200){
+                var reply = JSON.parse(xhr.responseText);
+                if(reply.hasOwnProperty("treatments")){
+                    var treatments = reply["treatments"];
+                    for(ind in treatments){
+                        var treatment = JSON.parse(treatments[ind]);
+                        $("#appendpatienttable").append("<tr><td>"+treatment["name"]+"</td><td>"+patient["telephone"]+"</td><td>"+patient["email"]+"</td><td>"+patient["address"]+", "+patient["city"]+", "+patient["country"]+"</td><td>"+showtreatmentbtn+addtreatmentbtn+"</td></tr>")
+                    }
+                }else{
+                    $("#appendpatienttable").hmlt("You have no patients yet!")
+                }
+            }
+        }
 
-</body>
-</html>
+        xhr.open('GET', '/Project_war_exploded/TreatmentsAPI?user_id='+user_id);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function sendTreatment(event){
+        event.preventDefault();
+        let myForm = document.getElementById('newTreatment');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // console.log(xhr.responseText);
+                $("#ajaxContent").html("<p style='color:green'>Your info was updated succesfully</p>");
+            } else if (xhr.status !== 200) {
+                $("#ajaxContent").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        xhr.open('POST', '/Project_war_exploded/TreatmentsAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+
+    }
+
+    function loadpatientable(){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.readyState===4 && xhr.status===200){
+                var reply = JSON.parse(xhr.responseText);
+                if(reply.hasOwnProperty("patients")){
+                    var patients = reply["patients"];
+                    for(ind in patients){
+                        var patient = JSON.parse(patients[ind]);
+                        var showtreatmentbtn = "<input type='button' value='Show Treatments' onclick='showtreatments(\""+patient["user_id"]+"\")>";
+                        $("#appendpatienttable").append("<tr><td>"+patient["firstname"]+" "+patient["lastname"]+"</td><td>"+patient["telephone"]+"</td><td>"+patient["email"]+"</td><td>"+patient["address"]+", "+patient["city"]+", "+patient["country"]+"</td><td>"+showtreatmentbtn+"</td></tr>")
+                    }
+                }else{
+                    $("#appendpatienttable").hmlt("You have no patients yet!")
+                }
+            }else{
+
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/UserAPI?type=patient&doctor_id='+userdata["doctor_id"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+
+    }
+
+    $(document).ready(function(){
+       loadpatientable();
+    });
+</script>
+<table>
+    <thead>
+        <td>Name</td>
+        <td>Telephone</td>
+        <td>Email</td>
+        <td>Address</td>
+        <td>Action</td>
+    </thead>
+    <div id="appendpatienttable">
+
+    </div>
+
+</table>
+<table style="display: none;" id="treatmenttable">
+    <thead>
+    <td>Patient</td>
+    <td>Start Date</td>
+    <td>End Date</td>
+    <td>Treatment</td>
+    </thead>
+    <div id="appendtreatment">
+
+    </div>
+
+    <tr>
+        <form name="newTreatment" id="newTreatment" onsubmit="sendTreatment(event);">
+            <input name="name" id="patientname" disabled>
+            <input name="start_date" type="date" required>
+            <input name="end_date" type="date" required>
+            <input name="treatment_text" type="text" required>
+        </form>
+    </tr>
+    
+</table>

@@ -1,4 +1,6 @@
+import Database_HY359.src.database.tables.EditRandevouzTable;
 import Database_HY359.src.database.tables.EditSimpleUserTable;
+import Database_HY359.src.mainClasses.Randevouz;
 import Database_HY359.src.mainClasses.SimpleUser;
 import ServletUtilities.ServletUtilities;
 import org.json.JSONException;
@@ -13,6 +15,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @WebServlet(name = "UserAPI", value = "/UserAPI")
 public class UserAPI extends HttpServlet {
@@ -35,12 +40,32 @@ public class UserAPI extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EditSimpleUserTable usertable = new EditSimpleUserTable();
         JSONObject jsonreply = new JSONObject();
-        String allusers = request.getParameter("allusers");
+        String type = request.getParameter("type");
 
-        try{
-            if(allusers!=null){
-                createResponse(response,200,usertable.databaseToJSONnotadmin().toString());
-            }else {
+        try {
+            if (type == null) {
+                createResponse(response, 200, usertable.databaseToJSONnotadmin().toString());
+            }else if(type.equals("patient")){
+                String doctor_id = request.getParameter("doctor_id");
+                if(doctor_id==null){createResponse(response,403,"Please specify doctor_id to get patients back");}
+
+                JSONObject jsonpatients = new JSONObject();
+                ArrayList<Randevouz> doctorsrends = new ArrayList<>();
+                EditRandevouzTable randtable = new EditRandevouzTable();
+                EditSimpleUserTable usrtable = new EditSimpleUserTable();
+                doctorsrends = randtable.databaseToArrayList(Integer.parseInt(doctor_id),4);
+
+                HashSet<Integer> patientsSet = new HashSet<>();
+                for(Randevouz rand: doctorsrends){
+                    patientsSet.add(rand.getUser_id());
+                }
+
+                for(int user_id: patientsSet){
+                    jsonpatients.append("patients",usertable.simpleUserToJSON(usertable.getSimpleUserFromID(user_id)));
+                }
+
+                createResponse(response,200,jsonpatients.toString());
+            }else if(type.equals("user")){
                 jsonreply = usertable.databaseToJSON();
                 createResponse(response, 200, jsonreply.toString());
             }
