@@ -3,10 +3,10 @@
         xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                $("#deletereply").html("<p style='color:green'>Your rendezvous was canceled succesfully</p>");
+                $("#deletereply").html("<p style='color:green'>Your rendezvous was cancelled succesfully</p>");
                 showRendezvous();
             } else if (xhr.status !== 200) {
-                $("#deletereply").html("<p style='color:red'>Your rendezvous didn't get canceled! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+                $("#deletereply").html("<p style='color:red'>Your rendezvous didn't get cancelled! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
             }
         }
         var data = {"rend_id":rend_id};

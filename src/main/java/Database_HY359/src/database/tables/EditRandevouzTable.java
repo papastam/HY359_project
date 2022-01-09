@@ -193,7 +193,7 @@ public class EditRandevouzTable {
     public void cancelrendezvous(int randevouzID) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
-        String updateQuery = "UPDATE randevouz SET status='canceled' WHERE randevouz_id = '" + randevouzID + "'";
+        String updateQuery = "UPDATE randevouz SET status='cancelled' WHERE randevouz_id = '" + randevouzID + "'";
         stmt.executeUpdate(updateQuery);
         stmt.close();
         con.close();
