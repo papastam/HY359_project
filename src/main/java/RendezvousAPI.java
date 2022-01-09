@@ -5,6 +5,7 @@ import Database_HY359.src.mainClasses.Randevouz;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import javax.json.Json;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -32,16 +33,40 @@ public class RendezvousAPI extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
     }
 
+    private JSONObject ArrayListToJSON(ArrayList<Randevouz> array){
+        JSONObject jsonret = new JSONObject();
+        EditRandevouzTable rendtable = new EditRandevouzTable();
+
+        for(int i=0;i< array.size();i++){
+            jsonret.append("rendezvous", rendtable.randevouzToJSON(array.get(i)));
+        }
+        return jsonret;
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String doctor_id = (String) request.getParameter("doctor_id");
         String user_id = (String) request.getParameter("user_id");
+        String mode = (String) request.getParameter("mode");
         EditRandevouzTable rendtable = new EditRandevouzTable();
-        JSONObject jsonreply = new JSONObject();
+
+        ArrayList<Randevouz> rendezvous = new ArrayList<Randevouz>();
 
         if(doctor_id!=null){
             try {
-                jsonreply = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
+                if(mode == null) {
+                    rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),0);
+                }
+                else {
+                    switch (mode){
+                        case "free":
+                            rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),1);
+                            break;
+                        case "selected":
+                            rendezvous = rendtable.getRendezvousByDocID(Integer.parseInt(doctor_id),2);
+                            break;
+                    }
+                }
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
@@ -49,17 +74,17 @@ public class RendezvousAPI extends HttpServlet {
             }
         }else if(user_id!=null){
             try {
-                jsonreply = rendtable.getAllRendezvousOfUser(Integer.parseInt(user_id));
+                rendezvous = rendtable.getAllRendezvousOfUser(Integer.parseInt(user_id));
             } catch (SQLException | ClassNotFoundException e) {
                 e.printStackTrace();
                 createResponse(response,403,e.getMessage());
                 return;
             }
         }else{
-            createResponse(response,403,"Please specify docor_id or user_id in the querry part");
+            createResponse(response,403,"Please specify doctor_id or user_id in the query part");
             return;
         }
-        createResponse(response,200,jsonreply.toString());
+        createResponse(response,200,ArrayListToJSON(rendezvous).toString());
     }
 
     @Override
@@ -105,7 +130,7 @@ public class RendezvousAPI extends HttpServlet {
             jsonIn.remove("username");
             jsonIn.remove("password");
             jsonIn.remove("certified");
-            rendezvous = randevouzTable.getRendezvousByDocIDtoArrayList(doctor.getDoctor_id(), 0);
+            rendezvous = randevouzTable.getRendezvousByDocID(doctor.getDoctor_id(), 0);
         }
         catch(ClassNotFoundException ex){
             System.out.println(ex.toString());
