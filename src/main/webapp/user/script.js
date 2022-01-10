@@ -29,10 +29,10 @@ function checkForDonation() {
     xhr.onload = function () {
         if(xhr.status === 200 && xhr.readyState === 4) {
             var reply = JSON.parse(xhr.responseText);
-            if(!(excludedMessages.includes(reply["message_id"]))) {
-                excludedMessages.push(reply["message_id"]);
-                for(let i in reply["messages"]) {
-                    var msg = JSON.parse(reply["messages"][i]);
+            for(let i in reply["messages"]) {
+                var msg = JSON.parse(reply["messages"][i]);
+                if(!(excludedMessages.includes(msg["message_id"]))) {
+                    excludedMessages.push(msg["message_id"]);
 
                     alert(msg["message"]);
                 }
@@ -47,7 +47,7 @@ function checkForDonation() {
 
 window.setInterval(function () {
     checkForDonation();
-}, 3000);
+}, 5000);
 
 $(document).ready(function () {
     checkUserLoggedIn("user");

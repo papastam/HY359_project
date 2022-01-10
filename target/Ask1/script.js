@@ -1,7 +1,3 @@
-function loadinfo(){
-    $("#appwindow").load("info.html");
-}
-
 function loaddoctors(){
     $("#appwindow").load("availableDoctors.html");
 }
@@ -38,4 +34,5 @@ function sendAjaxRegisterPOST(event){
 }
 
 $(document).ready(function(){
+    loaddoctors();
 });

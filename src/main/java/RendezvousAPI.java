@@ -57,65 +57,55 @@ public class RendezvousAPI extends HttpServlet {
         ArrayList<Randevouz> doc_rendezvous = null;
         JSONObject jsonOut = new JSONObject();
 
-        if(doctor_id!=null){
-            try {
-                if(mode == null) {
+        try {
+            if (doctor_id != null) {
+                if (mode == null) {
                     doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id), 0);
-                }
-                else {
-                    switch (mode){
+                } else {
+                    switch (mode) {
                         case "free":
-                            doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id),1);
+                            doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id), 1);
                             break;
                         case "selected":
-                            doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id),2);
+                            doc_rendezvous = rendtable.databaseToArrayList(Integer.parseInt(doctor_id), 2);
                             break;
                     }
                 }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-                createResponse(response,403,e.getMessage());
-                return;
-            }
-        }else if(user_id!=null){
-            try {
+
+                SimpleUser user = new SimpleUser();
+                EditSimpleUserTable userTable = new EditSimpleUserTable();
+
+                for (int i = 0; i < doc_rendezvous.size(); i++) {
+                    JSONObject rend = new JSONObject();
+                    user = userTable.getSimpleUserFromID(doc_rendezvous.get(i).getUser_id());
+                    if (user == null)
+                        rend.put("name", "Not selected by any user");
+                    else
+                        rend.put("name", user.getFirstname() + " " + user.getLastname());
+
+                    rend.put("date_time", doc_rendezvous.get(i).getDate_time());
+                    rend.put("status", doc_rendezvous.get(i).getStatus());
+                    rend.put("price", doc_rendezvous.get(i).getPrice());
+                    rend.put("doctor_info", doc_rendezvous.get(i).getDoctor_info());
+                    rend.put("rendezvous_id", doc_rendezvous.get(i).getRandevouz_id());
+                    jsonOut.put(String.valueOf(i), rend);
+                }
+
+                createResponse(response, 200, jsonOut.toString());
+            } else if (user_id != null) {
                 rendezvous = rendtable.getAllRendezvousOfUser(Integer.parseInt(user_id));
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-                createResponse(response,403,e.getMessage());
+
+                createResponse(response,200,rendezvous.toString());
+            } else {
+                createResponse(response, 403, "Please specify doctor_id or user_id in the query part");
                 return;
             }
-        }else{
-            createResponse(response,403,"Please specify doctor_id or user_id in the query part");
+
+        }catch (Exception e){
+            e.printStackTrace();
+            createResponse(response,403,e.getMessage());
             return;
         }
-
-        SimpleUser user = new SimpleUser();
-        EditSimpleUserTable userTable = new EditSimpleUserTable();
-
-        for(int i = 0; i < doc_rendezvous.size(); i++) {
-            try {
-                JSONObject rend = new JSONObject();
-                user = userTable.getSimpleUserFromID(doc_rendezvous.get(i).getUser_id());
-                if(user == null)
-                    rend.put("name", "Not selected by any user");
-                else
-                    rend.put("name", user.getFirstname() + " " + user.getLastname());
-
-                rend.put("date_time", doc_rendezvous.get(i).getDate_time());
-                rend.put("status", doc_rendezvous.get(i).getStatus());
-                rend.put("price", doc_rendezvous.get(i).getPrice());
-                rend.put("doctor_info", doc_rendezvous.get(i).getDoctor_info());
-                rend.put("rendezvous_id", doc_rendezvous.get(i).getRandevouz_id());
-                jsonOut.put(String.valueOf(i), rend);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        createResponse(response,200,jsonOut.toString());
     }
 
     @Override
