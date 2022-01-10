@@ -17,9 +17,9 @@ function sendAjaxRegisterPOST(event){
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // console.log(xhr.responseText);
-            $("#ajaxContent").html("<p style='color:green'>Your info was updated succesfully</p>");
+            $("#registerReply").html("<p style='color:green'>Your successfully registered</p>");
         } else if (xhr.status !== 200) {
-            $("#ajaxContent").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            $("#registerReply").html("<p style='color:red'>Couldn't Register! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
         }
     };
     delete data["cpassword"];
