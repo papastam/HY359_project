@@ -1,20 +1,20 @@
 <script src="https://momentjs.com/downloads/moment.js"></script>
 <script>
     // USER MESSAGE TEMPLATE
-    // <div class="message_container user_container">
-    //     <div class="message user_message">
+    // <div class="message_container sender_container">
+    //     <div class="message sender_message">
     //         (Message)
     //     </div>
     // </div>
 
     // DOCTOR MESSAGE TEMPLATE
     // <div class="message_container">
-    //     <div class="message doctor_message">
+    //     <div class="message receiver_message">
     //         (Message)
     //     </div>
     // </div>
 
-    var currentopenchat;
+    var currentopenchat = -1;
 
     function sendmessage(event) {
         event.preventDefault();
@@ -47,9 +47,9 @@
 
     function printmessage(message,sender) {
         if(sender==="user"){
-            $("#messages").append("<div class=\"message_container user_container\"><div class=\"message user_message\">"+message+"</div></div>");
+            $("#messages").append("<div class=\"message_container sender_container\"><div class=\"message sender_message\">"+message+"</div></div>");
         }else if(sender==="doctor"){
-            $("#messages").append("<div class=\"message_container\"><div class=\"message doctor_message\">"+message+"</div></div>");
+            $("#messages").append("<div class=\"message_container\"><div class=\"message receiver_message\">"+message+"</div></div>");
         }
     }
 
@@ -103,6 +103,12 @@
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
     }
+
+    window.setInterval(function(){
+        if(currentopenchat!=-1) {
+            openchat(currentopenchat);
+        }
+    }, 3000);
 
     $(document).ready(function () {
         printdoctortable();

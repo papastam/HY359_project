@@ -49,7 +49,6 @@ public class CertifiedDoctorBoy extends HttpServlet {
             createResponse(response, 403, e.getMessage());
             return;
         }
-
         createResponse(response,200,jsonreply.toString());
     }
 

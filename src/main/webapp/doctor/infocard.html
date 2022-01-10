@@ -34,7 +34,7 @@
 
     }
 
-     $(document).ready(function(){
+    function fillinfocard() {
         $("#username").val(userdata["username"]);
         $("#email").val(userdata["email"]);
         $("#passwordfield").val(userdata["password"]);
@@ -48,10 +48,15 @@
         $("#telephone").val(userdata["telephone"]);
         $("#height").val(userdata["height"]);
         $("#weight").val(userdata["weight"]);
+        $("#doctor_info").val(userdata["doctor_info"]);
 
         $("#gender_"+userdata["gender"]).prop("checked","checked");
         $("#bd_"+userdata["blooddonor"]).prop("checked","checked");
         $("#bt_"+userdata["bloodtype"]).prop("selected","true");
+    }
+
+     $(document).ready(function(){
+         fillinfocard();
 
         $("#showpass,#cshowpass").click(function(){
             if($(this).siblings(".pwrdfld").attr('type')=="password"){
@@ -343,7 +348,7 @@
         </li>
         <li id="doctorinfo">
             <label for="doctor_info">Doctor info: </label>
-            <input type="text" name="doctor_info">
+            <input id="doctor_info" type="text" name="doctor_info">
         </li>
         <li>
             <label for="firstname">First name:</label>

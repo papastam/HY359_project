@@ -108,16 +108,16 @@ form ul{
 	border-radius: 11px;
 }
 
-.user_message{
+.sender_message{
 	border: 2px solid hsl(202deg 78% 57%);
 	background-color: hsl(202deg 100% 90%);
 }
 
-.user_container{
+.sender_container{
 	text-align: -webkit-right;
 }
 
-.doctor_message{
+.receiver_message{
 	border: 2px solid hsl(38deg 78% 57%);
 	background-color: hsl(38deg 100% 90%);
 }
