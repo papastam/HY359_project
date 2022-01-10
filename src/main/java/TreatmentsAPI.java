@@ -3,10 +3,12 @@ import Database_HY359.src.database.tables.EditTreatmentTable;
 import Database_HY359.src.mainClasses.BloodTest;
 import Database_HY359.src.mainClasses.Treatment;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -25,7 +27,6 @@ public class TreatmentsAPI extends HttpServlet {
         }
         respwr.write(data);
         response.setContentType("application/text");
-
     }
 
     @Override
@@ -33,25 +34,38 @@ public class TreatmentsAPI extends HttpServlet {
         EditTreatmentTable treatable = new EditTreatmentTable();
         JSONObject jsonreply = new JSONObject();
 
-        int user_id = Integer.parseInt(request.getParameter("user_id"));
+        String user_id = request.getParameter("user_id");
+        String bloodtest_id = request.getParameter("bloodtest_id");
 
         try {
-            jsonreply = treatable.databaseToJSON(user_id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            createResponse(response,403,e.getMessage());
-            return;
-        } catch (ClassNotFoundException e) {
+            if(user_id!=null){
+                jsonreply = treatable.databaseToJSON(Integer.parseInt(user_id));
+            }else if(bloodtest_id!=null){
+                jsonreply = treatable.databaseToJSONfromTestID(Integer.parseInt(bloodtest_id));
+            }
+            createResponse(response,200,jsonreply.toString());
+        } catch (Exception e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
             return;
         }
 
-        createResponse(response,200,jsonreply.toString());
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader inputJSONfromClient = request.getReader();
+        JSONTokener tokener = new JSONTokener(inputJSONfromClient);
+        JSONObject jsonin = new JSONObject(tokener);
+        EditTreatmentTable treatmenttable = new EditTreatmentTable();
+        //TODO:Check for valid dates
+        try {
+            treatmenttable.addTreatmentFromJSON(jsonin.toString());
+            createResponse(response,200,"");
+        } catch (Exception e) {
+            e.printStackTrace();
+            createResponse(response,403,e.getMessage());
+        }
 
     }
 }

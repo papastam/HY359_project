@@ -1,5 +1,7 @@
 import Database_HY359.src.database.tables.EditBloodTestTable;
+import Database_HY359.src.database.tables.EditSimpleUserTable;
 import Database_HY359.src.mainClasses.BloodTest;
+import Database_HY359.src.mainClasses.SimpleUser;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
