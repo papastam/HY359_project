@@ -1,0 +1,49 @@
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script>
+    function notifyblooddonors(event){
+        event.preventDefault();
+        let myForm = document.getElementById('alertblooddonors');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // console.log(xhr.responseText);
+                $("#reply").html("<p style='color:green'>Your successfully registered</p>");
+            } else if (xhr.status !== 200) {
+                $("#reply").html("<p style='color:red'>Couldn't Register! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        data["doctor_id"]=userdata["doctor_id"];
+        data["blood_donation"]=1;
+        data["user_id"]=2;
+        data["sender"]="doctor";
+        data["date_time"] = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        xhr.open('POST', '/Project_war_exploded/MessagesAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+</script>
+<form id="alertblooddonors" name="alertblooddonors" onsubmit="notifyblooddonors(event);">
+    <label for="bloodtype">Blood Type: </label>
+    <select type="text" name="bloodtype" required>
+        <option value="A-">A-</option>
+        <option value="A+">A+</option>
+        <option value="B-">B-</option>
+        <option value="B+">B+</option>
+        <option value="AB-">AB-</option>
+        <option value="AB+">AB+</option>
+        <option value="0-">0-</option>
+        <option value="0+">0+</option>
+        <option value="Unknown">Unknown</option>
+    </select>
+    <label>Message: </label>
+    <input type="text" name="message" required>
+    <input type="submit" value="Notify Users">
+</form>
+<div id="reply"></div>

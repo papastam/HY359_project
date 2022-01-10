@@ -31,21 +31,25 @@ public class MessagesAPI extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String user_id = (String) request.getParameter("user_id");
         String doctor_id = (String) request.getParameter("doctor_id");
+        String bloodtype = (String) request.getParameter("bloodtype");
         EditMessageTable messageTable = new EditMessageTable();
         JSONObject jsonmessages = new JSONObject();
 
-        if(user_id==null || doctor_id==null){
-            createResponse(response,403,"Please specify user_id and doctor_id");
-        }
-
         try {
-            jsonmessages = messageTable.chatToJSON(Integer.parseInt(user_id), Integer.parseInt(doctor_id));
+            if(bloodtype!=null){
+                jsonmessages = messageTable.databaseToJSON(bloodtype);
+            }else if(user_id==null || doctor_id==null){
+                createResponse(response,403,"Please specify user_id and doctor_id");
+            }else {
+                jsonmessages = messageTable.chatToJSON(Integer.parseInt(user_id), Integer.parseInt(doctor_id));
+            }
+
+            createResponse(response,200, jsonmessages.toString());
         } catch (Exception e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
             return;
         }
-        createResponse(response,200, jsonmessages.toString());
     }
 
     @Override
