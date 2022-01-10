@@ -14,7 +14,7 @@
     //     </div>
     // </div>
 
-    var currentopenchat = -1;
+    var currentopenchat;
 
     function sendmessage(event) {
         event.preventDefault();
@@ -103,12 +103,6 @@
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
     }
-
-    window.setInterval(function(){
-        if(currentopenchat!=-1) {
-            openchat(currentopenchat);
-        }
-    }, 3000);
 
     $(document).ready(function () {
         printdoctortable();
