@@ -1,25 +1,159 @@
 <script>
-    function loadpatientable(){
+    var currentamka;
+    var currentpatient;
+    var currenttest;
+    var currentuser_id;
+
+    function loadpatientable() {
+        $("#patienttable").html("<thead><td>Name</td><td>Telephone</td><td>Email</td><td>Address</td><td>Action</td></thead>");
         var xhr = new XMLHttpRequest();
-        xhr.onload = function(){
-            if(xhr.readyState===4 && xhr.status===200){
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
                 var reply = JSON.parse(xhr.responseText);
-                console.log(reply);
-            }else{
+                if (reply.hasOwnProperty("patients")) {
+                    var patients = reply["patients"];
+                    for (ind in patients) {
+                        var patient = JSON.parse(patients[ind]);
+                        var showtestsbtn = "<input type='button' value='Show Treatments' onclick='loadtests(" + patient["amka"] + ", \"" + patient["user_id"] + "\")'>";
+                        $("#patienttable").append("<tr><td>" + patient["firstname"] + " " + patient["lastname"] + "</td><td>" + patient["telephone"] + "</td><td>" + patient["email"] + "</td><td>" + patient["address"] + ", " + patient["city"] + ", " + patient["country"] + "</td><td>" + showtestsbtn + "</td></tr>")
+                    }
+                } else {
+                    $("#patienttable").hmlt("You have no patients yet!")
+                }
+            } else {
 
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/UserAPI?type=patient&doctor_id='+userdata["doctor_id"]);
+        xhr.open('GET', '/Project_war_exploded/UserAPI?type=patient&doctor_id=' + userdata["doctor_id"]);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
 
     }
 
-    $(document).ready(function(){
-       loadpatientable();
+    function loadtests(amka, user_id) {
+        currentamka = amka;
+        currentuser_id = user_id;
+        $("#testtable").html("<thead><td>Patient</td><td>Test date</td><td>Medical Center</td><td>Blood Sugar</td><td>Cholesterol</td><td>Iron</td><td>Vitamin D3</td><td>Vitamin B12</td><td>Action</td></thead>");
+        $("#treatmenttable").html("");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var reply = JSON.parse(xhr.responseText);
+                if (reply.hasOwnProperty("tests")) {
+                    var tests = reply["tests"];
+                    for (ind in tests) {
+                        var test = JSON.parse(tests[ind]);
+                        currentpatient = test["name"];
+                        // console.log(test);
+                        var showtreatmentbtn = "<input type='button' value='Show Treatments' onclick='loadtreatments(\"" + test["bloodtest_id"] + "\")'>";
+                        $("#testtable").append("<tr><td>" + test["name"] + "</td><td>" + test["test_date"] + "</td><td>" + test["medical_center"] + "</td><td>" + test["blood_sugar"] + " (" + test["blood_sugar_level"] + ")</td><td>" + test["cholesterol"] + " (" + test["cholesterol_level"] + ")</td><td>" + test["iron"] + " (" + test["iron_level"] + ")</td><td>" + test["vitamin_d3"] + " (" + test["vitamin_d3_level"] + ")</td><td>" + test["vitamin_b12"] + " (" + test["vitamin_b12_level"] + ")</td><td>" + showtreatmentbtn + "</td></tr>");
+                    }
+                } else {
+                    $("#testtable").append("There are no blood tests for this patient!")
+                }
+                $("#testtable").append("<tr><td><input form='newTest' name=\"name\" id=\"patientnametest\" value='" + test["name"] + "' disabled></td><td><input form='newTest' name=\"test_date\" type=\"date\" required></td><td><input form='newTest' name=\"medical_center\" type=\"text\" required></td><td><input form='newTest' name=\"blood_sugar\" type=\"text\" required></td><td><input form='newTest' name=\"cholesterol\" type=\"text\" required></td><td><input form='newTest' name=\"iron\" type=\"text\" required></td><td><input form='newTest' name=\"vitamin_d3\" type=\"text\" required></td><td><input form='newTest' name=\"vitamin_b12\" type=\"text\" required></td><td><input form='newTest' type=\"submit\" value=\"Submit Test\"></td></tr>")
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/BloodTestsAPI?amka=' + amka);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function loadtreatments(bloodtest_id) {
+        $("#treatmenttable").html("<thead><td>Patient</td><td>Start Date</td><td>End Date</td><td>Treatment</td><td>Action</td></thead>");
+        currenttest = bloodtest_id;
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var reply = JSON.parse(xhr.responseText);
+                if (reply.hasOwnProperty("treatment")) {
+                    var treatments = reply["treatment"];
+                    for (ind in treatments) {
+                        var treatment = JSON.parse(treatments[ind]);
+                        $("#treatmenttable").append("<tr><td>" + currentpatient + "</td><td>" + treatment["start_date"] + "</td><td>" + treatment["end_date"] + "</td><td>" + treatment["treatment_text"] + "</td></tr>");
+                    }
+                } else {
+                    $("#treatmenttable").append("There are no active treatments for this test yet!")
+                }
+                $("#treatmenttable").append("<tr><td><input name=\"name\" id=\"patientname\" value='" + currentpatient + "' disabled></td><td><input name=\"start_date\" type=\"date\" required></td><td><input name=\"end_date\" type=\"date\" required></td><td><input name=\"treatment_text\" type=\"text\" required></td><td><input type=\"submit\" value=\"Submit Treatment\"></td></tr>");
+            }
+        }
+
+        xhr.open('GET', '/Project_war_exploded/TreatmentsAPI?bloodtest_id=' + bloodtest_id);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function sendTest(event) {
+        event.preventDefault();
+        let myForm = document.getElementById('newTest');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // console.log(xhr.responseText);
+                loadtests(currentamka);
+            } else if (xhr.status !== 200) {
+                $("#errormsg").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: " + xhr.status + " </p><p>" + xhr.responseText + "</p>");
+            }
+        };
+
+        data["amka"] = currentamka;
+
+        xhr.open('POST', '/Project_war_exploded/BloodTestsAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    function sendTreatment(event) {
+        event.preventDefault();
+        let myForm = document.getElementById('newTreatment');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // console.log(xhr.responseText);
+                loadtreatments(currenttest);
+            } else if (xhr.status !== 200) {
+                $("#errormsg").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: " + xhr.status + " </p><p>" + xhr.responseText + "</p>");
+            }
+        };
+
+        data["doctor_id"] = userdata["doctor_id"];
+        data["user_id"] = currentuser_id;
+        data["bloodtest_id"] = currenttest;
+
+        xhr.open('POST', '/Project_war_exploded/TreatmentsAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    $(document).ready(function () {
+        loadpatientable();
     });
 </script>
-<div>
+<table id="patienttable">
 
-</div>
+</table>
+<br>
+<form name="newTest" id="newTest" onSubmit="sendTest(event);">
+    <table id="testtable">
+
+    </table>
+</form>
+<br>
+<form name="newTreatment" id="newTreatment" onSubmit="sendTreatment(event);">
+    <table id="treatmenttable">
+
+    </table>
+</form>
+<div id="errormsg"></div>
+

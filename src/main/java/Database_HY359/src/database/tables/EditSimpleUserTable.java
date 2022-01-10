@@ -281,4 +281,23 @@ public class EditSimpleUserTable {
 
         return null;
     }
+
+    public SimpleUser getSimpleUserFromAMKA(long amka) throws SQLException, ClassNotFoundException{
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM users WHERE amka = '" + amka + "'");
+            rs.next();
+            String json=DB_Connection.getResultsToJSON(rs);
+            Gson gson = new Gson();
+            SimpleUser user = gson.fromJson(json, SimpleUser.class);
+            return user;
+        }
+        catch(SQLException ex) {
+            System.err.println(ex.toString());
+        }
+
+        return null;
+    }
 }

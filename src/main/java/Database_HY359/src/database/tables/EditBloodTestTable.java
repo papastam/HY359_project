@@ -77,8 +77,14 @@ public class EditBloodTestTable {
         try {
             rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka="+amka);
             while (rs.next()) {
-                String json = DB_Connection.getResultsToJSON(rs);
-                jsonret.append("tests",json);
+                JSONObject json = new JSONObject(DB_Connection.getResultsToJSON(rs));
+
+                EditSimpleUserTable usertable = new EditSimpleUserTable();
+                SimpleUser user = usertable.getSimpleUserFromAMKA(amka);
+                json.put("name",user.getFirstname()+" "+user.getLastname());
+                json.put("user_id",user.getUser_id());
+
+                jsonret.append("tests",json.toString());
             }
             return jsonret;
 
