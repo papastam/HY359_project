@@ -1,20 +1,20 @@
 <script src="https://momentjs.com/downloads/moment.js"></script>
 <script>
     // USER MESSAGE TEMPLATE
-    // <div class="message_container sender_container">
-    //     <div class="message sender_message">
+    // <div className="message_container sender_container">
+    //     <div className="message sender_message">
     //         (Message)
     //     </div>
     // </div>
 
     // DOCTOR MESSAGE TEMPLATE
-    // <div class="message_container">
-    //     <div class="message receiver_message">
+    // <div className="message_container">
+    //     <div className="message receiver_message">
     //         (Message)
     //     </div>
     // </div>
 
-    var currentopenchat;
+    var currentopenchat = -1;
 
     function sendmessage(event) {
         event.preventDefault();
@@ -30,26 +30,26 @@
                 $("#messageinput").val("");
                 $("#errormessages").html("");
             } else if (xhr.status !== 200) {
-                $("#errormessages").html("<p style='color:red'>Your message wasn't sent! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+                $("#errormessages").html("<p style='color:red'>Your message wasn't sent! Server responded with status code of: " + xhr.status + " </p><p>" + xhr.responseText + "</p>");
             }
         };
 
-        data["doctor_id"]=currentopenchat;
-        data["user_id"]=userdata["user_id"];
-        data["sender"]="user";
-        data["blood_donation"]=0;
-        data["date_time"]=moment().format('YYYY-MM-DD HH:mm:ss');
+        data["doctor_id"] = currentopenchat;
+        data["user_id"] = userdata["user_id"];
+        data["sender"] = "user";
+        data["blood_donation"] = 0;
+        data["date_time"] = moment().format('YYYY-MM-DD HH:mm:ss');
 
         xhr.open('POST', '/Project_war_exploded/MessagesAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
 
-    function printmessage(message,sender) {
-        if(sender==="user"){
-            $("#messages").append("<div class=\"message_container sender_container\"><div class=\"message sender_message\">"+message+"</div></div>");
-        }else if(sender==="doctor"){
-            $("#messages").append("<div class=\"message_container\"><div class=\"message receiver_message\">"+message+"</div></div>");
+    function printmessage(message, sender) {
+        if (sender === "user") {
+            $("#messages").append("<div class=\"message_container sender_container\"><div class=\"message sender_message\">" + message + "</div></div>");
+        } else if (sender === "doctor") {
+            $("#messages").append("<div class=\"message_container\"><div class=\"message receiver_message\">" + message + "</div></div>");
         }
     }
 
@@ -61,9 +61,9 @@
                 $("#messageswindow").show();
                 $("#messages").html("");
                 var reply = JSON.parse(xhr.responseText);
-                for(ind in reply["messages"]){
+                for (ind in reply["messages"]) {
                     var message = JSON.parse(reply["messages"][ind]);
-                    printmessage(message["message"],message["sender"]);
+                    printmessage(message["message"], message["sender"]);
                 }
             }
         }
@@ -104,12 +104,18 @@
         xhr.send("");
     }
 
+    window.setInterval(function () {
+        if (currentopenchat != -1) {
+            openchat(currentopenchat);
+        }
+    }, 3000);
+
     $(document).ready(function () {
         printdoctortable();
     });
 
 </script>
-<header class="title">
+<header className="title">
     <h4>Select a doctor to chat with:</h4>
 </header>
 <br>
@@ -132,7 +138,7 @@
 
     </div>
     <div id="messagecontols">
-        <form id="newMessageForm" class="newMessageForm" onsubmit="sendmessage(event);">
+        <form id="newMessageForm" className="newMessageForm" onSubmit="sendmessage(event);">
             <input type="text" id="messageinput" name="message" placeholder="Enter your message">
             <input type="submit" value="Send">
         </form>

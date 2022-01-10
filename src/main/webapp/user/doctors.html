@@ -3,8 +3,62 @@
     var doctorsreply;
     var jsonpoints;
 
+    function convertdistance(distance){
+        if(distance<1000){
+            return (distance).toFixed(2)+" m";
+        }else{
+            return (distance/1000.0).toFixed(2)+" km";
+        }
+    }
+
+    function convertduration(duration){
+        if(duration<60){
+            return (duration).toFixed(2)+" sec";
+        }else if(duration<3600){
+            return (duration/60.0).toFixed(2)+" min";
+        }else{
+            return (duration/3600.0).toFixed(2)+" hour(s)";
+        }
+    }
+
+    map = new OpenLayers.Map("Map");
+    var mapnik = new OpenLayers.Layer.OSM();
+    map.addLayer(mapnik);
+    const zoom = 15;
+
+    function setPosition(lat, lon){
+        var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from 	WGS 1984
+        var toProjection = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
+        return position;
+    }
+
+    function handler(position, message){
+        var popup = new OpenLayers.Popup.FramedCloud("Popup", position, null, message, null, true /* <-- true if we want a close (X) button, false otherwise*/);
+        map.addPopup(popup);
+    }
+
+    //Markers
+    var markers = new OpenLayers.Layer.Markers("Markers");
+    map.addLayer(markers);
+
+    function showmap(lat,lon){
+        markers.clearMarkers();
+
+        var position=setPosition(lat,lon);
+        map.setCenter(position, zoom);
+
+        var mar=new OpenLayers.Marker(position);
+        markers.addMarker(mar);
+        mar.events.register('mousedown', mar, function(evt) {
+            handler(position,address);}
+        );
+
+        $("#Map").show();
+    }
+
     function printdoctortable(sortedindexes, jsonreply) {
-        $("#docstable").html('<thead id=\"doctablehead\"><td className=\"doctablecell\">Name</td><td className=\"doctablecell\">Specialty</td><td className=\"doctablecell\">Telephone</td><td className=\"doctablecell\">Address</td><td className=\"doctablecell\">Email</td><td className=\"doctablecell\">Doctor Info</td><td className=\"doctablecell\">Distance</td><td className=\"doctablecell\">Duration</td></thead>')
+        $("#docstable").html('<thead id=\"doctablehead\"><td>Name</td><td>Specialty</td><td>Telephone</td><td>Address</td><td>Email</td><td>Doctor Info</td><td>Distance</td><td>Duration</td><td>Action</td></thead>')
         console.log(jsonreply);
         for (index in sortedindexes) {
             var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
@@ -15,20 +69,19 @@
             }
             $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
 
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["specialty"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["telephone"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["email"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["doctor_info"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["distance"] + ' m</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["duration"] + ' sec</td>');
+            $("#doctable_r" + index).append('<td>' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["specialty"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["telephone"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["email"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["doctor_info"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertdistance(doc["distance"]) + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertduration(doc["duration"]) + '</td>');
+            $("#doctable_r" + index).append('<td><input type="button" value="Show on map" onclick="showmap('+doc["lat"]+' , '+doc["lon"]+')"></td>');
         }
     }
 
     function calculateandPrint(method, jsonpoints, jsonreply) {
-        const data = null;
-
         const xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
 
@@ -80,7 +133,7 @@
         xhr.setRequestHeader("x-rapidapi-host", "trueway-matrix.p.rapidapi.com");
         xhr.setRequestHeader("x-rapidapi-key", "bd2e97d2d1msh175dda3181f8171p1988aejsnf9cec4a9c8d3");
 
-        xhr.send(data);
+        xhr.send();
     }
 
     $(document).ready(function () {
@@ -131,3 +184,5 @@
 <table id="docstable">
 
 </table>
+<br>
+<div id="Map" style="height:600px; width:700px"></div>
