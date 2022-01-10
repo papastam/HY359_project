@@ -88,7 +88,7 @@ public class RendezvousAPI extends HttpServlet {
                     rend.put("price", doc_rendezvous.get(i).getPrice());
                     rend.put("doctor_info", doc_rendezvous.get(i).getDoctor_info());
                     rend.put("rendezvous_id", doc_rendezvous.get(i).getRandevouz_id());
-                    jsonOut.put(String.valueOf(i), rend);
+                    jsonOut.append("rendezvous", rend.toString());
                 }
 
                 createResponse(response, 200, jsonOut.toString());

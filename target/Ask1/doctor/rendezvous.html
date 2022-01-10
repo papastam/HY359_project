@@ -42,8 +42,7 @@
         xhr.onload = function() {
             if(xhr.status === 200 && xhr.readyState === 4) {
                 var response = JSON.parse(xhr.responseText);
-                console.log("repsponse is");
-                console.log(response);
+
                 table = "";
                 table += "<table class='table table-bordered'><thead><tr>" +
                     "<th></th>" +
@@ -54,9 +53,9 @@
                     "<th>Status</th>" +
                     "<th>Cancel</th></tr></thead><tbody>";
 
-                for(let i in response) {
-                    var rend = response[""+i];
-                    console.log("rend");
+                for(let i in response["rendezvous"]) {
+                    var rend = JSON.parse(response["rendezvous"][i]);
+
                     var rend_id = rend["rendezvous_id"];
                     var cancelbtn = "<button type='button' onclick='cancelrendezvous(\""+rend_id+"\")'><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-x-lg\" viewBox=\"0 0 16 16\">\n" +
                         "  <path fill-rule=\"evenodd\" d=\"M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z\"/>\n" +

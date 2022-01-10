@@ -14,7 +14,7 @@
                     var patients = reply["patients"];
                     for (ind in patients) {
                         var patient = JSON.parse(patients[ind]);
-                        var showtestsbtn = "<input type='button' value='Show Treatments' onclick='loadtests(" + patient["amka"] + " , " + patient["user_id"] + ")'>";
+                        var showtestsbtn = "<input type='button' value='Show Tests' onclick='loadtests(" + patient["amka"] + " , " + patient["user_id"] + ")'>";
                         $("#patienttable").append("<tr><td>" + patient["firstname"] + " " + patient["lastname"] + "</td><td>" + patient["telephone"] + "</td><td>" + patient["email"] + "</td><td>" + patient["address"] + ", " + patient["city"] + ", " + patient["country"] + "</td><td>" + showtestsbtn + "</td></tr>")
                     }
                 } else {

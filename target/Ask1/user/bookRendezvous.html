@@ -3,6 +3,24 @@
     var jsonpoints;
     var rendezvous;
 
+    function convertdistance(distance){
+        if(distance<1000){
+            return (distance).toFixed(2)+" m";
+        }else{
+            return (distance/1000.0).toFixed(2)+" km";
+        }
+    }
+
+    function convertduration(duration){
+        if(duration<60){
+            return (duration).toFixed(2)+" sec";
+        }else if(duration<3600){
+            return (duration/60.0).toFixed(2)+" min";
+        }else{
+            return (duration/3600.0).toFixed(2)+" hour(s)";
+        }
+    }
+
     function submitBook(event){
         event.preventDefault();
         let myForm = document.getElementById('confirmbookform');
@@ -75,8 +93,8 @@
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["email"] + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell">' + doc["doctor_info"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["distance"] + ' m</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["duration"] + ' sec</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + convertdistance(doc["distance"]) + '</td>');
+            $("#doctable_r" + index).append('<td class="doctablecell">' + convertduration(doc["duration"]) + '</td>');
             $("#doctable_r" + index).append('<td class="doctablecell"><input type="button" value="Show Rendezvous" onclick="showrendezvous(\'' + doc["doctor_id"] + '\')"></td>');
         }
     }
