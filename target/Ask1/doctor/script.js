@@ -22,6 +22,10 @@ function loadmessages(){
     $("#appwindow").load("messages.html");
 }
 
+function loadbloddonation(){
+    $("#appwindow").load("blooddonors.html");
+}
+
 $(document).ready(function () {
     checkUserLoggedIn("doctor");
     loadinfo();
