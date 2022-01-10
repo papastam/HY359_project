@@ -14,7 +14,7 @@
                     var patients = reply["patients"];
                     for (ind in patients) {
                         var patient = JSON.parse(patients[ind]);
-                        var showtestsbtn = "<input type='button' value='Show Treatments' onclick='loadtests(" + patient["amka"] + ", \"" + patient["user_id"] + "\")'>";
+                        var showtestsbtn = "<input type='button' value='Show Treatments' onclick='loadtests(\"" + patient["amka"] + "," + patient["user_id"] + "\")'>";
                         $("#patienttable").append("<tr><td>" + patient["firstname"] + " " + patient["lastname"] + "</td><td>" + patient["telephone"] + "</td><td>" + patient["email"] + "</td><td>" + patient["address"] + ", " + patient["city"] + ", " + patient["country"] + "</td><td>" + showtestsbtn + "</td></tr>")
                     }
                 } else {
@@ -104,6 +104,8 @@
         };
 
         data["amka"] = currentamka;
+        data["user_id"] = currentuser_id;
+        data["bloodtest_id"] = currenttest;
 
         xhr.open('POST', '/Project_war_exploded/BloodTestsAPI');
         xhr.setRequestHeader("Content-type", "application/json");
@@ -121,17 +123,16 @@
         xhr.onload = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 // console.log(xhr.responseText);
-                loadtreatments(currenttest);
+                $("#errormsg").html("<p style='color:green'>Your info was updated succesfully</p>");
             } else if (xhr.status !== 200) {
                 $("#errormsg").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: " + xhr.status + " </p><p>" + xhr.responseText + "</p>");
             }
         };
 
         data["doctor_id"] = userdata["doctor_id"];
-        data["user_id"] = currentuser_id;
-        data["bloodtest_id"] = currenttest;
+        data["user_id"] =
 
-        xhr.open('POST', '/Project_war_exploded/TreatmentsAPI');
+            xhr.open('POST', '/Project_war_exploded/TreatmentsAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
