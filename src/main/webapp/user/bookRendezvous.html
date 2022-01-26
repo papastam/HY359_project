@@ -49,11 +49,11 @@
 
     function showbook(randevouz_ind){
         var rend = JSON.parse(rendezvous[randevouz_ind]);
-        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table id='confirmtable'><thead><td>Date & Time</td><td>Price</td><td>Doctor Info</td><td>Comments</td><td>Confirm</td></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td><td style='display: none'><input name='randevouz_id' value='"+rend["randevouz_id"]+"'></td></tr></table></form>");
+        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table class='table table-active' id='confirmtable'><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Comments</th><th>Confirm</th></tr></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td><td style='display: none'><input name='randevouz_id' value='"+rend["randevouz_id"]+"'></td></tr></table></form>");
     }
 
     function showrendezvous(doctor_id) {
-        $("#rendezvous").html("<table id=\"randtable\"><thead><td>Date & Time</td><td>Price</td><td>Doctor Info</td><td>Book</td> </thead></table>")
+        $("#rendezvous").html("<table class='table table-active' id=\"randtable\"><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Book</td></tr></thead></table>")
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -76,7 +76,7 @@
     }
 
     function printdoctortable(sortedindexes, jsonreply) {
-        $("#docstable").html('<thead id=\"doctablehead\"><td class=\"doctablecell\">Name</td><td class=\"doctablecell\">Specialty</td><td class=\"doctablecell\">Telephone</td><td class=\"doctablecell\">Address</td><td class=\"doctablecell\">Email</td><td class=\"doctablecell\">Doctor Info</td><td class=\"doctablecell\">Distance</td><td class=\"doctablecell\">Duration</td><td class=\"doctablecell\">Show Rendezvous</td></thead>')
+        $("#docstable").html('<thead class="thead-dark" id=\"doctablehead\"><tr><th class=\"doctablecell\">Name</th><th class=\"doctablecell\">Specialty</th><th class=\"doctablecell\">Telephone</th><th class=\"doctablecell\">Address</th><th class=\"doctablecell\">Email</th><th class=\"doctablecell\">Doctor Info</th><th class=\"doctablecell\">Distance</th><th class=\"doctablecell\">Duration</th><th class=\"doctablecell\">Show Rendezvous</th></tr></thead>')
         //console.log(jsonreply);
         for (index in sortedindexes) {
             var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
@@ -201,7 +201,7 @@
     <option value="durations">Duration</option>
 </select>
 
-<table id="docstable">
+<table class='table table-active' id="docstable">
 
 </table>
 <br>

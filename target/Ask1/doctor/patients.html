@@ -5,7 +5,7 @@
     var currentuser_id;
 
     function loadpatientable() {
-        $("#patienttable").html("<thead><td>Name</td><td>Telephone</td><td>Email</td><td>Address</td><td>Action</td></thead>");
+        $("#patienttable").html("<thead class='thead-dark'><tr><th>Name</th><th>Telephone</th><th>Email</th><th>Address</th><th>Action</th></tr></thead>");
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -34,7 +34,7 @@
     function loadtests(amka, user_id) {
         currentamka = amka;
         currentuser_id = user_id;
-        $("#testtable").html("<thead><td>Patient</td><td>Test date</td><td>Medical Center</td><td>Blood Sugar</td><td>Cholesterol</td><td>Iron</td><td>Vitamin D3</td><td>Vitamin B12</td><td>Action</td></thead>");
+        $("#testtable").html("<thead class='thead-dark'><tr><th>Patient</th><th>Test date</th><th>Medical Center</th><th>Blood Sugar</th><th>Cholesterol</th><th>Iron</th><th>Vitamin D3</th><th>Vitamin B12</th><th>Action</th></tr></thead>");
         $("#treatmenttable").html("");
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -62,7 +62,7 @@
     }
 
     function loadtreatments(bloodtest_id) {
-        $("#treatmenttable").html("<thead><td>Patient</td><td>Start Date</td><td>End Date</td><td>Treatment</td><td>Action</td></thead>");
+        $("#treatmenttable").html("<thead class='thead-dark'><tr><th>Patient</th><th>Start Date</th><th>End Date</th><th>Treatment</th><th>Action</th></tr></thead>");
         currenttest = bloodtest_id;
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -141,18 +141,18 @@
         loadpatientable();
     });
 </script>
-<table id="patienttable">
+<table class='table table-active' id="patienttable">
 
 </table>
 <br>
 <form name="newTest" id="newTest" onSubmit="sendTest(event);">
-    <table id="testtable">
+    <table class='table table-active' id="testtable">
 
     </table>
 </form>
 <br>
 <form name="newTreatment" id="newTreatment" onSubmit="sendTreatment(event);">
-    <table id="treatmenttable">
+    <table class='table table-active' id="treatmenttable">
 
     </table>
 </form>

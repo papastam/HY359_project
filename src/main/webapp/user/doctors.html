@@ -57,7 +57,7 @@
     }
 
     function printdoctortable(sortedindexes, jsonreply) {
-        $("#docstable").html('<thead id=\"doctablehead\"><td>Name</td><td>Specialty</td><td>Telephone</td><td>Address</td><td>Email</td><td>Doctor Info</td><td>Distance</td><td>Duration</td><td>Action</td></thead>')
+        $("#docstable").html('<thead class="thead-dark" id=\"doctablehead\"><tr><th>Name</th><th>Specialty</th><th>Telephone</th><th>Address</th><th>Email</th><th>Doctor Info</th><th>Distance</th><th>Duration</th><th>Action</th></tr></thead>')
         console.log(jsonreply);
         for (index in sortedindexes) {
             var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
@@ -180,7 +180,7 @@
     <option value="durations">Duration</option>
 </select>
 
-<table id="docstable">
+<table class='table table-active' id="docstable">
 
 </table>
 <br>
