@@ -91,7 +91,7 @@ public class EditMessageTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM message WHERE message_id= '" + id + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             Message bt = gson.fromJson(json, Message.class);

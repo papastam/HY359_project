@@ -39,7 +39,7 @@ public class EditRandevouzTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM randevouz WHERE randevouz_id= '" + id + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             Randevouz bt = gson.fromJson(json, Randevouz.class);

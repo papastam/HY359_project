@@ -126,7 +126,7 @@ public class EditBloodTestTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka= '" + amka + "' AND test_date='"+date+"'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             BloodTest bt = gson.fromJson(json, BloodTest.class);

@@ -64,7 +64,7 @@ public class EditSimpleUserTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM users WHERE username = '" + username + "' AND password='"+password+"'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             SimpleUser user = gson.fromJson(json, SimpleUser.class);
@@ -269,7 +269,7 @@ public class EditSimpleUserTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = '" + user_id + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             SimpleUser user = gson.fromJson(json, SimpleUser.class);
@@ -288,7 +288,7 @@ public class EditSimpleUserTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM users WHERE amka = '" + amka + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             SimpleUser user = gson.fromJson(json, SimpleUser.class);

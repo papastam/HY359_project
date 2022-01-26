@@ -52,7 +52,7 @@ public class EditTreatmentTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM treatment WHERE treatment_id= '" + id + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json=DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             Treatment tr  = gson.fromJson(json, Treatment.class);

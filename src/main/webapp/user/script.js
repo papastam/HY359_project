@@ -45,9 +45,9 @@ function checkForDonation() {
 }
 
 
-window.setInterval(function () {
-    checkForDonation();
-}, 5000);
+// window.setInterval(function () {
+//     checkForDonation();
+// }, 5000);
 
 $(document).ready(function () {
     checkUserLoggedIn("user");

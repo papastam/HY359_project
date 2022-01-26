@@ -77,7 +77,7 @@ public class EditDoctorTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM doctors WHERE username = '" + username + "' AND password='" + password + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json = DB_Connection.getResultsToJSON(rs);
             Gson gson = new Gson();
             Doctor doc = gson.fromJson(json, Doctor.class);
@@ -141,7 +141,7 @@ public class EditDoctorTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM doctors WHERE username = '" + username + "' AND password='" + password + "'");
-            rs.next();
+            if(rs.next()==false){return null;}
             String json = DB_Connection.getResultsToJSON(rs);
             return json;
         } catch (Exception e) {

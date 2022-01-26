@@ -1,5 +1,5 @@
 <script>
-    var currentamka;
+    var currentamka ="";
     var currentpatient;
     var currenttest;
     var currentuser_id;
@@ -32,7 +32,7 @@
     }
 
     function loadtests(amka, user_id) {
-        currentamka = amka;
+        currentamka = ""+amka;
         currentuser_id = user_id;
         $("#testtable").html("<thead class='thead-dark'><tr><th>Patient</th><th>Test date</th><th>Medical Center</th><th>Blood Sugar</th><th>Cholesterol</th><th>Iron</th><th>Vitamin D3</th><th>Vitamin B12</th><th>Action</th></tr></thead>");
         $("#treatmenttable").html("");
@@ -56,7 +56,7 @@
             }
         }
 
-        xhr.open('GET', '/hy359_project_war_exploded/BloodTestsAPI?amka=' + amka);
+        xhr.open('GET', '/hy359_project_war_exploded/BloodTestsAPI?amka=' + currentamka);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }
