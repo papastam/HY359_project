@@ -3,9 +3,9 @@
     <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
     <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
-      <artifact name="Project:war exploded">
+      <artifact name="hy359_project:war exploded">
         <settings>
-          <option name="CONTEXT_PATH" value="/Project_war_exploded" />
+          <option name="CONTEXT_PATH" value="/hy359_project_war_exploded" />
         </settings>
       </artifact>
     </deployment>
@@ -88,9 +88,11 @@
         <artifact name="Ask1:war exploded" />
         <artifact name="hy359 assignment3:war exploded" />
         <artifact name="Project:war exploded" />
+        <artifact name="hy359_project:war exploded" />
       </option>
       <option name="BuildArtifacts" enabled="true">
         <artifact name="Project:war exploded" />
+        <artifact name="hy359_project:war exploded" />
       </option>
     </method>
   </configuration>

@@ -40,7 +40,7 @@ function checkForDonation() {
         }
     }
 
-    xhr.open("GET", "/Project_war_exploded/MessagesAPI?bloodtype="+userdata["bloodtype"]);
+    xhr.open("GET", "/hy359_project_war_exploded/MessagesAPI?bloodtype="+userdata["bloodtype"]);
     xhr.send();
 }
 

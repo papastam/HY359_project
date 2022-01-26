@@ -40,7 +40,7 @@
         data["blood_donation"]=0;
         data["date_time"]=moment().format('YYYY-MM-DD HH:mm:ss');
 
-        xhr.open('POST', '/Project_war_exploded/MessagesAPI');
+        xhr.open('POST', '/hy359_project_war_exploded/MessagesAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
@@ -68,7 +68,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/MessagesAPI?user_id=' + user_id + "&doctor_id=" + userdata["doctor_id"]);
+        xhr.open('GET', '/hy359_project_war_exploded/MessagesAPI?user_id=' + user_id + "&doctor_id=" + userdata["doctor_id"]);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
     }
@@ -92,7 +92,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/UserAPI?type=user');
+        xhr.open('GET', '/hy359_project_war_exploded/UserAPI?type=user');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
     }

@@ -10,7 +10,7 @@
             }
         }
         var data = {"rend_id":rend_id};
-        xhr.open('DELETE', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('DELETE', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
@@ -34,7 +34,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/RendezvousAPI?user_id='+userdata["user_id"]);
+        xhr.open('GET', '/hy359_project_war_exploded/RendezvousAPI?user_id='+userdata["user_id"]);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }

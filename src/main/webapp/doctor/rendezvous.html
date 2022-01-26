@@ -32,7 +32,7 @@
         data["username"] = userdata["username"];
         data["password"] = userdata["password"];
         data["certified"] = userdata["certified"];
-        xhr.open('PUT', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('PUT', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.send(JSON.stringify(data));
     }
 
@@ -76,7 +76,7 @@
             }
         }
 
-        xhr.open("GET", "/Project_war_exploded/RendezvousAPI?doctor_id="+userdata["doctor_id"]);
+        xhr.open("GET", "/hy359_project_war_exploded/RendezvousAPI?doctor_id="+userdata["doctor_id"]);
         xhr.send();
     }
 
@@ -91,7 +91,7 @@
             }
         }
         var data = {"rend_id":rend_id};
-        xhr.open('DELETE', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('DELETE', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }

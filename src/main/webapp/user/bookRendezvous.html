@@ -42,7 +42,7 @@
 
         // console.log("sent data");
         console.log(JSON.stringify(data));
-        xhr.open('POST', '/Project_war_exploded/RendezvousAPI');
+        xhr.open('POST', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
@@ -70,7 +70,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/RendezvousAPI?doctor_id=' + doctor_id);
+        xhr.open('GET', '/hy359_project_war_exploded/RendezvousAPI?doctor_id=' + doctor_id);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
     }
@@ -179,7 +179,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/CertifiedDoctorBoy');
+        xhr.open('GET', '/hy359_project_war_exploded/CertifiedDoctorBoy');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
 

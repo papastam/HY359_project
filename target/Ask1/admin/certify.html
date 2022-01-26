@@ -17,7 +17,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/CertifiedDoctorBoy');
+        xhr.open('GET', '/hy359_project_war_exploded/CertifiedDoctorBoy');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }
@@ -37,7 +37,7 @@
         var jsonrequest = {"username":username};
         jsonrequest["certification"] = $("#"+username+"_certvalue").val();
         console.log(jsonrequest);
-        xhr.open("POST", "/Project_war_exploded/CertifiedDoctorBoy");
+        xhr.open("POST", "/hy359_project_war_exploded/CertifiedDoctorBoy");
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(jsonrequest));
 

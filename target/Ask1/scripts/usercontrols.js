@@ -56,14 +56,14 @@ function logout(){
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            window.location.href = "/Project_war_exploded"
+            window.location.href = "/hy359_project_war_exploded"
 
         } else if (xhr.status !== 200) {
             console.log('Request failed. Returned status of ' + xhr.status);
         }
     };
 
-    xhr.open('POST', '/Project_war_exploded/Logout');
+    xhr.open('POST', '/hy359_project_war_exploded/Logout');
     xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     xhr.send();
 }
@@ -75,12 +75,12 @@ function checkUserLoggedIn(usertype){
             userdata = JSON.parse(xhr.responseText);
             if(userdata["usertype"]!=usertype){logout();}
         }else if(xhr.status!=200){
-            window.location.href = "/Project_war_exploded";
+            window.location.href = "/hy359_project_war_exploded";
             console.log("autologin failed with status code: "+xhr.status);
         }
     }
 
-    xhr.open('POST', '/Project_war_exploded/GetInfo');
+    xhr.open('POST', '/hy359_project_war_exploded/GetInfo');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send("");
 }

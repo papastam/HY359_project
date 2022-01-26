@@ -25,7 +25,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/UserAPI?type=patient&doctor_id=' + userdata["doctor_id"]);
+        xhr.open('GET', '/hy359_project_war_exploded/UserAPI?type=patient&doctor_id=' + userdata["doctor_id"]);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
 
@@ -56,7 +56,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/BloodTestsAPI?amka=' + amka);
+        xhr.open('GET', '/hy359_project_war_exploded/BloodTestsAPI?amka=' + amka);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }
@@ -81,7 +81,7 @@
             }
         }
 
-        xhr.open('GET', '/Project_war_exploded/TreatmentsAPI?bloodtest_id=' + bloodtest_id);
+        xhr.open('GET', '/hy359_project_war_exploded/TreatmentsAPI?bloodtest_id=' + bloodtest_id);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }
@@ -107,7 +107,7 @@
         data["user_id"] = currentuser_id;
         data["bloodtest_id"] = currenttest;
 
-        xhr.open('POST', '/Project_war_exploded/BloodTestsAPI');
+        xhr.open('POST', '/hy359_project_war_exploded/BloodTestsAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
@@ -132,7 +132,7 @@
         data["doctor_id"] = userdata["doctor_id"];
         data["user_id"] =
 
-            xhr.open('POST', '/Project_war_exploded/TreatmentsAPI');
+            xhr.open('POST', '/hy359_project_war_exploded/TreatmentsAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }

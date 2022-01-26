@@ -23,7 +23,7 @@
         data["sender"]="doctor";
         data["date_time"] = moment().format('YYYY-MM-DD HH:mm:ss');
 
-        xhr.open('POST', '/Project_war_exploded/MessagesAPI');
+        xhr.open('POST', '/hy359_project_war_exploded/MessagesAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }

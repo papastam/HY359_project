@@ -74,7 +74,7 @@
 
         testdata["amka"]=userdata["amka"];
 
-        xhr.open('POST', '/Project_war_exploded/BloodTestsAPI');
+        xhr.open('POST', '/hy359_project_war_exploded/BloodTestsAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(testdata));
     }
@@ -100,7 +100,7 @@
             };
         }
 
-        xhr.open('GET', '/Project_war_exploded/TreatmentsAPI?user_id=' + userdata["user_id"]);
+        xhr.open('GET', '/hy359_project_war_exploded/TreatmentsAPI?user_id=' + userdata["user_id"]);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }
@@ -131,7 +131,7 @@
             }
         };
 
-        xhr.open('GET', '/Project_war_exploded/BloodTestsAPI?amka='+userdata["amka"]);
+        xhr.open('GET', '/hy359_project_war_exploded/BloodTestsAPI?amka='+userdata["amka"]);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send();
     }

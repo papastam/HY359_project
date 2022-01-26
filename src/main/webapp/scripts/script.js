@@ -27,12 +27,12 @@ function sendAjaxLoginPOST(event){
 			var jsonreply = JSON.parse(xhr.responseText);
 			console.log(jsonreply);
 			if(jsonreply["logged_in"]){
-				if(jsonreply["usertype"]==="Project_war_exploded/admin"){
-					window.location.href = "Project_war_exploded/admin";
+				if(jsonreply["usertype"]==="hy359_project_war_exploded/admin"){
+					window.location.href = "hy359_project_war_exploded/admin";
 				}else if(jsonreply["usertype"]==="doctor"){
-					window.location.href = "Project_war_exploded/doctor";
+					window.location.href = "hy359_project_war_exploded/doctor";
 				}else{
-					window.location.href = "Project_war_exploded/user";
+					window.location.href = "hy359_project_war_exploded/user";
 				}
 			}
 		}else if(xhr.readyState === 4 && xhr.status === 403){
