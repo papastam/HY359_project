@@ -140,6 +140,7 @@ form ul{
 
 #appwindow{
     min-height: 550px;
+	margin: 11px;
 }
 
 #loginform{
@@ -245,8 +246,11 @@ form ul{
 	border-bottom: solid #000000 1px;
 }
 
-#cp_navbar{
-	text-decoration: underline rgba(0,0,0,.55);
+#cp_navbar {
+	font-size: 18px;
+	margin: 5px;
+	border-radius: 15px;
+	border: outset 6px #6a2e00;
 }
 
 #footer_form{
