@@ -51,7 +51,8 @@
                     "<th>Information</th>" +
                     "<th>Price</th>" +
                     "<th>Status</th>" +
-                    "<th>Cancel</th></tr></thead><tbody>";
+                    "<th>Cancel</th>" +
+                    "<th>Done</th></tr></thead><tbody>";
 
                 for(let i in response["rendezvous"]) {
                     var rend = JSON.parse(response["rendezvous"][i]);
@@ -61,6 +62,9 @@
                         "  <path fill-rule=\"evenodd\" d=\"M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z\"/>\n" +
                         "  <path fill-rule=\"evenodd\" d=\"M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z\"/>\n" +
                         "</svg></button>"
+                    var donebtn = "<button type='button' onclick='finishrendezvous(\""+rend_id+"\")'><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-check2\" viewBox=\"0 0 16 16\">\n" +
+                        "  <path d=\"M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z\"/>\n" +
+                        "</svg></button>"
                     table += "<tr>" +
                         "<td>" +i +"</td>" +
                         "<td>"+rend["name"]+"</td>" +
@@ -68,7 +72,8 @@
                         "<td>"+rend["doctor_info"]+"</td>" +
                         "<td>"+rend["price"]+"</td>" +
                         "<td>"+rend["status"]+"</td>" +
-                        "<td>"+cancelbtn+"</td></tr>";
+                        "<td>"+cancelbtn+"</td>" +
+                        "<td>"+donebtn+"</td></tr>";
                 }
                 table += "</tbody></table>";
 
@@ -94,6 +99,25 @@
         xhr.open('DELETE', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
+    }
+
+    function finishrendezvous(rend_id) {
+        xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                $("#deletereply").html("<p style='color:green'>Your rendezvous was marked as done succesfully</p>");
+                showDocRendezvous();
+            }
+            else {
+                $("#deletereply").html("<p style='color:red'>Your rendezvous didn't get marked as done! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        }
+
+        const data = {"randevouz_id": rend_id,"status": "done"};
+
+        xhr.open('POST', '/hy359_project_war_exploded/RendezvousAPI');
+        xhr.send(JSON.stringify(data));
+
     }
 </script>
 
