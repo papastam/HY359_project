@@ -82,7 +82,7 @@
     var treatmentsjson;
     function showTreatments(ind) {
         var treatment = JSON.parse(treatmentsjson["treatments"][ind]);
-        $("#treatmentwindow").html("<header>Your treatment:</header><table><tr><td>Start Date</td><td>End Date</td><td>Treatment</td></tr><tr><td>"+treatment["start_date"]+"</td><td>"+treatment["end_date"]+"</td><td>"+treatment["treatment_text"]+"</td></tr></table>")
+        $("#treatmentwindow").html("<header>Your treatment:</header><table class='table table-active'><tr><th>Start Date</th><th>End Date</th><th>Treatment</th></tr><tr><td>"+treatment["start_date"]+"</td><td>"+treatment["end_date"]+"</td><td>"+treatment["treatment_text"]+"</td></tr></table>")
     }
 
     function loadTreatments(){
@@ -143,7 +143,7 @@
 </script>
 <div>
     <form id="newBloodTest" onsubmit="submitNewBloodTest(event)">
-        <table>
+        <table class='table table-active'>
             <tr>
                 <td>Test Date</td>
                 <td>Medical Center</td>
@@ -171,7 +171,7 @@
 </div>
 <div>
     <header>Previus Blood Tests</header>
-    <table id="prevbloodtests">
+    <table class='table table-active' id="prevbloodtests">
 
     </table>
 </div>

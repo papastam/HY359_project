@@ -16,7 +16,7 @@
     }
 
     function showRendezvous(){
-        $("#bookedrendezvous").html("<thead><td>Date & time</td><td>Price</td><td>Doctor Info</td><td>Status</td><td>Actions</td></thead>");
+        $("#bookedrendezvous").html("<thead class='thead-dark'><tr><th>Date & time</th><th>Price</th><th>Doctor Info</th><th>Status</th><th>Actions</th></tr></thead>");
         xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
@@ -44,6 +44,6 @@
 <header>
     Your booked rendezvous:
 </header>
-<table id="bookedrendezvous">
+<table class='table table-active' id="bookedrendezvous">
 </table>
 <div id="deletereply"></div>
