@@ -59,6 +59,9 @@ public class TreatmentsAPI extends HttpServlet {
         JSONObject jsonin = new JSONObject(tokener);
         EditTreatmentTable treatmenttable = new EditTreatmentTable();
         //TODO:Check for valid dates
+        String start_date = (String) jsonin.get("start_date");
+        String end_date = (String) jsonin.get("end+date");
+        System.out.println("Start: "+start_date+" End: "+end_date);
         try {
             treatmenttable.addTreatmentFromJSON(jsonin.toString());
             createResponse(response,200,"");

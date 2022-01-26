@@ -69,13 +69,13 @@ public class EditBloodTestTable {
         return null;
     }
 
-    public JSONObject databaseToJSON(long amka) throws SQLException, ClassNotFoundException {
+    public JSONObject databaseToJSON(String amka) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         JSONObject jsonret = new JSONObject();
         ResultSet rs;
         try {
-            rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka="+amka);
+            rs = stmt.executeQuery("SELECT * FROM bloodtest WHERE amka='"+amka+"'");
             while (rs.next()) {
                 JSONObject json = new JSONObject(DB_Connection.getResultsToJSON(rs));
 

@@ -38,12 +38,8 @@ public class BloodTestsAPI extends HttpServlet {
         String amka = request.getParameter("amka");
 
         try {
-            jsonreply = bloodtests.databaseToJSON(Long.parseLong(amka));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            createResponse(response,403,e.getMessage());
-            return;
-        } catch (ClassNotFoundException e) {
+            jsonreply = bloodtests.databaseToJSON(amka);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
             return;

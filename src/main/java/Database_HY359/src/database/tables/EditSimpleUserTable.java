@@ -282,7 +282,7 @@ public class EditSimpleUserTable {
         return null;
     }
 
-    public SimpleUser getSimpleUserFromAMKA(long amka) throws SQLException, ClassNotFoundException{
+    public SimpleUser getSimpleUserFromAMKA(String amka) throws SQLException, ClassNotFoundException{
         Connection con = DB_Connection.getConnection();
         Statement stmt = con.createStatement();
         ResultSet rs;
