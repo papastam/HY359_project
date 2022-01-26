@@ -65,6 +65,7 @@ public class TreatmentsAPI extends HttpServlet {
         int start = Integer.parseInt(end_date.split("-")[0]+end_date.split("-")[1]+end_date.split("-")[2]);
         if(start > end) {
             createResponse(response, 403, "End date can't be after the starting date");
+            return;
         }
 
         try {
