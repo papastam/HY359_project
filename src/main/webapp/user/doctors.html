@@ -23,7 +23,7 @@
     map = new OpenLayers.Map("Map");
     var mapnik = new OpenLayers.Layer.OSM();
     map.addLayer(mapnik);
-    const zoom = 15;
+    var zoom = 15;
 
     function setPosition(lat, lon){
         var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from 	WGS 1984
@@ -170,7 +170,7 @@
     });
 
 </script>
-<header className="title">
+<header class="title">
     <h4>Here are all the licenced doctors available:</h4>
 </header>
 <br>

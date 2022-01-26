@@ -25,7 +25,7 @@
     var treatmentsjson;
     function showTreatments(ind) {
         var treatment = JSON.parse(treatmentsjson["treatments"][ind]);
-        $("#treatmentwindow").html("<header>Your treatment:</header><table class='table table-active'><tr><th>Start Date</th><th>End Date</th><th>Treatment</th></tr><tr><td>"+treatment["start_date"]+"</td><td>"+treatment["end_date"]+"</td><td>"+treatment["treatment_text"]+"</td></tr></table>")
+        $("#treatmentwindow").html("<header>Your treatment:</header><table class='table table-active'><thead class='thead-dark' id=\"doctablehead\"><tr><th>Start Date</th><th>End Date</th><th>Treatment</th></tr></thead>tr><td>"+treatment["start_date"]+"</td><td>"+treatment["end_date"]+"</td><td>"+treatment["treatment_text"]+"</td></tr></table>")
     }
 
     function loadTreatments(){
@@ -54,7 +54,7 @@
         xhr.onload = function (){
             if(xhr.readyState===4 && xhr.status==200 ){
                 var reply = JSON.parse(xhr.responseText);
-                $("#prevbloodtests").append("<tr><td>Test Date</td><td>Medical Center</td><td>Blood Sugar</td><td>Cholesterol</td><td>Iron</td><td>Vitamin D3</td><td>Vitamin B12</td><td>Treatment</td><td></td></tr>");
+                $("#prevbloodtests").append("<thead class='thead-dark' id=\"doctablehead\"><tr><th>Test Date</th><th>Medical Center</th><th>Blood Sugar</th><th>Cholesterol</th><th>Iron</th><th>Vitamin D3</th><th>Vitamin B12</th><th>Treatment</th></thead></tr>");
 
                 loadTreatments();
 
@@ -126,16 +126,18 @@
 <div>
     <form id="newBloodTest" onsubmit="submitNewBloodTest(event)">
         <table class='table table-active'>
-            <tr>
-                <td>Test Date</td>
-                <td>Medical Center</td>
-                <td>Blood Sugar</td>
-                <td>Cholesterol</td>
-                <td>Iron</td>
-                <td>Vitamin D3</td>
-                <td>Vitamin B12</td>
-                <td></td>
-            </tr>
+            <thead class='thead-dark' id="doctablehead">
+                <tr>
+                    <th>Test Date</th>
+                    <th>Medical Center</th>
+                    <th>Blood Sugar</th>
+                    <th>Cholesterol</th>
+                    <th>Iron</th>
+                    <th>Vitamin D3</th>
+                    <th>Vitamin B12</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tr>
                 <td><input id="test_date" type="date" name="test_date" value="1980-01-01" min="1920-01-01" max="2005-12-31" required /></td>
                 <td><input id="medical_center" type="text" name="medical_center" required></td>

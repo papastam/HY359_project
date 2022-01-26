@@ -90,15 +90,15 @@
             }
             $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
 
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["specialty"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["telephone"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["email"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + doc["doctor_info"] + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + convertdistance(doc["distance"]) + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell">' + convertduration(doc["duration"]) + '</td>');
-            $("#doctable_r" + index).append('<td class="doctablecell"><input type="button" value="Show Rendezvous" onclick="showrendezvous(\'' + doc["doctor_id"] + '\')"></td>');
+            $("#doctable_r" + index).append('<td>' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["specialty"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["telephone"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["email"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["doctor_info"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertdistance(doc["distance"]) + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertduration(doc["duration"]) + '</td>');
+            $("#doctable_r" + index).append('<td><input type="button" value="Show Rendezvous" onclick="showrendezvous(\'' + doc["doctor_id"] + '\')"></td>');
         }
     }
 
@@ -194,7 +194,7 @@
     });
 
 </script>
-<header className="title">
+<header class="title">
     <h4>Here are all the licenced doctors available:</h4>
 </header>
 <br>
@@ -204,7 +204,7 @@
     <option value="durations">Duration</option>
 </select>
 
-<table className='table table-active' id="docstable">
+<table class='table table-active' id="docstable">
 
 </table>
 <br>
