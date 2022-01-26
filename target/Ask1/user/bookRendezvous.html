@@ -41,7 +41,7 @@
         };
         data["user_id"] = userdata["user_id"]
         data["randevouz_id"] = selectedrendezvous
-        data["status"] = "selected"
+
         console.log(JSON.stringify(data));
         xhr.open('POST', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
