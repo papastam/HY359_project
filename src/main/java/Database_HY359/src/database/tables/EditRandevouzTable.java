@@ -232,7 +232,14 @@ public class EditRandevouzTable {
         con.close();
     }
 
-
+    public void updateRandevouz(int rendezvous_id, String status) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.getConnection();
+        Statement stmt = con.createStatement();
+        String updateQuery = "UPDATE randevouz SET status='" + status+ "' WHERE randevouz_id = '" + rendezvous_id + "'";
+        stmt.executeUpdate(updateQuery);
+        stmt.close();
+        con.close();
+    }
 
     public void createRandevouzTable() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.getConnection();

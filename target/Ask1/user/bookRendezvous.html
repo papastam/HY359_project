@@ -4,25 +4,25 @@
     var rendezvous;
     var selectedrendezvous;
 
-    function convertdistance(distance){
-        if(distance<1000){
-            return (distance).toFixed(2)+" m";
-        }else{
-            return (distance/1000.0).toFixed(2)+" km";
+    function convertdistance(distance) {
+        if (distance < 1000) {
+            return (distance).toFixed(2) + " m";
+        } else {
+            return (distance / 1000.0).toFixed(2) + " km";
         }
     }
 
-    function convertduration(duration){
-        if(duration<60){
-            return (duration).toFixed(2)+" sec";
-        }else if(duration<3600){
-            return (duration/60.0).toFixed(2)+" min";
-        }else{
-            return (duration/3600.0).toFixed(2)+" hour(s)";
+    function convertduration(duration) {
+        if (duration < 60) {
+            return (duration).toFixed(2) + " sec";
+        } else if (duration < 3600) {
+            return (duration / 60.0).toFixed(2) + " min";
+        } else {
+            return (duration / 3600.0).toFixed(2) + " hour(s)";
         }
     }
 
-    function submitBook(event){
+    function submitBook(event) {
         event.preventDefault();
         let myForm = document.getElementById('confirmbookform');
         let formData = new FormData(myForm);
@@ -36,23 +36,23 @@
                 $("#rendezvous").html("");
                 $("#confirmbook").html("<p style='color:green'>Your rendezvous was booked succesfully</p>");
             } else if (xhr.status !== 200) {
-                $("#confirmbook").html("<p style='color:red'>Your rendezvous wasn't booked! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+                $("#confirmbook").html("<p style='color:red'>Your rendezvous wasn't booked! Server responded with status code of: " + xhr.status + " </p><p>" + xhr.responseText + "</p>");
             }
         };
-        data["user_id"]=userdata["user_id"]
-        data["randevouz_id"]=selectedrendezvous
-
+        data["user_id"] = userdata["user_id"]
+        data["randevouz_id"] = selectedrendezvous
+        data["status"] = "selected"
         console.log(JSON.stringify(data));
         xhr.open('POST', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
     }
 
-    function showbook(randevouz_ind){
+    function showbook(randevouz_ind) {
         var rend = JSON.parse(rendezvous[randevouz_ind]);
         console.log(rend);
         selectedrendezvous = rend["rendezvous_id"];
-        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table class='table table-active' id='confirmtable'><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Comments</th><th>Confirm</th></tr></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td></tr></table></form>");
+        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table class='table table-active' id='confirmtable'><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Comments</th><th>Confirm</th></tr></thead><tr><td>" + rend["date_time"] + "</td><td>" + rend["price"] + "€</td><td>" + rend["doctor_info"] + "</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td></tr></table></form>");
     }
 
     function showrendezvous(doctor_id) {
@@ -61,13 +61,13 @@
         xhr.onload = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 var reply = JSON.parse(this.responseText);
-                if(jQuery.isEmptyObject(reply)){
+                if (jQuery.isEmptyObject(reply)) {
                     $("#randtable").append("<div>This doctor has no available rendezvous</div>");
-                }else{
+                } else {
                     rendezvous = reply["rendezvous"];
-                    for(ind in rendezvous){
+                    for (ind in rendezvous) {
                         var rend = JSON.parse(rendezvous[ind]);
-                        $("#randtable").append("<tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input type='button' value='Book' onclick='showbook(\""+ind+"\")'></td></tr>")
+                        $("#randtable").append("<tr><td>" + rend["date_time"] + "</td><td>" + rend["price"] + "€</td><td>" + rend["doctor_info"] + "</td><td><input type='button' value='Book' onclick='showbook(\"" + ind + "\")'></td></tr>")
                     }
                 }
             }
@@ -204,7 +204,7 @@
     <option value="durations">Duration</option>
 </select>
 
-<table class='table table-active' id="docstable">
+<table className='table table-active' id="docstable">
 
 </table>
 <br>

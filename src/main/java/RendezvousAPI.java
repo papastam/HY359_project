@@ -72,7 +72,7 @@ public class RendezvousAPI extends HttpServlet {
                     }
                 }
 
-                SimpleUser user = new SimpleUser();
+                SimpleUser user;
                 EditSimpleUserTable userTable = new EditSimpleUserTable();
 
                 for (int i = 0; i < doc_rendezvous.size(); i++) {
@@ -116,7 +116,10 @@ public class RendezvousAPI extends HttpServlet {
         EditRandevouzTable rendtable = new EditRandevouzTable();
 
         try {
-            rendtable.updateRandevouz((Integer) jsonin.get("randevouz_id"),(Integer) jsonin.get("user_id"), (String) jsonin.get("user_info"),"selected");
+            if(((String) jsonin.get("status")).equals("selected"))
+                rendtable.updateRandevouz((Integer) jsonin.get("randevouz_id"),(Integer) jsonin.get("user_id"), (String) jsonin.get("user_info"),"selected");
+            else if(((String) jsonin.get("status")).equals("done"))
+                rendtable.updateRandevouz(Integer.parseInt((String) jsonin.get("randevouz_id")),"done");
         } catch (Exception e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());
