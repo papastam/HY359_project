@@ -14,7 +14,7 @@
                     var patients = reply["patients"];
                     for (ind in patients) {
                         var patient = JSON.parse(patients[ind]);
-                        var showtestsbtn = "<input type='button' value='Show Tests' onclick='loadtests(" + patient["amka"] + " , " + patient["user_id"] + ")'>";
+                        var showtestsbtn = "<input type='button' value='Show Tests' onclick='loadtests(" + patient["amka"] + " , " + patient["user_id"] + ", \"" + patient["firstname"] + " " + patient["lastname"] + "\")'>";
                         $("#patienttable").append("<tr><td>" + patient["firstname"] + " " + patient["lastname"] + "</td><td>" + patient["telephone"] + "</td><td>" + patient["email"] + "</td><td>" + patient["address"] + ", " + patient["city"] + ", " + patient["country"] + "</td><td>" + showtestsbtn + "</td></tr>")
                     }
                 } else {
@@ -31,7 +31,7 @@
 
     }
 
-    function loadtests(amka, user_id) {
+    function loadtests(amka, user_id, name) {
         currentamka = ""+amka;
         currentuser_id = user_id;
         $("#testtable").html("<thead class='thead-dark'><tr><th>Patient</th><th>Test date</th><th>Medical Center</th><th>Blood Sugar</th><th>Cholesterol</th><th>Iron</th><th>Vitamin D3</th><th>Vitamin B12</th><th>Action</th></tr></thead>");
