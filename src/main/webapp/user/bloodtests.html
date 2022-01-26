@@ -1,61 +1,4 @@
 <script>
-    // function drawAxisTickColors(testsjson) {
-    //     console.log(testsjson);
-    //     var data = google.visualization.arrayToDataTable([
-    //         ['Exam', testsjson[0]["test_date"], testsjson[1]["test_date"]],
-    //         ['Blood Sugar', testsjson[0]["blood_sugar"], testsjson[1]["blood_sugar"]],
-    //         ['Cholesterol', testsjson[0]["cholesterol"], testsjson[1]["cholesterol"]],
-    //         ['Iron', testsjson[0]["Iron"], testsjson[1]["Iron"]],
-    //         ['Vitamin D3', testsjson[0]["vitamin_d3"], testsjson[1]["vitamin_d3"]],
-    //         ['Vitamin B12', testsjson[0]["vitamin_b12"], testsjson[1]["vitamin_b12"]]
-    // google.charts.load('current', {packages: ['corechart', 'bar']});
-    // google.charts.setOnLoadCallback(drawAxisTickColors);
-    //
-    // function drawAxisTickColors() {
-    //     var data = google.visualization.arrayToDataTable([
-    //         ['City', '2010 Population', '2000 Population'],
-    //         ['New York City, NY', 8175000, 8008000],
-    //         ['Los Angeles, CA', 3792000, 3694000],
-    //         ['Chicago, IL', 2695000, 2896000],
-    //         ['Houston, TX', 2099000, 1953000],
-    //         ['Philadelphia, PA', 1526000, 1517000]
-    //     ]);
-    //
-    //     var options = {
-    //         title: 'Population of Largest U.S. Cities',
-    //         chartArea: {width: '50%'},
-    //         hAxis: {
-    //             title: 'Total Population',
-    //             minValue: 0,
-    //             textStyle: {
-    //                 bold: true,
-    //                 fontSize: 12,
-    //                 color: '#4d4d4d'
-    //             },
-    //             titleTextStyle: {
-    //                 bold: true,
-    //                 fontSize: 18,
-    //                 color: '#4d4d4d'
-    //             }
-    //         },
-    //         vAxis: {
-    //             title: 'City',
-    //             textStyle: {
-    //                 fontSize: 14,
-    //                 bold: true,
-    //                 color: '#848484'
-    //             },
-    //             titleTextStyle: {
-    //                 fontSize: 14,
-    //                 bold: true,
-    //                 color: '#848484'
-    //             }
-    //         }
-    //     };
-    //     var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-    //     chart.draw(data, options);
-    // }
-
     function submitNewBloodTest(event){
         event.preventDefault();
         let formData = new FormData(document.getElementById('newBloodTest'));
@@ -117,6 +60,7 @@
 
                 chartjson = {};
                 var count =0;
+                printtestdiagram(reply["tests"]);
                 for(ind in reply["tests"]){
                     var test = JSON.parse(reply["tests"][ind]);
                     $("#prevbloodtests").append("<tr><td>"+test["test_date"]+"</td><td>"+test["medical_center"]+"</td><td>"+test["blood_sugar"]+" ("+test["blood_sugar_level"]+")</td><td>"+test["cholesterol"]+" ("+test["cholesterol_level"]+")</td><td>"+test["iron"]+" ("+test["iron_level"]+")</td><td>"+test["vitamin_d3"]+" ("+test["vitamin_d3_level"]+")</td><td>"+test["vitamin_b12"]+" ("+test["vitamin_b12_level"]+")</td><td id='test_"+test["bloodtest_id"]+"'>No available treatments</td><td></td></tr>");
@@ -125,9 +69,6 @@
                         count++;
                     }
                 }
-                // console.log(chartjson);
-                // drawAxisTickColors();
-                //TODO: show the fucking graphs
             }
         };
 
@@ -136,7 +77,48 @@
         xhr.send();
     }
 
+    function printtestdiagram(tests){
+        var diagramdata = new google.visualization.DataTable()
+
+        diagramdata.addColumn('string', 'Date');
+        diagramdata.addColumn('number', 'Blood Sugar');
+        diagramdata.addColumn('number', 'Cholesterol');
+        diagramdata.addColumn('number', 'Iron');
+        diagramdata.addColumn('number', 'Vitamin D3');
+        diagramdata.addColumn('number', 'Vitamin B12');
+
+        var measurements = []
+        for (ind in tests) {
+            var test = JSON.parse(tests[ind]);
+
+            measurements[ind]=[]
+            measurements[ind][0]=test["test_date"];
+            measurements[ind][1]=parseInt(test["blood_sugar"]);
+            measurements[ind][2]=parseInt(test["cholesterol"]);
+            measurements[ind][3]=parseInt(test["iron"]);
+            measurements[ind][4]=parseInt(test["vitamin_d3"]);
+            measurements[ind][5]=parseInt(test["vitamin_b12"]);
+        }
+
+        console.log(measurements)
+        diagramdata.addRows(measurements);
+
+        var options = {
+            chart: {
+                title: 'Comparison of Blood Tests'
+            },
+            width: 900,
+            height: 500
+        };
+
+        var chart = new google.charts.Line(document.getElementById('chart_div'));
+
+        chart.draw(diagramdata, google.charts.Line.convertOptions(options));
+
+    }
+
     $(document).ready(function (){
+        google.charts.load('current', {'packages':['line']});
         loadBloodTests();
         loadTreatments();
     });
@@ -178,4 +160,5 @@
 <div id="treatmentwindow">
 
 </div>
-<div id="dual_x_div" style="width: 900px; height: 500px;"></div>
+<br><br>
+<div id="chart_div"></div>
