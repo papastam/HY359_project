@@ -58,13 +58,14 @@ public class TreatmentsAPI extends HttpServlet {
         JSONTokener tokener = new JSONTokener(inputJSONfromClient);
         JSONObject jsonin = new JSONObject(tokener);
         EditTreatmentTable treatmenttable = new EditTreatmentTable();
-        //TODO:Check for valid dates
+
         String start_date = (String) jsonin.get("start_date");
         String end_date = (String) jsonin.get("end_date");
         int end = Integer.parseInt(start_date.split("-")[0]+start_date.split("-")[1]+start_date.split("-")[2]);
         int start = Integer.parseInt(end_date.split("-")[0]+end_date.split("-")[1]+end_date.split("-")[2]);
         if(start > end) {
             createResponse(response, 403, "End date can't be after the starting date");
+            return;
         }
 
         try {
