@@ -73,7 +73,7 @@
         xhr.send("");
     }
 
-    function printdoctortable() {
+    function printusertable() {
         var xhr = new XMLHttpRequest();
         xhr.onload = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -92,7 +92,7 @@
             }
         }
 
-        xhr.open('GET', '/hy359_project_war_exploded/UserAPI?type=user');
+        xhr.open('GET', '/hy359_project_war_exploded/UserAPI');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send("");
     }
@@ -104,7 +104,7 @@
     }, 5000);
 
     $(document).ready(function () {
-        printdoctortable();
+        printusertable();
     });
 
 </script>
