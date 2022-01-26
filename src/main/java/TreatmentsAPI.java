@@ -60,7 +60,7 @@ public class TreatmentsAPI extends HttpServlet {
         EditTreatmentTable treatmenttable = new EditTreatmentTable();
         //TODO:Check for valid dates
         String start_date = (String) jsonin.get("start_date");
-        String end_date = (String) jsonin.get("end+date");
+        String end_date = (String) jsonin.get("end_date");
         System.out.println("Start: "+start_date+" End: "+end_date);
         try {
             treatmenttable.addTreatmentFromJSON(jsonin.toString());
