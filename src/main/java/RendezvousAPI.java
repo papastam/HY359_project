@@ -116,7 +116,7 @@ public class RendezvousAPI extends HttpServlet {
         EditRandevouzTable rendtable = new EditRandevouzTable();
 
         try {
-            rendtable.updateRandevouz(Integer.parseInt((String) jsonin.get("randevouz_id")),(Integer) jsonin.get("user_id"), (String) jsonin.get("user_info"),"selected");
+            rendtable.updateRandevouz((Integer) jsonin.get("randevouz_id"),(Integer) jsonin.get("user_id"), (String) jsonin.get("user_info"),"selected");
         } catch (Exception e) {
             e.printStackTrace();
             createResponse(response,403,e.getMessage());

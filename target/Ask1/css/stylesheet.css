@@ -247,6 +247,11 @@ form ul{
 	border-bottom: solid #000000 1px;
 }
 
+.ad{
+	margin: 0px 5px;
+}
+
+
 #cp_navbar {
 	font-size: 18px;
 	margin: 5px;
@@ -255,13 +260,15 @@ form ul{
 }
 
 #footer_form{
-	position: absolute																																																																																																																																																																																																																																																																																																																																																																													;
+	position: absolute;
 	right: 0px;
+	top: 0px;
 	margin: 25px 0px;
 }
 
 #footer_info {
-	margin: 25px
+	margin: 24px;
+	display: inline-block;
 }
 
 .title{

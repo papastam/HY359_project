@@ -2,6 +2,7 @@
     var doctorsreply;
     var jsonpoints;
     var rendezvous;
+    var selectedrendezvous;
 
     function convertdistance(distance){
         if(distance<1000){
@@ -39,8 +40,8 @@
             }
         };
         data["user_id"]=userdata["user_id"]
+        data["randevouz_id"]=selectedrendezvous
 
-        // console.log("sent data");
         console.log(JSON.stringify(data));
         xhr.open('POST', '/hy359_project_war_exploded/RendezvousAPI');
         xhr.setRequestHeader("Content-type", "application/json");
@@ -49,7 +50,9 @@
 
     function showbook(randevouz_ind){
         var rend = JSON.parse(rendezvous[randevouz_ind]);
-        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table class='table table-active' id='confirmtable'><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Comments</th><th>Confirm</th></tr></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td><td style='display: none'><input name='randevouz_id' value='"+rend["randevouz_id"]+"'></td></tr></table></form>");
+        console.log(rend);
+        selectedrendezvous = rend["rendezvous_id"];
+        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table class='table table-active' id='confirmtable'><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Comments</th><th>Confirm</th></tr></thead><tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td></tr></table></form>");
     }
 
     function showrendezvous(doctor_id) {
