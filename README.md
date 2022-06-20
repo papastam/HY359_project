@@ -1,4 +1,4 @@
-# Project Summary
+# Doctors/Users Webapp
 
 For the project of the HY359 course we created a doctor-user website. In this website a user can create an account, find a doctor and make an appointment. There is also
 messaging functionality. We used java servlets to implement the websites functionality.
@@ -9,13 +9,13 @@ The full assignment can be found in the [assignment PDF](https://github.com/papa
 
 The project's report can be found in the `./report` directory
 
-# Requirements
+## Build Requirements
 * It is recommended that you run the project as a IntelliJ Project!
 * The web app requires a database, xampp is recommended.
 * For running the project, [JDK](https://www.oracle.com/ie/java/technologies/javase/javase8-archive-downloads.html) is required *(recommended version: jdk1.8.0_241)*
 * [Tomcat](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.58/bin/apache-tomcat-9.0.58.zip) is also required to run the project *(included in xampp)*
 
-# Set up
+## Set up
 <h3>Initial Setup</h3>
 
 * The database can be initialized by running: <br>`src/main/java/Database_HY359/src/database/init/InitDatabase.java`
@@ -29,7 +29,7 @@ The project's report can be found in the `./report` directory
 + Click on `Configure` next to `Application server` selection, and select the tomcat installation directory in the `Tomcat Home` selection.
 + Apply the configuration and run the project!
 
-# Project Webapp
+## Project Webapp
 The webapp is divided in three web pages (and an admin one):
 
 + Main webpage
@@ -46,5 +46,5 @@ The webapp is divided in three web pages (and an admin one):
 ![Main Webpage Screenshot](https://github.com/papastam/HY359_project/blob/master/report/documents/Screenshots/admin%20page.png?raw=true)
 
 
-# Co owners
+## Co owners
 [Dimitris Bisias](https://github.com/dbisias)
