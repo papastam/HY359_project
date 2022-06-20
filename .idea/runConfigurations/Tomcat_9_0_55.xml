@@ -85,7 +85,6 @@
       <option name="Make" enabled="true" />
       <option name="BuildArtifacts" enabled="true">
         <artifact name="Assignment3:war exploded" />
-        <artifact name="Ask1:war exploded" />
         <artifact name="hy359 assignment3:war exploded" />
         <artifact name="Project:war exploded" />
         <artifact name="hy359_project:war exploded" />

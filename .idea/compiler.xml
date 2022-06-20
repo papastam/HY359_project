@@ -8,8 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Assignment3" />
         <module name="hy359_project" />
-        <module name="hy359_project" />
-        <module name="Ask1" />
         <module name="hy359 assignment3" />
       </profile>
     </annotationProcessing>

@@ -46,7 +46,7 @@ public class InitDatabase {
     public void initDatabase() throws SQLException, ClassNotFoundException {
         Connection conn = getInitialConnection();
         Statement stmt = conn.createStatement();
-        stmt.execute("CREATE DATABASE HY359");
+        stmt.execute("CREATE DATABASE csd_hy359");
         stmt.close();
         conn.close();
     }
