@@ -29,7 +29,7 @@ The project's report can be found in the `./report` directory
 + Apply the configuration and run the project!
 
 # Project Webapp
-The webapp is divided in three web pages:
+The webapp is divided in three web pages (and an admin one):
 
 + Main webpage
 
