@@ -17,6 +17,7 @@ The project's report can be found in the `./report` directory
 
 # Set up
 <h3>Initial Setup</h3>
+
 * The database can be initialized by running: <br>`src/main/java/Database_HY359/src/database/init/InitDatabase.java`
 * You can optionally add dummy users to the database by running: <br> `src/main/java/Database_HY359/src/database/init/AddDummyUsers.java`
 <br>
