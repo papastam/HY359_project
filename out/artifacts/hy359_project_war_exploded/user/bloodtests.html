@@ -1,0 +1,166 @@
+<script>
+    function submitNewBloodTest(event){
+        event.preventDefault();
+        let formData = new FormData(document.getElementById('newBloodTest'));
+        const testdata = {};
+        formData.forEach((value, key) => (testdata[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                $("#ajaxContent").html("<p style='color:green'>Your info was updated succesfully</p>");
+                loadBloodTests();
+            } else if (xhr.status !== 200) {
+                $("#ajaxContent").html("<p style='color:red'>Your info wasn't updated! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        testdata["amka"]=userdata["amka"];
+
+        xhr.open('POST', '/hy359_project_war_exploded/BloodTestsAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(testdata));
+    }
+
+    var treatmentsjson;
+    function showTreatments(ind) {
+        var treatment = JSON.parse(treatmentsjson["treatments"][ind]);
+        $("#treatmentwindow").html("<header>Your treatment:</header><table class='table table-active'><thead class='thead-dark' id=\"doctablehead\"><tr><th>Start Date</th><th>End Date</th><th>Treatment</th></tr></thead>tr><td>"+treatment["start_date"]+"</td><td>"+treatment["end_date"]+"</td><td>"+treatment["treatment_text"]+"</td></tr></table>")
+    }
+
+    function loadTreatments(){
+        $("#treatments").html("");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status == 200) {
+                treatmentsjson = JSON.parse(xhr.responseText);
+                console.log(treatmentsjson);
+                var count = 0;
+                for (ind in treatmentsjson["treatments"]) {
+                    var treatment = JSON.parse(treatmentsjson["treatments"][ind]);
+                    $("#test_"+treatment["bloodtest_id"]).html("<input value=\"Show treatment\" type=\"button\" onclick=\"showTreatments('"+ind+"')\">")
+                }
+            };
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/TreatmentsAPI?user_id=' + userdata["user_id"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function loadBloodTests(){
+        $("#prevbloodtests").html("");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState===4 && xhr.status==200 ){
+                var reply = JSON.parse(xhr.responseText);
+                $("#prevbloodtests").append("<thead class='thead-dark' id=\"doctablehead\"><tr><th>Test Date</th><th>Medical Center</th><th>Blood Sugar</th><th>Cholesterol</th><th>Iron</th><th>Vitamin D3</th><th>Vitamin B12</th><th>Treatment</th></thead></tr>");
+
+                loadTreatments();
+
+                chartjson = {};
+                var count =0;
+                printtestdiagram(reply["tests"]);
+                for(ind in reply["tests"]){
+                    var test = JSON.parse(reply["tests"][ind]);
+                    $("#prevbloodtests").append("<tr><td>"+test["test_date"]+"</td><td>"+test["medical_center"]+"</td><td>"+test["blood_sugar"]+" ("+test["blood_sugar_level"]+")</td><td>"+test["cholesterol"]+" ("+test["cholesterol_level"]+")</td><td>"+test["iron"]+" ("+test["iron_level"]+")</td><td>"+test["vitamin_d3"]+" ("+test["vitamin_d3_level"]+")</td><td>"+test["vitamin_b12"]+" ("+test["vitamin_b12_level"]+")</td><td id='test_"+test["bloodtest_id"]+"'>No available treatments</td><td></td></tr>");
+                    if(count<2){
+                        chartjson[count]=test;
+                        count++;
+                    }
+                }
+            }
+        };
+
+        xhr.open('GET', '/hy359_project_war_exploded/BloodTestsAPI?amka='+userdata["amka"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function printtestdiagram(tests){
+        var diagramdata = new google.visualization.DataTable()
+
+        diagramdata.addColumn('string', 'Date');
+        diagramdata.addColumn('number', 'Blood Sugar');
+        diagramdata.addColumn('number', 'Cholesterol');
+        diagramdata.addColumn('number', 'Iron');
+        diagramdata.addColumn('number', 'Vitamin D3');
+        diagramdata.addColumn('number', 'Vitamin B12');
+
+        var measurements = []
+        for (ind in tests) {
+            var test = JSON.parse(tests[ind]);
+
+            measurements[ind]=[]
+            measurements[ind][0]=test["test_date"];
+            measurements[ind][1]=parseInt(test["blood_sugar"]);
+            measurements[ind][2]=parseInt(test["cholesterol"]);
+            measurements[ind][3]=parseInt(test["iron"]);
+            measurements[ind][4]=parseInt(test["vitamin_d3"]);
+            measurements[ind][5]=parseInt(test["vitamin_b12"]);
+        }
+
+        console.log(measurements)
+        diagramdata.addRows(measurements);
+
+        var options = {
+            chart: {
+                title: 'Comparison of Blood Tests'
+            },
+            width: 900,
+            height: 500
+        };
+
+        var chart = new google.charts.Line(document.getElementById('chart_div'));
+
+        chart.draw(diagramdata, google.charts.Line.convertOptions(options));
+
+    }
+
+    $(document).ready(function (){
+        google.charts.load('current', {'packages':['line']});
+        loadBloodTests();
+        loadTreatments();
+    });
+</script>
+<div>
+    <form id="newBloodTest" onsubmit="submitNewBloodTest(event)">
+        <table class='table table-active'>
+            <thead class='thead-dark' id="doctablehead">
+                <tr>
+                    <th>Test Date</th>
+                    <th>Medical Center</th>
+                    <th>Blood Sugar</th>
+                    <th>Cholesterol</th>
+                    <th>Iron</th>
+                    <th>Vitamin D3</th>
+                    <th>Vitamin B12</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tr>
+                <td><input id="test_date" type="date" name="test_date" value="1980-01-01" min="1920-01-01" max="2005-12-31" required /></td>
+                <td><input id="medical_center" type="text" name="medical_center" required></td>
+                <td><input id="blood_sugar" type="text" name="blood_sugar" required></td>
+                <td><input id="cholesterol" type="text" name="cholesterol" required></td>
+                <td><input id="iron" type="text" name="iron" required></td>
+                <td><input id="vitamin_d3" type="text" name="vitamin_d3" required></td>
+                <td><input id="vitamin_b12" type="text" name="vitamin_b12" required></td>
+                <td><input type="submit" class="button" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
+    <div id="ajaxContent"></div>
+    <br>
+</div>
+<div>
+    <header>Previus Blood Tests</header>
+    <table class='table table-active' id="prevbloodtests">
+
+    </table>
+</div>
+<div id="treatmentwindow">
+
+</div>
+<br><br>
+<div id="chart_div"></div>

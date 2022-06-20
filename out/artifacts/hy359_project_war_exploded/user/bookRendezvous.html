@@ -1,0 +1,217 @@
+<script>
+    var doctorsreply;
+    var jsonpoints;
+    var rendezvous;
+    var selectedrendezvous;
+
+    function convertdistance(distance) {
+        if (distance < 1000) {
+            return (distance).toFixed(2) + " m";
+        } else {
+            return (distance / 1000.0).toFixed(2) + " km";
+        }
+    }
+
+    function convertduration(duration) {
+        if (duration < 60) {
+            return (duration).toFixed(2) + " sec";
+        } else if (duration < 3600) {
+            return (duration / 60.0).toFixed(2) + " min";
+        } else {
+            return (duration / 3600.0).toFixed(2) + " hour(s)";
+        }
+    }
+
+    function submitBook(event) {
+        event.preventDefault();
+        let myForm = document.getElementById('confirmbookform');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // console.log(xhr.responseText);
+                $("#rendezvous").html("");
+                $("#confirmbook").html("<p style='color:green'>Your rendezvous was booked succesfully</p>");
+            } else if (xhr.status !== 200) {
+                $("#confirmbook").html("<p style='color:red'>Your rendezvous wasn't booked! Server responded with status code of: " + xhr.status + " </p><p>" + xhr.responseText + "</p>");
+            }
+        };
+        data["user_id"] = userdata["user_id"]
+        data["randevouz_id"] = selectedrendezvous
+        data["status"] = "selected"
+        console.log(JSON.stringify(data));
+        xhr.open('POST', '/hy359_project_war_exploded/RendezvousAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    function showbook(randevouz_ind) {
+        var rend = JSON.parse(rendezvous[randevouz_ind]);
+        console.log(rend);
+        selectedrendezvous = rend["rendezvous_id"];
+        $("#confirmbook").html("<header>Confirm your Rendezvous</header><form id='confirmbookform' onsubmit='submitBook(event);'><table class='table table-active' id='confirmtable'><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Comments</th><th>Confirm</th></tr></thead><tr><td>" + rend["date_time"] + "</td><td>" + rend["price"] + "€</td><td>" + rend["doctor_info"] + "</td><td><input name='user_info' required></td><td><input type='submit' value='Submit'></td></tr></table></form>");
+    }
+
+    function showrendezvous(doctor_id) {
+        $("#rendezvous").html("<table class='table table-active' id=\"randtable\"><thead class='thead-dark'><tr><th>Date & Time</th><th>Price</th><th>Doctor Info</th><th>Book</td></tr></thead></table>")
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var reply = JSON.parse(this.responseText);
+                if (jQuery.isEmptyObject(reply)) {
+                    $("#randtable").append("<div>This doctor has no available rendezvous</div>");
+                } else {
+                    rendezvous = reply["rendezvous"];
+                    for (ind in rendezvous) {
+                        var rend = JSON.parse(rendezvous[ind]);
+                        $("#randtable").append("<tr><td>" + rend["date_time"] + "</td><td>" + rend["price"] + "€</td><td>" + rend["doctor_info"] + "</td><td><input type='button' value='Book' onclick='showbook(\"" + ind + "\")'></td></tr>")
+                    }
+                }
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/RendezvousAPI?mode=free&doctor_id=' + doctor_id);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+    }
+
+    function printdoctortable(sortedindexes, jsonreply) {
+        $("#docstable").html('<thead class="thead-dark" id=\"doctablehead\"><tr><th class=\"doctablecell\">Name</th><th class=\"doctablecell\">Specialty</th><th class=\"doctablecell\">Telephone</th><th class=\"doctablecell\">Address</th><th class=\"doctablecell\">Email</th><th class=\"doctablecell\">Doctor Info</th><th class=\"doctablecell\">Distance</th><th class=\"doctablecell\">Duration</th><th class=\"doctablecell\">Show Rendezvous</th></tr></thead>')
+        //console.log(jsonreply);
+        for (index in sortedindexes) {
+            var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
+            //console.log(sortedindexes[index]);
+
+            if (doc["certified"] != true) {
+                continue;
+            }
+            $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
+
+            $("#doctable_r" + index).append('<td>' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["specialty"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["telephone"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["email"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["doctor_info"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertdistance(doc["distance"]) + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertduration(doc["duration"]) + '</td>');
+            $("#doctable_r" + index).append('<td><input type="button" value="Show Rendezvous" onclick="showrendezvous(\'' + doc["doctor_id"] + '\')"></td>');
+        }
+    }
+
+    function calculateandPrint(method, jsonpoints, jsonreply) {
+        const data = null;
+
+        const xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                var reply = JSON.parse(this.responseText);
+                var distances = reply["distances"][0];
+                var durations = reply["durations"][0];
+                var length = distances["length"];
+                //console.log(reply);
+                var sortedindexes = new Object();
+
+                for (i = 0; i < length; i++) {
+                    if (distances[i] == null) {
+                        distances[i] = 99999999;
+                    }
+                    if (durations[i] == null) {
+                        durations[i] = 99999999;
+                    }
+                }
+
+                //console.log(distances);
+                for (i = 0; i < length; i++) {
+                    var minind = 0;
+                    if (method === "distances") {
+                        minind = distances.indexOf(Math.min(...distances));
+                        sortedindexes[i] = minind;
+                    } else if (method === "durations") {
+                        minind = durations.indexOf(Math.min(...durations));
+                        sortedindexes[i] = minind;
+                    }
+
+                    var doc = JSON.parse(jsonreply["doctors"][minind]);
+                    doc["distance"] = distances[minind];
+                    doc["duration"] = durations[minind];
+                    jsonreply["doctors"][minind] = JSON.stringify(doc);
+
+                    durations[minind] = 9999999999;
+                    distances[minind] = 9999999999;
+
+                    //console.log(doc);
+                }
+                //console.log(sortedindexes);
+                printdoctortable(sortedindexes, jsonreply);
+            }
+        });
+
+        xhr.open("GET", "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins=" + jsonpoints["user"] + "&destinations=" + jsonpoints["docs"]);
+        xhr.setRequestHeader("x-rapidapi-host", "trueway-matrix.p.rapidapi.com");
+        xhr.setRequestHeader("x-rapidapi-key", "bd2e97d2d1msh175dda3181f8171p1988aejsnf9cec4a9c8d3");
+
+        xhr.send(data);
+    }
+
+    $(document).ready(function () {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                doctorsreply = JSON.parse(xhr.responseText);
+
+                jsonpoints = {"user": userdata["lat"] + "," + userdata["lon"], "docs": ""};
+                for (index in doctorsreply["doctors"]) {
+                    var doc = JSON.parse(doctorsreply["doctors"][index]);
+                    //console.log(doc);
+
+                    if (doc["certified"] != true) {
+                        continue;
+                    }
+                    jsonpoints["docs"] = jsonpoints["docs"] + doc["lat"] + "," + doc["lon"] + ";";
+                    jsonpoints["indexes"] = jsonpoints["indexes"] + index + ";";
+
+                }
+                //console.log(jsonpoints);
+                calculateandPrint("distances", jsonpoints, doctorsreply);
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/CertifiedDoctorBoy');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+
+        $("#sortorder").change(function () {
+            calculateandPrint($(this).val(), jsonpoints, doctorsreply);
+            //console.log("changed");
+        });
+
+    });
+
+</script>
+<header class="title">
+    <h4>Here are all the licenced doctors available:</h4>
+</header>
+<br>
+<label htmlFor="sortorder">Sort table by: </label>
+<select id="sortorder" name="sortorder">
+    <option value="distances" selected>Distance</option>
+    <option value="durations">Duration</option>
+</select>
+
+<table class='table table-active' id="docstable">
+
+</table>
+<br>
+<div id="rendezvous">
+
+</div>
+<br>
+<div id="confirmbook">
+
+</div>

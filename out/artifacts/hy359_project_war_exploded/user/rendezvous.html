@@ -1,0 +1,30 @@
+<script>
+    function showmyrendezvous(){
+        $("#rendezvouswindow").load("myRendezvous.html");
+    }
+
+    function bookrendezvous(){
+        $("#rendezvouswindow").load("bookRendezvous.html");
+    }
+
+    $(document).ready(function () {
+        showmyrendezvous();
+    });
+</script>
+
+<div id="rendezvouscontrols">
+    <nav id="rendezvousnav" class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav">
+            <li id="myrendezvous" class="nav-item active" >
+                <a class="nav-link" onclick="showmyrendezvous();">My Rendezvous </a>
+            </li>
+            <li id="logoutbtn" class="nav-item active">
+            <a class="nav-link" onclick="bookrendezvous();">Book new </a>
+        </li>
+        </ul>
+    </nav>
+</div>
+
+<div id="rendezvouswindow">
+
+</div>

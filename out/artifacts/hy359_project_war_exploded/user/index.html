@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>User's Panel</title>
+	<link rel="icon" href="../images/icon.png">
+    
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../css/stylesheet.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+	<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
+	<script src="https://goessner.net/download/prj/jsonxml/xml2json.js"> </script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+	<!-- OUR SCRIPTS -->
+	<script src="../scripts/usercontrols.js"></script>
+	<script src="script.js"></script>
+</head>
+<body>
+<div id="fb-root"></div>
+
+<header id="top_header">
+	<div id="header_logo">
+		<a href=""><img id="site_logo" src="../images/papastampedia.png"></a>
+	</div>
+	<div id="header_text">
+		<h2>Konstantinos Englezakis</h2>
+		<h6>one of the best greek singers</h6>
+	</div>
+
+	<div id="usercontrols">
+		<nav id="loginnav" class="navbar navbar-expand-lg navbar-light bg-light">
+			<ul class="navbar-nav">
+				<li id="logoutbtn" class="nav-item">
+					<a class="nav-link" onclick="logout();">Logout </a>
+				</li>
+			</ul>
+		</nav>
+	</div>
+
+</header>
+<nav id="cp_navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link active" onclick="loadinfo();">My Info </a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link active" onclick="loadtests()">Tests and Treatments</a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link active" onclick="loadrendezvous()">Rendezvous </a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link active" onclick="loaddoctors()">Doctors </a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link active" onclick="loadmessages()">Messages </a>
+			</li>
+		</ul>
+	</div>
+</nav>
+<div>
+	<div id="appwindow">
+
+	</div>
+</div>
+<footer>
+	<div id="footer_info">
+		<a class="ad" href="https://www.vrisko.gr/efimeries-farmakeion/irakleio" target="_blank"><img src="https://www.vrisko.gr/graphlink/Pharmacies/image/300x60_Banner_n/?Region=irakleio&NativeRegion=%ce%97%cf%81%ce%ac%ce%ba%ce%bb%ce%b5%ce%b9%ce%bf&" border="0" alt="Εφημερεύοντα Φαρμακεία Ηράκλειο" /></a>
+		<a class="ad" href="https://www.vrisko.gr/efimeries-nosokomeion?SelectedCity=hrakleio" target="_blank"><img src="https://www.vrisko.gr/graphlink/Hospitals/image/300x60_Banner_n/?Prefecture=hrakleio&NativePrefecture=%ce%97%ce%a1%ce%91%ce%9a%ce%9b%ce%95%ce%99%ce%9f&" border="0" alt="Εφημερεύοντα Νοσοκομεία ΗΡΑΚΛΕΙΟ" /></a>
+	</div>
+	<div id="footer_form">
+		<h6>Subscribe to Papastampedia newsletter:</h6>
+		<form class="form-inline">
+			<input class="form-control mr-sm-2" placeholder="example@mail.com">
+			<button id="newsletter_btn" class="btn btn-outline-success my-2 my-sm-0">Subscribe</button>
+		</form>
+	</div>
+</footer>
+</body>
+</html>

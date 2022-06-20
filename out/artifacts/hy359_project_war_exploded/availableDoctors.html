@@ -1,0 +1,51 @@
+<script>
+    function printdoctortable() {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                console.log(jsonreply);
+                for(var index in jsonreply["doctors"]){
+                    var doc = JSON.parse(jsonreply["doctors"][index]);
+                    if(doc["certified"]!=1){continue;}
+                    console.log(doc);
+
+                    $("#docstable").append('<tr id="doctable_r'+index+'"></tr>');
+
+                    $("#doctable_r"+index).append('<td class="doctablecell">'+doc["firstname"]+' '+doc["lastname"]+'</td>');
+                    $("#doctable_r"+index).append('<td class="doctablecell">'+doc["specialty"]+'</td>');
+                    $("#doctable_r"+index).append('<td class="doctablecell">'+doc["telephone"]+'</td>');
+                    $("#doctable_r"+index).append('<td class="doctablecell">'+doc["address"]+", "+doc["city"]+", "+doc["country"]+'</td>');
+                    $("#doctable_r"+index).append('<td class="doctablecell">'+doc["email"]+'</td>');
+                    $("#doctable_r"+index).append('<td class="doctablecell">'+doc["doctor_info"]+'</td>');
+                }
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/CertifiedDoctorBoy?certified=1');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+    }
+
+    $(document).ready(function(){printdoctortable();});
+
+</script>
+<header class="title">
+    <h4>Here are all the licenced doctors available:</h4>
+</header>
+<br>
+<!--<div id="container">-->
+    <table class='table table-active' id="docstable">
+        <thead class='thead-dark' id="doctablehead">
+            <tr>
+                <th>Name</th>
+                <th>Specialty</th>
+                <th>Telephone</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Doctor Info</th>
+            </tr>
+        </thead>
+
+    </table>
+<!--</div>-->

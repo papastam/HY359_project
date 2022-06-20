@@ -1,0 +1,56 @@
+<script>
+    function loadusertable(){
+        $("#usertable").append("<tr><th>Username</th><th>AMKA</th><th>Address</th><th>Phone</th><th>Action</th></tr>");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                for(index in jsonreply["users"]){
+                    user=JSON.parse(jsonreply["users"][index]);
+                    if(user["username"]==="admin"){continue;}
+                    $("#usertable").append("<tr><td>"+user["username"]+"</td><td>"+user["amka"]+"</td><td>"+user["address"]+", "+user["city"]+", "+user["country"]+"</td><td>"+user["telephone"]+"</td><td> <input value=\"Delete\" type=\"button\" onclick=\"deleteUser('"+user["username"]+"')\"></td></tr>")
+                }
+            }else if(xhr.readyState === 4 && xhr.status === 403){
+                console.log("GetUsers failed, returned status code of: "+xhr.status);
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/UserAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function deleteUser(username){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.readyState === 4 && xhr.status ===200){
+                $("#deletereply").html("<a style='color: green'>User"+username+" succesfully deleted</a>");
+                $("#usertable").html("");
+                loadusertable();
+            }else if(xhr.status===403){
+                $("#deletereply").html("<a style='color: red'>Server responded with status code of"+xhr.status+": "+xhr.responseText+"</a>");
+            }
+        }
+
+        var jsonrequest = {"username":username};
+
+        xhr.open("DELETE", "/hy359_project_war_exploded/UserAPI");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(jsonrequest));
+
+    }
+
+    $(document).ready(function(){
+        loadusertable();
+    });
+
+</script>
+
+<script src="script.js"></script>
+<div>
+    <table class='table table-active' id="usertable">
+    </table>
+</div>
+<div id="deletereply">
+
+</div>

@@ -1,0 +1,58 @@
+<script>
+    function loaddoctortable(){
+        $("#doctable").append("<tr><th>Username</th><th>AMKA</th><th>Address</th><th>Phone</th><th>Certified</th></tr>");
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function (){
+            if(xhr.readyState === 4 && xhr.status === 200){
+                var jsonreply = JSON.parse(xhr.responseText);
+                for(index in jsonreply["doctors"]){
+                    doc=JSON.parse(jsonreply["doctors"][index]);
+
+                    var certifiedoption = " <select name='certification' id='"+doc["username"]+"_certvalue' onchange='changeDoctorCertification(\""+doc["username"]+"\")'> <option value='1' "+(doc["certified"]=="1"?"selected":"")+">Yes</option> <option value='0' "+(doc["certified"]=="0"?"selected":"")+">No</option>"
+
+                    $("#doctable").append("<tr><td>"+doc["username"]+"</td><td>"+doc["amka"]+"</td><td>"+doc["address"]+", "+doc["city"]+", "+doc["country"]+"</td><td>"+doc["telephone"]+"</td><td>"+certifiedoption+"</td></tr>")
+                }
+            }else if(xhr.readyState === 4 && xhr.status === 403){
+                console.log("GetDoctors failed, returned status code of: "+xhr.status);
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/CertifiedDoctorBoy');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    function changeDoctorCertification(username){
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.readyState === 4 && xhr.status ===200){
+                $("#serverreply").html("<a style='color: green'>Doctor "+username+" succesfully got his new certification</a>");
+                $("#doctable").html("");
+                loaddoctortable();
+            }else if(xhr.status===403){
+                $("#serverreply").html("<a style='color: red'>Server responded with status code of"+xhr.status+": "+xhr.responseText+"</a>");
+            }
+        }
+
+        var jsonrequest = {"username":username};
+        jsonrequest["certification"] = $("#"+username+"_certvalue").val();
+        console.log(jsonrequest);
+        xhr.open("POST", "/hy359_project_war_exploded/CertifiedDoctorBoy");
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(jsonrequest));
+
+    }
+
+    $(document).ready(function(){
+        loaddoctortable();
+    });
+
+</script>
+<script src="script.js"></script>
+<div>
+    <table class='table table-active' id="doctable">
+    </table>
+</div>
+<div id="serverreply">
+
+</div>

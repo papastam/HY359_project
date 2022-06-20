@@ -1,0 +1,140 @@
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script>
+    // USER MESSAGE TEMPLATE
+    // <div class="message_container">
+    //     <div class="message receiver_message">
+    //         (Message)
+    //     </div>
+    // </div>
+
+    // DOCTOR MESSAGE TEMPLATE
+    // <div class="message_container sender_container">
+    //     <div class="message sender_message">
+    //         (Message)
+    //     </div>
+    // </div>
+
+    var currentopenchat = -1;
+
+    function sendmessage(event) {
+        event.preventDefault();
+        let myForm = document.getElementById('newMessageForm');
+        let formData = new FormData(myForm);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                openchat(currentopenchat);
+                $("#messageinput").val("");
+                $("#errormessages").html("");
+            } else if (xhr.status !== 200) {
+                $("#errormessages").html("<p style='color:red'>Your message wasn't sent! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        };
+
+        data["user_id"]=currentopenchat;
+        data["doctor_id"]=userdata["doctor_id"];
+        data["sender"]="doctor";
+        data["blood_donation"]=0;
+        data["date_time"]=moment().format('YYYY-MM-DD HH:mm:ss');
+
+        xhr.open('POST', '/hy359_project_war_exploded/MessagesAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    function printmessage(message,sender) {
+        if(sender==="user"){
+            $("#messages").append("<div class=\"message_container\"><div class=\"message receiver_message\">"+message+"</div></div>");
+        }else if(sender==="doctor"){
+            $("#messages").append("<div class=\"message_container sender_container\"><div class=\"message sender_message\">"+message+"</div></div>");
+        }
+    }
+
+    function openchat(user_id) {
+        currentopenchat = user_id;
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                $("#messageswindow").show();
+                $("#messages").html("");
+                var reply = JSON.parse(xhr.responseText);
+                for(ind in reply["messages"]){
+                    var message = JSON.parse(reply["messages"][ind]);
+                    printmessage(message["message"],message["sender"]);
+                }
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/MessagesAPI?user_id=' + user_id + "&doctor_id=" + userdata["doctor_id"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+    }
+
+    function printusertable() {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var jsonreply = JSON.parse(xhr.responseText);
+                // console.log(jsonreply);
+                for (var index in jsonreply["users"]) {
+                    var user = JSON.parse(jsonreply["users"][index]);
+                    $("#usertable").append('<tr id="usertable_r' + index + '"></tr>');
+
+                    $("#usertable_r" + index).append('<td>' + user["firstname"] + ' ' + user["lastname"] + '</td>');
+                    $("#usertable_r" + index).append('<td>' + user["telephone"] + '</td>');
+                    $("#usertable_r" + index).append('<td>' + user["address"] + ", " + user["city"] + ", " + user["country"] + '</td>');
+                    $("#usertable_r" + index).append('<td>' + user["email"] + '</td>');
+                    $("#usertable_r" + index).append('<td ><input type="button" value="Open Chat" onclick="openchat(\'' + user["user_id"] + '\')" </td>');
+                }
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/UserAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+    }
+
+    window.setInterval(function(){
+        if(currentopenchat!=-1) {
+            openchat(currentopenchat);
+        }
+    }, 5000);
+
+    $(document).ready(function () {
+        printusertable();
+    });
+
+</script>
+<header class="title">
+    <h4>Select a user to chat with:</h4>
+</header>
+<br>
+<table class='table table-active' id="usertable">
+    <thead class='thead-dark' id="usertablehead">
+        <tr>
+            <th>Name</th>
+            <th>Telephone</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+</table>
+<br>
+<div id="messageswindow">
+    <div id="messages">
+
+
+    </div>
+    <div id="messagecontols">
+        <form id="newMessageForm" class="newMessageForm" onsubmit="sendmessage(event);">
+            <input type="text" id="messageinput" name="message" placeholder="Enter your message">
+            <input type="submit" value="Send">
+        </form>
+    </div>
+    <div id="errormessages"></div>
+</div>

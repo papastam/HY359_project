@@ -1,0 +1,49 @@
+<script>
+    function cancelrendezvous(rend_id){
+        xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                $("#deletereply").html("<p style='color:green'>Your rendezvous was cancelled succesfully</p>");
+                showRendezvous();
+            } else if (xhr.status !== 200) {
+                $("#deletereply").html("<p style='color:red'>Your rendezvous didn't get cancelled! Server responded with status code of: "+xhr.status+" </p><p>"+xhr.responseText+"</p>");
+            }
+        }
+        var data = {"rend_id":rend_id};
+        xhr.open('DELETE', '/hy359_project_war_exploded/RendezvousAPI');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }
+
+    function showRendezvous(){
+        $("#bookedrendezvous").html("<thead class='thead-dark'><tr><th>Date & time</th><th>Price</th><th>Doctor Info</th><th>Status</th><th>Actions</th></tr></thead>");
+        xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var reply = JSON.parse(xhr.responseText);
+                if(jQuery.isEmptyObject(reply)){
+                    $("#bookedrendezvous").append("<div>This doctor has no available rendezvous</div>");
+                }else{
+                    var rendezvous = reply["rendezvous"];
+                    for(ind in rendezvous){
+                        var rend = JSON.parse(rendezvous[ind]);
+                        var cancelbtn = "<td><input type='button' value='Cancel' onclick='cancelrendezvous(\""+rend["randevouz_id"]+"\")'"+(rend['status']==='selected'?"":"disabled")+"></td>";
+                        $("#bookedrendezvous").append("<tr><td>"+rend["date_time"]+"</td><td>"+rend["price"]+"€</td><td>"+rend["doctor_info"]+"</td><td>"+rend["status"]+"</td>"+cancelbtn+"</tr>");
+                    }
+                }
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/RendezvousAPI?user_id='+userdata["user_id"]);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send();
+    }
+
+    $(document).ready(function(){showRendezvous();})
+</script>
+<header>
+    Your booked rendezvous:
+</header>
+<table class='table table-active' id="bookedrendezvous">
+</table>
+<div id="deletereply"></div>

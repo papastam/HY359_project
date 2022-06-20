@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+
+    <link rel="stylesheet" href="../css/admin.css">
+    
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
+	<script src="https://goessner.net/download/prj/jsonxml/xml2json.js"> </script>
+
+    <!-- OUR SCRIPTS -->
+    <script src="../scripts/usercontrols.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="admin-grid-container">
+
+        <div id="navbar-right" class="admin-grid-item">
+            <div>
+
+            </div>
+            <table class='table table-active'>
+                <tr>
+                    <td id="usersbtn" onclick="loadusers();">Users</td>
+                </tr>
+                <tr>
+                    <td id="certifybtn" onclick="loadcertify();">Certify</td>
+                </tr>
+                <tr>
+                    <td id="logutbtn" onclick="logout();">Logout</td>
+                </tr>
+            </table>
+        </div>
+
+
+
+
+        <div id="appwindow" class="admin-grid-item">
+            <div>
+
+            </div>    
+        </div>
+    </div>
+</body>
+</html>

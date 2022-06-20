@@ -1,0 +1,187 @@
+<script>
+    var doctorsreply;
+    var jsonpoints;
+
+    function convertdistance(distance){
+        if(distance<1000){
+            return (distance).toFixed(2)+" m";
+        }else{
+            return (distance/1000.0).toFixed(2)+" km";
+        }
+    }
+
+    function convertduration(duration){
+        if(duration<60){
+            return (duration).toFixed(2)+" sec";
+        }else if(duration<3600){
+            return (duration/60.0).toFixed(2)+" min";
+        }else{
+            return (duration/3600.0).toFixed(2)+" hour(s)";
+        }
+    }
+
+    map = new OpenLayers.Map("Map");
+    var mapnik = new OpenLayers.Layer.OSM();
+    map.addLayer(mapnik);
+    var zoom = 15;
+
+    function setPosition(lat, lon){
+        var fromProjection = new OpenLayers.Projection("EPSG:4326"); // Transform from 	WGS 1984
+        var toProjection = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
+        return position;
+    }
+
+    function handler(position, message){
+        var popup = new OpenLayers.Popup.FramedCloud("Popup", position, null, message, null, true /* <-- true if we want a close (X) button, false otherwise*/);
+        map.addPopup(popup);
+    }
+
+    //Markers
+    var markers = new OpenLayers.Layer.Markers("Markers");
+    map.addLayer(markers);
+
+    function showmap(lat,lon){
+        markers.clearMarkers();
+
+        var position=setPosition(lat,lon);
+        map.setCenter(position, zoom);
+
+        var mar=new OpenLayers.Marker(position);
+        markers.addMarker(mar);
+        mar.events.register('mousedown', mar, function(evt) {
+            handler(position,address);}
+        );
+
+        $("#Map").show();
+    }
+
+    function printdoctortable(sortedindexes, jsonreply) {
+        $("#docstable").html('<thead class="thead-dark" id=\"doctablehead\"><tr><th>Name</th><th>Specialty</th><th>Telephone</th><th>Address</th><th>Email</th><th>Doctor Info</th><th>Distance</th><th>Duration</th><th>Action</th></tr></thead>')
+        console.log(jsonreply);
+        for (index in sortedindexes) {
+            var doc = JSON.parse(jsonreply["doctors"][sortedindexes[index]]);
+            console.log(sortedindexes[index]);
+
+            if (doc["certified"] != true) {
+                continue;
+            }
+            $("#docstable").append('<tr id="doctable_r' + index + '"></tr>');
+
+            $("#doctable_r" + index).append('<td>' + doc["firstname"] + ' ' + doc["lastname"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["specialty"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["telephone"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["address"] + ", " + doc["city"] + ", " + doc["country"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["email"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + doc["doctor_info"] + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertdistance(doc["distance"]) + '</td>');
+            $("#doctable_r" + index).append('<td>' + convertduration(doc["duration"]) + '</td>');
+            $("#doctable_r" + index).append('<td><input type="button" value="Show on map" onclick="showmap('+doc["lat"]+' , '+doc["lon"]+')"></td>');
+        }
+    }
+
+    function calculateandPrint(method, jsonpoints, jsonreply) {
+        const xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === this.DONE) {
+                var reply = JSON.parse(this.responseText);
+                var distances = reply["distances"][0];
+                var durations = reply["durations"][0];
+                var length = distances["length"];
+                console.log(reply);
+                var sortedindexes = new Object();
+
+                for (i = 0; i < length; i++) {
+                    if (distances[i] == null) {
+                        distances[i] = 99999999;
+                    }
+                    if (durations[i] == null) {
+                        durations[i] = 99999999;
+                    }
+                }
+
+                console.log(distances);
+                for (i = 0; i < length; i++) {
+                    var minind=0;
+                    if(method==="distances") {
+                        minind = distances.indexOf(Math.min(...distances));
+                        sortedindexes[i] = minind;
+                    }else if(method==="durations"){
+                        minind = durations.indexOf(Math.min(...durations));
+                        sortedindexes[i] = minind;
+                    }
+
+                    var doc = JSON.parse(jsonreply["doctors"][minind]);
+                    doc["distance"] = distances[minind];
+                    doc["duration"] = durations[minind];
+                    jsonreply["doctors"][minind] = JSON.stringify(doc);
+
+                    durations[minind] = 9999999999;
+                    distances[minind] = 9999999999;
+
+                    console.log(doc);
+                }
+                console.log(sortedindexes);
+                printdoctortable(sortedindexes, jsonreply);
+            }
+        });
+
+        xhr.open("GET", "https://trueway-matrix.p.rapidapi.com/CalculateDrivingMatrix?origins=" + jsonpoints["user"] + "&destinations=" + jsonpoints["docs"]);
+        xhr.setRequestHeader("x-rapidapi-host", "trueway-matrix.p.rapidapi.com");
+        xhr.setRequestHeader("x-rapidapi-key", "bd2e97d2d1msh175dda3181f8171p1988aejsnf9cec4a9c8d3");
+
+        xhr.send();
+    }
+
+    $(document).ready(function () {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                doctorsreply = JSON.parse(xhr.responseText);
+
+                jsonpoints = {"user": userdata["lat"] + "," + userdata["lon"], "docs": ""};
+                for (index in doctorsreply["doctors"]) {
+                    var doc = JSON.parse(doctorsreply["doctors"][index]);
+                    console.log(doc);
+
+                    if (doc["certified"] != true) {
+                        continue;
+                    }
+                    jsonpoints["docs"] = jsonpoints["docs"] + doc["lat"] + "," + doc["lon"] + ";";
+                    jsonpoints["indexes"] = jsonpoints["indexes"] + index + ";";
+
+                }
+                console.log(jsonpoints);
+                calculateandPrint("distances", jsonpoints, doctorsreply);
+            }
+        }
+
+        xhr.open('GET', '/hy359_project_war_exploded/CertifiedDoctorBoy');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send("");
+
+        $("#sortorder").change(function () {
+            calculateandPrint($(this).val(),jsonpoints,doctorsreply);
+            console.log("changed");
+        });
+
+    });
+
+</script>
+<header class="title">
+    <h4>Here are all the licenced doctors available:</h4>
+</header>
+<br>
+<label htmlFor="sortorder">Sort table by: </label>
+<select id="sortorder" name="sortorder">
+    <option value="distances" selected>Distance</option>
+    <option value="durations">Duration</option>
+</select>
+
+<table class='table table-active' id="docstable">
+
+</table>
+<br>
+<div id="Map" style="height:600px; width:700px"></div>
